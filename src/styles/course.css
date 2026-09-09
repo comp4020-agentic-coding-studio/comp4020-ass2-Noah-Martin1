@@ -1,0 +1,77 @@
+/*
+ * SLOP2710's own layer, on top of the theme's brand tokens.
+ *
+ * Everything visual in this course is drawn in two inks on the page ground,
+ * because the Slop identity is a two-ink risograph and because a consistent
+ * grammar across twelve weeks is worth more than twelve clever pictures.
+ *
+ * The grammar, used by every diagram and every simulation:
+ *
+ *   a person waiting     hollow dot, ink outline
+ *   a person in service  filled dot, gold
+ *   a server             square
+ *   time                 runs left to right
+ *   accumulated cost     a gold bar
+ *
+ * Colours are derived from --at-* so both themes and any future rebrand
+ * follow automatically. Nothing here restates a brand colour literally.
+ */
+
+:root {
+  --q-ink: var(--at-text);
+  --q-ink-soft: var(--at-text-muted);
+  --q-gold: var(--at-primary);
+  --q-rule: var(--at-border);
+  --q-ground: var(--at-bg-alt);
+
+  --q-dot: 0.5rem;
+  --q-gap: 0.35rem;
+  --q-stroke: 1.5px;
+}
+
+/* A figure wrapper shared by static diagrams and live simulations, so the two
+   kinds of visual sit identically in the flow of a week's page. */
+.q-figure {
+  margin: 2rem 0;
+  border: var(--q-stroke) solid var(--q-rule);
+  border-radius: var(--at-radius, 4px);
+  background: var(--q-ground);
+  overflow: hidden;
+}
+
+.q-figure__stage {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.q-figure__caption {
+  border-top: var(--q-stroke) solid var(--q-rule);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--q-ink-soft);
+}
+
+.q-figure__caption b {
+  color: var(--q-ink);
+  font-weight: 600;
+}
+
+/* Wide diagrams scroll inside their own box rather than pushing the page
+   sideways. The 390px marking viewport makes this mandatory, not optional. */
+.q-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Act labelling. Acts are distinguished by name and position, never by a third
+   colour -- introducing a hue per act would break the two-ink discipline the
+   diagrams depend on. */
+.q-act-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--q-ink-soft);
+  font-weight: 600;
+}

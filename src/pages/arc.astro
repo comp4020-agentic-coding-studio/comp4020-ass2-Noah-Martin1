@@ -1,0 +1,233 @@
+---
+import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import { getPublishedCollection } from "astro-course-university/content";
+import { withBase } from "astro-theme-university/url";
+import { siteConfig } from "../site-config";
+import "../styles/course.css";
+
+// This page and spec/course-arc.test.ts read the same four frontmatter keys --
+// act, idea, system and buildsOn. The diagram cannot drift from the checks,
+// because there is nothing for it to drift from: it is the checks' input.
+type Week = {
+  week: number;
+  title: string;
+  idea: string;
+  system: string;
+  act: string;
+  buildsOn?: number;
+};
+
+const lectures = await getPublishedCollection("lectures");
+const weeks: Week[] = lectures
+  .map((lecture) => {
+    const data = lecture.data as unknown as Record<string, unknown>;
+    return {
+      week: Number(data.week),
+      title: String(data.title),
+      idea: String(data.idea ?? ""),
+      system: String(data.system ?? ""),
+      act: String(data.act ?? ""),
+      buildsOn: data.buildsOn === undefined ? undefined : Number(data.buildsOn),
+    };
+  })
+  .sort((a, b) => a.week - b.week);
+
+const ACTS = [
+  { id: "I", name: "Why waiting happens", gloss: "The physics. Learn to see a queue, explain why it forms, measure it from outside, and price what it costs." },
+  { id: "II", name: "Who goes first", gloss: "The rules. Five ways to order the same people, and what each one buys and charges." },
+  { id: "III", name: "Systems that fight back", gloss: "The complications. Queues joined to other queues, and queues full of people who have worked out the rule." },
+];
+
+// Geometry for the chain diagram. Nodes sit on a baseline; every buildsOn edge
+// is an arc above it, so a long edge -- week 8 reaching back to week 4 -- is
+// visible as a taller arc rather than being buried in a list.
+const STEP = 74;
+const PAD = 40;
+const BASE = 132;
+const R = 15;
+const W = PAD * 2 + STEP * (weeks.length - 1);
+const x = (week: number) => PAD + (week - 1) * STEP;
+
+const edges = weeks
+  .filter((w) => w.buildsOn !== undefined)
+  .map((w) => {
+    const from = x(w.buildsOn as number);
+    const to = x(w.week);
+    const span = Math.abs(to - from) / STEP;
+    const lift = Math.min(20 + span * 22, 104);
+    return { from, to, lift, span, week: w.week, buildsOn: w.buildsOn as number };
+  });
+
+const actOf = (week: number) => weeks.find((w) => w.week === week)?.act ?? "";
+const actRuns = ACTS.map((act) => {
+  const inAct = weeks.filter((w) => w.act === act.id).map((w) => w.week);
+  return { ...act, first: Math.min(...inAct), last: Math.max(...inAct), weeks: inAct };
+});
+
+const longEdges = edges.filter((e) => e.span > 1);
+const chainSummary = weeks
+  .filter((w) => w.buildsOn !== undefined)
+  .map((w) => `week ${w.week} builds on week ${w.buildsOn}`)
+  .join("; ");
+---
+
+<ContentLayout
+  title="The shape of the semester"
+  description="Twelve weeks, three acts, and the chain of dependencies that connects them. Every week names the earlier week it stands on, and a check in spec/ fails the build if that chain ever breaks."
+  {...siteConfig}
+>
+  <p>
+    A course is one idea explored for twelve weeks, not twelve topics that
+    happen to share a subject. This page is where SLOP2710 shows its working.
+  </p>
+
+  <p>
+    Each week below declares the single new idea it introduces, the real system
+    it argues from, and the earlier week it builds on. Those declarations are not
+    written here — they live in each lecture's frontmatter, and
+    <code>spec/course-arc.test.ts</code> reads the same four fields. If a week
+    ever pointed forwards, pointed nowhere, or reused another week's headline
+    system, the build would fail rather than quietly producing a prettier
+    version of this diagram.
+  </p>
+
+  <figure class="q-figure arc-figure">
+    <div class="q-figure__stage q-scroll">
+      <svg
+        viewBox={`0 0 ${W} ${BASE + 46}`}
+        width={W}
+        height={BASE + 46}
+        class="arc-svg"
+        role="img"
+        aria-label={`The dependency chain of the twelve teaching weeks. ${chainSummary}.`}
+      >
+        {actRuns.map((act) => (
+          <g>
+            <rect
+              x={x(act.first) - R - 9}
+              y={BASE - R - 11}
+              width={x(act.last) - x(act.first) + (R + 9) * 2}
+              height={(R + 11) * 2}
+              rx="18"
+              class="arc-band"
+            />
+            <text x={x(act.first) - R - 9} y={BASE + R + 34} class="arc-band-label">
+              Act {act.id}
+            </text>
+          </g>
+        ))}
+
+        <line x1={PAD} y1={BASE} x2={W - PAD} y2={BASE} class="arc-baseline" />
+
+        {edges.map((e) => (
+          <path
+            d={`M ${e.from} ${BASE - R} C ${e.from} ${BASE - R - e.lift}, ${e.to} ${BASE - R - e.lift}, ${e.to} ${BASE - R}`}
+            class={e.span > 1 ? "arc-edge arc-edge--long" : "arc-edge"}
+          />
+        ))}
+
+        {weeks.map((w) => (
+          <g>
+            <circle cx={x(w.week)} cy={BASE} r={R} class="arc-node" />
+            <text x={x(w.week)} y={BASE + 5} class="arc-node-label">{w.week}</text>
+          </g>
+        ))}
+      </svg>
+    </div>
+    <figcaption class="q-figure__caption">
+      <b>What to look for:</b> most weeks lean on the one before them, but two
+      reach further back — {longEdges.map((e, i) => (
+        <>{i > 0 ? " and " : ""}week {e.week} onto week {e.buildsOn}</>
+      ))}. Those are the course's two callbacks: price can only sort a queue once
+      time has been given a price, and a network of queues is variability from
+      week 2 propagating.
+    </figcaption>
+  </figure>
+
+  {actRuns.map((act) => (
+    <section class="arc-act" aria-labelledby={`act-${act.id}`}>
+      <h2 id={`act-${act.id}`}>
+        <span class="q-act-label">Act {act.id} · weeks {act.first}–{act.last}</span>
+        <span class="arc-act-name">{act.name}</span>
+      </h2>
+      <p class="arc-act-gloss">{act.gloss}</p>
+
+      <ol class="arc-weeks">
+        {weeks.filter((w) => w.act === act.id).map((w) => (
+          <li class="arc-week">
+            <div class="arc-week-head">
+              <span class="arc-week-no">Week {w.week}</span>
+              <a href={withBase(`/lectures/week-${String(w.week).padStart(2, "0")}/`)}>{w.title}</a>
+            </div>
+            <p class="arc-week-idea">{w.idea}</p>
+            <p class="arc-week-meta">
+              <span><b>Argued from:</b> {w.system}</span>
+              {w.buildsOn === undefined ? (
+                <span class="arc-week-start">Starts the course</span>
+              ) : (
+                <span><b>Builds on:</b> week {w.buildsOn}{" "}
+                  <span class="arc-week-dim">({actOf(w.buildsOn) === act.id ? "same act" : `Act ${actOf(w.buildsOn)}`})</span>
+                </span>
+              )}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  ))}
+</ContentLayout>
+
+<style>
+  .arc-figure { margin-block: 2.5rem; }
+  .arc-svg { display: block; margin-inline: auto; max-width: 100%; height: auto; }
+
+  .arc-band { fill: var(--q-ink); opacity: 0.05; }
+  .arc-band-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; fill: var(--q-ink-soft);
+  }
+  .arc-baseline { stroke: var(--q-rule); stroke-width: 1.5; }
+  .arc-edge { fill: none; stroke: var(--q-ink-soft); stroke-width: 1.5; opacity: 0.5; }
+  .arc-edge--long { stroke: var(--q-gold); stroke-width: 2.5; opacity: 1; }
+  .arc-node { fill: var(--at-bg); stroke: var(--q-ink); stroke-width: 1.5; }
+  .arc-node-label {
+    text-anchor: middle; font-size: 13px; font-weight: 600;
+    fill: var(--q-ink); font-variant-numeric: tabular-nums;
+  }
+
+  .arc-act { margin-block: 2.5rem 0; }
+  .arc-act h2 { display: flex; flex-direction: column; gap: 0.15rem; margin-bottom: 0.25rem; }
+  .arc-act-name { font-size: 1.5rem; }
+  .arc-act-gloss { color: var(--q-ink-soft); margin-top: 0; }
+
+  .arc-weeks { list-style: none; padding: 0; margin: 1.25rem 0 0; }
+  .arc-week {
+    padding: 0.9rem 0;
+    border-top: 1.5px solid var(--q-rule);
+  }
+  .arc-week:last-child { border-bottom: 1.5px solid var(--q-rule); }
+
+  .arc-week-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15rem 0.75rem;
+  }
+  .arc-week-no {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--q-gold);
+    font-variant-numeric: tabular-nums; min-width: 4.5rem;
+  }
+  .arc-week-head a { font-weight: 600; }
+
+  .arc-week-idea { margin: 0.35rem 0 0.4rem; }
+  .arc-week-meta {
+    display: flex; flex-wrap: wrap; gap: 0.2rem 1.5rem;
+    margin: 0; font-size: 0.875rem; color: var(--q-ink-soft);
+  }
+  .arc-week-meta b { color: var(--q-ink); font-weight: 600; }
+  .arc-week-dim { opacity: 0.75; }
+  .arc-week-start { font-style: italic; }
+
+  @media (min-width: 40rem) {
+    .arc-week-head { gap: 0.75rem; }
+    .arc-act h2 { flex-direction: row; align-items: baseline; gap: 0.75rem; }
+  }
+</style>

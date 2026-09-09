@@ -4,7 +4,7 @@ description:
   Run two ordering rules against the same arrival stream, and report what the
   numbers did — including the part you did not expect.
 week: 9
-due: 2027-04-30T17:00:00+10:00
+due: 2027-05-07T17:00:00+10:00
 weight: 15
 marking:
   mode: weighted

@@ -40,23 +40,21 @@ export const slopCourseMetaSchema = z
 
 // The single source of truth for the course record. The generated homepage,
 // navigation label and /api/index.json all read this object.
-// Replace every placeholder value, but keep the shape: the catalogue ingests
-// this API contract when the course is published.
 //
-// The code's last three digits were assigned to this repo when it was
-// provisioned, and no other course in the cohort has them. Change the first
-// digit to your course's level (and `level` to match); keep the other three.
-// STARTER_CONTENT: replace this course record, then remove this comment.
+// Level 2: the course assumes no prerequisites and no prior statistics, but the
+// modelling in weeks 3, 10 and 11 asks more of a student than a 1000-level unit
+// fairly can. The last three digits are the ones this repo was provisioned with.
 export const courseMeta = slopCourseMetaSchema.parse({
-  code: "SLOP1710",
-  title: "Course Title Goes Here",
+  code: "SLOP2710",
+  title: "The Economics of Waiting",
   session: "Semester 1",
   year: 2027,
-  level: 1,
+  level: 2,
   startDate: "2027-02-22",
   endDate: "2027-05-28",
   description:
-    "One concise paragraph explaining what this course is, who it is for, " +
-    "and why somebody would choose to spend a semester taking it.",
-  tags: ["replace me"],
+    "Queues are not accidents. Every line you have stood in was designed by " +
+    "someone who decided whose time was worth less. Twelve weeks on how queues " +
+    "form, what waiting costs, and who pays when the rules change.",
+  tags: ["Queueing theory", "Applied economics", "System design"],
 }) satisfies CourseMetaInput;

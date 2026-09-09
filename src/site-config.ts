@@ -3,10 +3,11 @@ import { slopBranding } from "astro-theme-slop";
 import { courseMeta } from "./course-config";
 
 // The underlying collection and URL remain `sessions`; these labels are the
-// language students see. Change them to Studios, Tutorials, Expeditions, etc.
+// language students see. In this course the weekly contact hour is fieldwork or
+// measurement rather than discussion, so it is a lab.
 export const sessionLabels = {
-  singular: "Session",
-  plural: "Sessions",
+  singular: "Lab",
+  plural: "Labs",
 } as const;
 
 export const graphCollections = ["sessions", "assessments", "lectures", "people"];
@@ -21,6 +22,7 @@ export const siteConfig = defineSiteConfig({
   name: "Slop University",
 
   links: [
+    { text: "The arc", href: "/arc/" },
     { text: "Lectures", href: "/lectures/" },
     { text: sessionLabels.plural, href: "/sessions/" },
     { text: "Assessment", href: "/assessments/" },

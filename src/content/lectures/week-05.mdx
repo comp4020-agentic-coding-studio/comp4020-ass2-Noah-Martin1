@@ -16,6 +16,8 @@ related:
   - assessments/02-ordering-rule
 ---
 
+import QueueSim from "../../components/QueueSim.astro";
+
 Sometime around 1970, banks in the United States did something that now looks
 obvious and at the time was controversial enough to need explaining to
 customers: they replaced one queue per teller with a single queue feeding all
@@ -59,6 +61,14 @@ swapped a lottery for a promise.
 Watch the second graph as well as the first. The mean improves by roughly half;
 the ninetieth percentile improves by considerably more. Most of the value of most
 queue design is in the tail, and organisations almost invariably report the mean.
+
+<QueueSim
+  variant="lanes"
+  id="sim-lanes"
+  alt="Two configurations running the same arrivals: above, one line feeding four servers; below, four separate lines with one server each. The pooled line stays short while the separate lines develop uneven backlogs, with some servers idle beside a queue."
+  watch="The readout shows pooled first, separate second, for L, W and the 90th percentile. Watch the four separate lanes go uneven — and specifically, watch for a server sitting idle while another lane has three people in it. That idle box is where the pooled line's advantage comes from."
+/>
+
 
 ## The fairness claim, stated properly
 

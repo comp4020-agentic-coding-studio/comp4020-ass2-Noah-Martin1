@@ -302,6 +302,7 @@ export class BoardingSim {
   done = false;
 
   private rng: () => number;
+  private seed: number;
 
   strategy: BoardingStrategy;
 

@@ -16,6 +16,8 @@ related:
   - assessments/03-simulation-report
 ---
 
+import QueueSim from "../../components/QueueSim.astro";
+
 A theme park sells a pass that lets you skip the line. People find this
 objectionable in a way they do not find objectionable that the park charges
 admission at all, and it is worth working out exactly what the objection is,
@@ -83,6 +85,14 @@ while the tail lengthens sharply. Move the slider and watch which graph reacts.
 
 Which case you are in is an empirical fact about the system, not a matter of
 opinion, and it is astonishing how rarely anyone checks before arguing.
+
+<QueueSim
+  variant="express"
+  id="sim-express"
+  alt="One pair of servers taking from two queues: a gold priority queue above and a standard queue below. As the share buying priority rises, the standard queue lengthens while the priority queue stays short until it too fills up."
+  watch="W is shown as priority / standard. Drag the slider from 0 to 80 per cent and watch two things at once: the standard wait climbs steeply, and the priority wait also creeps up as the fast lane fills with other people who paid. Past roughly half, nobody is getting much for their money and the operator is collecting it anyway."
+/>
+
 
 Next week: the alternative nobody in this debate mentions, which is not to have
 the queue at all.

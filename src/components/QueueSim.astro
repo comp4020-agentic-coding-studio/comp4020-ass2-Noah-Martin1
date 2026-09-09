@@ -1,0 +1,539 @@
+---
+/**
+ * The course's one simulation component.
+ *
+ * Weeks 2, 5, 8 and 10 all render this. Configuring it rather than writing four
+ * bespoke animations is what keeps the visual grammar identical across the
+ * semester: same frame, same readout row, same controls, same caption slot.
+ *
+ * `watch` is required, not optional. A simulation that cannot say what it is
+ * demonstrating is decoration, and spec/simulations.test.ts fails the build if
+ * one ships without a caption.
+ */
+import "../styles/course.css";
+
+export type SimVariant = "rho" | "lanes" | "express" | "boarding";
+
+interface Props {
+  variant: SimVariant;
+  /** What the reader should look at. Rendered as the figure caption. */
+  watch: string;
+  /** Text alternative describing the diagram for anyone not seeing it. */
+  alt: string;
+  id: string;
+}
+
+const { variant, watch, alt, id } = Astro.props;
+
+const HEIGHTS: Record<SimVariant, number> = {
+  rho: 156,
+  lanes: 250,
+  express: 196,
+  boarding: 300,
+};
+---
+
+<figure class="q-figure qsim" data-qsim data-variant={variant} id={id}>
+  <div class="q-figure__stage">
+    <canvas
+      class="qsim__canvas"
+      data-qsim-canvas
+      data-height={HEIGHTS[variant]}
+      role="img"
+      aria-label={alt}></canvas>
+  </div>
+
+  <dl class="qsim__readout" data-qsim-readout>
+    <div><dt>λ</dt><dd data-r="lambda">—</dd></div>
+    <div><dt>μ</dt><dd data-r="mu">—</dd></div>
+    <div><dt>ρ</dt><dd data-r="rho">—</dd></div>
+    <div><dt>L</dt><dd data-r="L">—</dd></div>
+    <div><dt>W</dt><dd data-r="W">—</dd></div>
+    <div><dt>W<span>90</span></dt><dd data-r="W90">—</dd></div>
+  </dl>
+
+  <div class="qsim__controls">
+    <button type="button" class="qsim__play" data-qsim-play aria-pressed="false">
+      Play
+    </button>
+
+    {variant === "rho" && (
+      <>
+        <div class="qsim__control">
+          <label for={`${id}-load`}>Load (ρ) <output data-out="load">0.80</output></label>
+          <input id={`${id}-load`} data-qsim-input="load" type="range"
+            min="40" max="97" value="80" step="1" />
+        </div>
+        <div class="qsim__control">
+          <label for={`${id}-var`}>Variability <output data-out="var">1.00</output></label>
+          <input id={`${id}-var`} data-qsim-input="var" type="range"
+            min="0" max="100" value="100" step="1" />
+        </div>
+      </>
+    )}
+
+    {variant === "lanes" && (
+      <div class="qsim__control">
+        <label for={`${id}-load`}>Load (ρ) <output data-out="load">0.85</output></label>
+        <input id={`${id}-load`} data-qsim-input="load" type="range"
+          min="40" max="95" value="85" step="1" />
+      </div>
+    )}
+
+    {variant === "express" && (
+      <div class="qsim__control">
+        <label for={`${id}-share`}>Buying priority <output data-out="share">10%</output></label>
+        <input id={`${id}-share`} data-qsim-input="share" type="range"
+          min="0" max="80" value="10" step="5" />
+      </div>
+    )}
+
+    {variant === "boarding" && (
+      <div class="qsim__control qsim__control--select">
+        <label for={`${id}-strategy`}>Boarding order</label>
+        <select id={`${id}-strategy`} data-qsim-input="strategy">
+          <option value="back-to-front">Back to front</option>
+          <option value="random">Random</option>
+          <option value="outside-in">Outside in (WILMA)</option>
+          <option value="steffen">Steffen</option>
+        </select>
+      </div>
+    )}
+
+    <button type="button" class="qsim__reset" data-qsim-reset>Reset</button>
+  </div>
+
+  <figcaption class="q-figure__caption">
+    <b>What to watch:</b> {watch}
+  </figcaption>
+</figure>
+
+<style>
+  .qsim__canvas { display: block; width: 100%; }
+
+  .qsim__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    margin: 0;
+    padding: 0.6rem 1rem;
+    border-top: var(--q-stroke) solid var(--q-rule);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8125rem;
+  }
+  .qsim__readout > div { display: flex; gap: 0.35rem; align-items: baseline; }
+  .qsim__readout dt { color: var(--q-ink-soft); font-style: italic; }
+  .qsim__readout dt span { font-size: 0.75em; font-style: normal; }
+  .qsim__readout dd { margin: 0; font-weight: 600; }
+
+  .qsim__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.6rem 1rem;
+    padding: 0.75rem 1rem;
+    border-top: var(--q-stroke) solid var(--q-rule);
+  }
+
+  .qsim__control { flex: 1 1 12rem; min-width: 10rem; }
+  .qsim__control--select { flex: 0 1 auto; }
+  .qsim__control label {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--q-ink-soft);
+    margin-bottom: 0.15rem;
+  }
+  .qsim__control output { font-weight: 600; color: var(--q-ink); font-variant-numeric: tabular-nums; }
+  .qsim__control input[type="range"] { width: 100%; accent-color: var(--q-gold); }
+  .qsim__control select { width: 100%; }
+
+  .qsim__play,
+  .qsim__reset {
+    flex: 0 0 auto;
+    padding: 0.35rem 0.9rem;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--q-ink);
+    background: var(--at-bg);
+    border: var(--q-stroke) solid var(--q-rule);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .qsim__play[aria-pressed="true"] { background: var(--q-gold); color: var(--at-bg); border-color: var(--q-gold); }
+  .qsim__play:hover, .qsim__reset:hover { border-color: var(--q-gold); }
+  .qsim__play:focus-visible, .qsim__reset:focus-visible { outline: 2px solid var(--q-gold); outline-offset: 2px; }
+
+  @media (max-width: 26rem) {
+    .qsim__readout { gap: 0 0.9rem; font-size: 0.75rem; }
+  }
+</style>
+
+<script>
+  import { QueueSim, BoardingSim, type BoardingStrategy, type SimConfig } from "../lib/queue-sim";
+
+  type Variant = "rho" | "lanes" | "express" | "boarding";
+
+  const MU = 0.2;
+  /** Ticks of headless simulation behind the printed statistics. */
+  const STATS_TICKS = 20000;
+  /** Sim ticks advanced per real second while animating. */
+  const TICKS_PER_SEC = 14;
+
+  function ink(el: HTMLElement) {
+    const cs = getComputedStyle(el);
+    return {
+      ink: cs.getPropertyValue("--q-ink").trim() || "#222",
+      soft: cs.getPropertyValue("--q-ink-soft").trim() || "#777",
+      gold: cs.getPropertyValue("--q-gold").trim() || "#b97d1c",
+      rule: cs.getPropertyValue("--q-rule").trim() || "#ccc",
+      bg: cs.getPropertyValue("--at-bg").trim() || "#fff",
+    };
+  }
+
+  function setupOne(root: HTMLElement) {
+    if (root.dataset.qsimReady === "1") return;
+    root.dataset.qsimReady = "1";
+
+    const variant = (root.dataset.variant ?? "rho") as Variant;
+    const canvas = root.querySelector<HTMLCanvasElement>("[data-qsim-canvas]");
+    const playBtn = root.querySelector<HTMLButtonElement>("[data-qsim-play]");
+    const resetBtn = root.querySelector<HTMLButtonElement>("[data-qsim-reset]");
+    const readout = root.querySelector<HTMLElement>("[data-qsim-readout]");
+    if (!canvas || !playBtn || !resetBtn || !readout) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const cssHeight = Number(canvas.dataset.height ?? 160);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const controls: Record<string, HTMLInputElement | HTMLSelectElement> = {};
+    root.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[data-qsim-input]").forEach((el) => {
+      controls[el.dataset.qsimInput as string] = el;
+    });
+
+    const num = (key: string, fallback: number) =>
+      controls[key] ? Number((controls[key] as HTMLInputElement).value) : fallback;
+
+    let visual: QueueSim[] = [];
+    let boarding: BoardingSim | null = null;
+    let playing = false;
+    let raf = 0;
+    let last = 0;
+    let carry = 0;
+
+    /** Build the configs this variant needs. Index 0 is always the main panel. */
+    function configs(): SimConfig[] {
+      const base = {
+        seed: 7, servers: 1, lanes: 1, lambda: MU * 0.8, mu: MU,
+        serviceCv: 1, arrivalCv: 1, discipline: "fcfs" as const, priorityShare: 0,
+      };
+      if (variant === "rho") {
+        const rho = num("load", 80) / 100;
+        const v = num("var", 100) / 100;
+        return [{ ...base, lambda: MU * rho, serviceCv: v, arrivalCv: v }];
+      }
+      if (variant === "lanes") {
+        const rho = num("load", 85) / 100;
+        const lambda = MU * 4 * rho;
+        return [
+          { ...base, servers: 4, lanes: 1, lambda },
+          { ...base, servers: 1, lanes: 4, lambda },
+        ];
+      }
+      // express
+      const share = num("share", 10) / 100;
+      return [{
+        ...base, servers: 2, lanes: 1, lambda: MU * 2 * 0.85,
+        discipline: "priority" as const, priorityShare: share,
+      }];
+    }
+
+    function rebuild() {
+      if (variant === "boarding") {
+        const strategy = (controls.strategy?.value ?? "back-to-front") as BoardingStrategy;
+        boarding = new BoardingSim(strategy, 14, 3, 7);
+        if (reduced.matches) { let g = 0; while (!boarding.done && g++ < 20000) boarding.step(); }
+      } else {
+        visual = configs().map((c) => new QueueSim(c, 0));
+        if (reduced.matches) visual.forEach((s) => s.run(400));
+      }
+      refreshStats();
+      draw();
+    }
+
+    /** Statistics come from a long headless run, never from what is on screen. */
+    function refreshStats() {
+      const out = (key: string, value: string) => {
+        const el = readout!.querySelector(`[data-r="${key}"]`);
+        if (el) el.textContent = value;
+      };
+
+      if (variant === "boarding") {
+        readout!.hidden = true;
+        return;
+      }
+      readout!.hidden = false;
+
+      const cfgs = configs();
+      const headless = cfgs.map((c) => { const s = new QueueSim(c); s.run(STATS_TICKS); return s; });
+      const main = headless[0];
+      const st = main.stats();
+
+      out("lambda", main.config.lambda.toFixed(2));
+      out("mu", main.config.mu.toFixed(2));
+      out("rho", main.rho.toFixed(2));
+
+      if (variant === "lanes") {
+        const b = headless[1].stats();
+        out("L", `${st.L.toFixed(1)} / ${b.L.toFixed(1)}`);
+        out("W", `${st.W.toFixed(1)} / ${b.W.toFixed(1)}`);
+        out("W90", `${st.W90} / ${b.W90}`);
+      } else if (variant === "express") {
+        out("L", st.L.toFixed(1));
+        out("W", `${st.Wpriority.toFixed(1)} / ${st.Wstandard.toFixed(1)}`);
+        out("W90", String(st.W90));
+      } else {
+        out("L", st.L.toFixed(1));
+        out("W", st.W.toFixed(1));
+        out("W90", String(st.W90));
+      }
+    }
+
+    function sizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = root.clientWidth || 600;
+      canvas!.width = Math.round(w * dpr);
+      canvas!.height = Math.round(cssHeight * dpr);
+      canvas!.style.height = `${cssHeight}px`;
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { w, h: cssHeight };
+    }
+
+    // --- drawing primitives, in the two-ink grammar -----------------------
+    function person(c: CanvasRenderingContext2D, x: number, y: number, served: boolean, col: ReturnType<typeof ink>) {
+      c.beginPath();
+      c.arc(x, y, 5, 0, Math.PI * 2);
+      if (served) { c.fillStyle = col.gold; c.fill(); }
+      else { c.strokeStyle = col.ink; c.lineWidth = 1.5; c.stroke(); }
+    }
+
+    function serverBox(c: CanvasRenderingContext2D, x: number, y: number, busy: boolean, col: ReturnType<typeof ink>) {
+      c.beginPath();
+      c.rect(x - 9, y - 9, 18, 18);
+      c.strokeStyle = busy ? col.gold : col.rule;
+      c.lineWidth = busy ? 2.5 : 1.5;
+      c.stroke();
+    }
+
+    function label(c: CanvasRenderingContext2D, text: string, x: number, y: number, col: string, size = 11, align: CanvasTextAlign = "left") {
+      c.fillStyle = col;
+      c.font = `${size}px ui-sans-serif, system-ui, sans-serif`;
+      c.textAlign = align;
+      c.fillText(text, x, y);
+    }
+
+    /** One queue on one baseline: dots flowing right into a server box. */
+    function drawLane(c: CanvasRenderingContext2D, sim: QueueSim, laneIndex: number, y: number, w: number, col: ReturnType<typeof ink>, caption?: string) {
+      const rightPad = 26;
+      const serverX = w - rightPad - 14 * (sim.config.servers - 1) - 14;
+      if (caption) label(c, caption, 14, y - 22, col.soft, 11);
+
+      c.beginPath();
+      c.moveTo(14, y);
+      c.lineTo(w - 14, y);
+      c.strokeStyle = col.rule;
+      c.lineWidth = 1;
+      c.setLineDash([2, 4]);
+      c.stroke();
+      c.setLineDash([]);
+
+      for (let s = 0; s < sim.config.servers; s++) {
+        serverBox(c, serverX + s * 26, y, Boolean(sim.busy[laneIndex]?.[s]), col);
+        const cust = sim.busy[laneIndex]?.[s];
+        if (cust) person(c, serverX + s * 26, y, true, col);
+      }
+
+      const queue = sim.queues[laneIndex] ?? [];
+      const startX = serverX - 34;
+      const shown = Math.min(queue.length, Math.floor((startX - 16) / 13));
+      for (let i = 0; i < shown; i++) {
+        person(c, startX - i * 13, y, false, col);
+      }
+      if (queue.length > shown) {
+        label(c, `+${queue.length - shown}`, 14, y + 4, col.soft, 10, "left");
+      }
+    }
+
+    function draw() {
+      const { w, h } = sizeCanvas();
+      const col = ink(root);
+      ctx!.clearRect(0, 0, w, h);
+
+      if (variant === "boarding" && boarding) {
+        drawBoarding(ctx!, boarding, w, h, col);
+        return;
+      }
+      if (!visual.length) return;
+
+      if (variant === "rho") {
+        drawLane(ctx!, visual[0], 0, 62, w, col);
+        const n = visual[0].inSystem;
+        label(ctx!, `${n} in system at tick ${visual[0].tick}`, 14, 118, col.soft, 11);
+      } else if (variant === "lanes") {
+        drawLane(ctx!, visual[0], 0, 46, w, col, "One line, four servers");
+        for (let l = 0; l < 4; l++) {
+          drawLane(ctx!, visual[1], l, 132 + l * 30, w, col, l === 0 ? "Four lines, one server each" : undefined);
+        }
+      } else if (variant === "express") {
+        const sim = visual[0];
+        const priority = sim.queues[0].filter((c) => c.priority);
+        const standard = sim.queues[0].filter((c) => !c.priority);
+        label(ctx!, "Priority", 14, 34, col.gold, 11);
+        for (let i = 0; i < Math.min(priority.length, Math.floor((w - 120) / 13)); i++) {
+          person(ctx!, w - 90 - i * 13, 52, false, col);
+          ctx!.beginPath(); ctx!.arc(w - 90 - i * 13, 52, 5, 0, Math.PI * 2);
+          ctx!.strokeStyle = col.gold; ctx!.lineWidth = 2; ctx!.stroke();
+        }
+        label(ctx!, "Standard", 14, 104, col.soft, 11);
+        for (let i = 0; i < Math.min(standard.length, Math.floor((w - 120) / 13)); i++) {
+          person(ctx!, w - 90 - i * 13, 122, false, col);
+        }
+        for (let s = 0; s < 2; s++) {
+          const cust = sim.busy[0][s];
+          serverBox(ctx!, w - 44, 52 + s * 70, Boolean(cust), col);
+          if (cust) person(ctx!, w - 44, 52 + s * 70, true, col);
+        }
+        label(ctx!, `${priority.length} priority · ${standard.length} standard waiting`, 14, 168, col.soft, 11);
+      }
+    }
+
+    function drawBoarding(c: CanvasRenderingContext2D, sim: BoardingSim, w: number, h: number, col: ReturnType<typeof ink>) {
+      const rows = sim.rows;
+      const left = 16;
+      const usable = w - left - 16;
+      const cw = Math.min(usable / rows, 26);
+      const top = 40;
+      const seatH = 15;
+
+      label(c, `${sim.strategy} · tick ${sim.tick} · ${sim.seated}/${rows * sim.cols} seated`, left, 22, col.soft, 11);
+
+      // seats above and below, aisle in the middle
+      for (let r = 0; r < rows; r++) {
+        const x = left + r * cw + cw / 2;
+        for (let s = 0; s < sim.cols; s++) {
+          const y = s < 2 ? top + s * seatH : top + 2 * seatH + 20 + (s - 2) * seatH;
+          c.beginPath();
+          c.rect(x - cw / 2 + 2, y, Math.max(cw - 4, 6), seatH - 3);
+          c.strokeStyle = col.rule;
+          c.lineWidth = 1;
+          c.stroke();
+        }
+      }
+
+      // aisle line
+      const aisleY = top + 2 * seatH + 10;
+      c.beginPath();
+      c.moveTo(left, aisleY);
+      c.lineTo(left + rows * cw, aisleY);
+      c.strokeStyle = col.rule;
+      c.lineWidth = 1;
+      c.setLineDash([2, 4]);
+      c.stroke();
+      c.setLineDash([]);
+
+      // seated passengers fill their seat; walkers sit on the aisle line
+      for (let r = 0; r < rows; r++) {
+        const person0 = sim.aisle[r];
+        if (!person0) continue;
+        const x = left + r * cw + cw / 2;
+        const stowing = person0.at === person0.seatRow - 1;
+        c.beginPath();
+        c.arc(x, aisleY, 5, 0, Math.PI * 2);
+        if (stowing) { c.fillStyle = col.gold; c.fill(); }
+        else { c.strokeStyle = col.ink; c.lineWidth = 1.5; c.stroke(); }
+      }
+
+      label(c, `${sim.queue.length} still on the jetway`, left, h - 34, col.soft, 11);
+      const barW = (w - left * 2) * (sim.seated / (rows * sim.cols));
+      c.fillStyle = col.gold;
+      c.fillRect(left, h - 24, barW, 6);
+      c.strokeStyle = col.rule;
+      c.lineWidth = 1;
+      c.strokeRect(left, h - 24, w - left * 2, 6);
+    }
+
+    // --- loop -------------------------------------------------------------
+    function frame(now: number) {
+      if (!playing) return;
+      const dt = Math.min((now - last) / 1000, 0.25);
+      last = now;
+      carry += dt * TICKS_PER_SEC;
+      const steps = Math.floor(carry);
+      carry -= steps;
+      for (let i = 0; i < steps; i++) {
+        if (variant === "boarding") {
+          if (boarding && !boarding.done) boarding.step();
+        } else {
+          visual.forEach((s) => s.step());
+        }
+      }
+      if (variant === "boarding" && boarding?.done) stop();
+      draw();
+      raf = requestAnimationFrame(frame);
+    }
+
+    function play() {
+      if (playing) return;
+      playing = true;
+      playBtn!.textContent = "Pause";
+      playBtn!.setAttribute("aria-pressed", "true");
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
+
+    function stop() {
+      playing = false;
+      playBtn!.textContent = "Play";
+      playBtn!.setAttribute("aria-pressed", "false");
+      cancelAnimationFrame(raf);
+    }
+
+    playBtn.addEventListener("click", () => (playing ? stop() : play()));
+    resetBtn.addEventListener("click", () => { stop(); rebuild(); });
+
+    Object.entries(controls).forEach(([key, el]) => {
+      el.addEventListener("input", () => {
+        const out = root.querySelector(`[data-out="${key}"]`);
+        if (out) {
+          const v = Number((el as HTMLInputElement).value);
+          out.textContent = key === "share" ? `${v}%` : (v / 100).toFixed(2);
+        }
+        const wasPlaying = playing;
+        stop();
+        rebuild();
+        if (wasPlaying && !reduced.matches) play();
+      });
+    });
+
+    let resizeTimer = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(draw, 120);
+    };
+    window.addEventListener("resize", onResize);
+    document.addEventListener("astro:before-swap", () => { stop(); window.removeEventListener("resize", onResize); }, { once: true });
+
+    rebuild();
+  }
+
+  function setup() {
+    document.querySelectorAll<HTMLElement>("[data-qsim]").forEach(setupOne);
+  }
+
+  setup();
+  document.addEventListener("astro:page-load", setup);
+</script>

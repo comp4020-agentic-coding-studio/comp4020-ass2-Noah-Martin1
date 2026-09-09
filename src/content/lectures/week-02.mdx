@@ -15,6 +15,8 @@ related:
   - sessions/week-02
 ---
 
+import QueueSim from "../../components/QueueSim.astro";
+
 Two systems. Both serve exactly sixty customers an hour. Both have exactly one
 server, working at exactly the same average speed.
 
@@ -45,6 +47,14 @@ out of a system are paid for with an enormous amount of somebody else's time.
 Run the simulation below and watch it happen; the dial is the only control, and
 the thing to notice is how ordinary the queue looks at 0.8 and how fast it
 stops looking ordinary after that.
+
+<QueueSim
+  variant="rho"
+  id="sim-rho"
+  alt="A single queue feeding one server. Hollow dots are people waiting, a gold dot is the person being served. Raising the load slider lengthens the line; lowering the variability slider shortens it dramatically at the same load."
+  watch="Set variability to zero and push load to 0.97 — the queue empties completely, because a perfectly predictable system has no queue however busy it is. Now put variability back to 1 and drop load to 0.9. Same servers, less work, a far worse queue. That is the whole lecture in two slider moves."
+/>
+
 
 This has a direct managerial consequence that almost nobody acts on. A system
 deliberately run at 85% capacity is not a wasteful system. It is a system that

@@ -15,6 +15,8 @@ related:
   - sessions/week-10
 ---
 
+import QueueSim from "../../components/QueueSim.astro";
+
 In week 2 I left an aircraft at a gate and promised to come back to it. Here it
 is, and it is the best worked example in the course because every tool from the
 preceding nine weeks is needed to say anything true about it.
@@ -53,6 +55,14 @@ trials it roughly halves boarding time against back-to-front.
 
 The simulation below runs all four on the same passenger population. The
 difference is not marginal.
+
+<QueueSim
+  variant="boarding"
+  id="sim-boarding"
+  alt="A cabin of fourteen rows seen from above, with seats either side of a central aisle. Passengers move down the aisle as hollow dots and turn gold while stowing a bag, blocking everyone behind them. Back-to-front boarding concentrates the blockages; Steffen spreads them out."
+  watch="Run back-to-front first and watch the gold dots — the people stowing — cluster into the same few metres of aisle, with a solid line of hollow dots stalled behind them. Then run Steffen. Same passengers, same bags, same stow times; the blockages simply never line up. Back-to-front takes about twice as long."
+/>
+
 
 ## So why does nobody use the fast one?
 

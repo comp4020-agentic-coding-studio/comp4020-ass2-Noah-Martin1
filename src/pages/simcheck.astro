@@ -1,0 +1,11 @@
+---
+import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
+import QueueSim from "../components/QueueSim.astro";
+import { siteConfig } from "../site-config";
+---
+<ContentLayout title="Sim check" description="Temporary scratch page for visually checking all four simulations together." {...siteConfig}>
+  <QueueSim variant="rho" id="s1" alt="A single queue feeding one server, hollow dots waiting and a gold dot in service, with load and variability sliders." watch="Set variability to zero and push load to 0.97 — the queue empties completely. That is the whole lecture in two slider moves." />
+  <QueueSim variant="lanes" id="s2" alt="Two configurations on the same arrivals: one line of four servers above, four separate single-server lines below, showing uneven backlogs." watch="Watch the four separate lanes go uneven, and specifically watch for a server sitting idle while another lane has three people waiting in it." />
+  <QueueSim variant="express" id="s3" alt="Two servers taking from a gold priority queue above and a standard queue below, with a slider for the share buying priority." watch="Drag the slider from 0 to 80 per cent and watch the standard wait climb steeply while the priority wait also creeps up as the fast lane fills." />
+  <QueueSim variant="boarding" id="s4" alt="A cabin of fourteen rows from above with a central aisle, passengers as hollow dots turning gold while stowing bags and blocking those behind." watch="Run back-to-front and watch the stowing passengers cluster into the same few metres of aisle. Then run Steffen: same bags, but the blockages never line up." />
+</ContentLayout>

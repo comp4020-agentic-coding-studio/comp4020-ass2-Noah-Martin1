@@ -32,5 +32,8 @@ export const siteConfig = defineSiteConfig({
 
   licence: "CC-BY-NC-SA-4.0",
   socialImage: "/src/assets/images/card.png",
-  socialImageAlt: `A preview card for ${courseMeta.code}: ${courseMeta.title}`,
+  socialImageAlt:
+    `${courseMeta.code}: ${courseMeta.title}. Below the title, the line ` +
+    "\"There is no neutral queue\", and three queues of hollow dots feeding " +
+    "square servers, the middle one idle while the others work.",
 });

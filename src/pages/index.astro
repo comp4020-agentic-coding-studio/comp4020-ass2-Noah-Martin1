@@ -5,45 +5,78 @@ import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import heroImage from "../assets/images/hero-home.avif";
 import { courseMeta } from "../course-config";
 import { sessionLabels, siteConfig } from "../site-config";
-
-// STARTER_CONTENT: replace the hero artwork and its alt text below, then
-// remove this comment.
 ---
 
 <ContentLayout
   title={`${courseMeta.code}: ${courseMeta.title}`}
   description={courseMeta.description}
   heroImage={heroImage}
-  heroImageAlt="A lecture theatre reduced to flat gold and black shapes, rows of seats sweeping past the frame, in a two-ink risograph print"
+  heroImageAlt="Ninety hollow dots strung along a line toward a single square, one of them filled gold, drawn as a two-ink risograph print: a queue and the one server it is waiting for"
   {...siteConfig}
 >
   <ul class="course-tags" aria-label="Course tags">
     {courseMeta.tags.map((tag) => <li>{tag}</li>)}
   </ul>
 
-  <!-- STARTER_CONTENT: replace the authored page below, then remove this comment. -->
+  <p class="thesis">There is no neutral queue.</p>
+
+  <p>
+    Every line you have ever stood in was running a rule that decided who went
+    first. Somebody chose that rule — or, more often, inherited it from whoever
+    laid out the room and never looked at it again. It is deciding whose time is
+    worth less, and it is doing that without saying so, to people who have no
+    way to bill anyone for the hours.
+  </p>
+
+  <p>
+    This course is twelve weeks on how queues form, what waiting costs, who pays
+    for it, and what changes when you change the rule. It is not a queueing
+    theory unit, though you will have the core of the mathematics by week 3 and
+    it takes about forty minutes. The mathematics answers <em>how long</em>. The
+    interesting question is <em>who</em>.
+  </p>
+
   <h2>What you will do</h2>
   <p>
-    Say what a student spends their time on — the making, reading, arguing or
-    measuring that fills the weeks. Name the artefact they walk out with.
+    Measure real queues, with a stopwatch, in person — starting in the first
+    lab and continuing all semester. Build simulations and break them. Board a
+    taped-out aircraft cabin four different ways and time it. Triage forty case
+    cards under pressure and then find the pattern in your own errors.
+  </p>
+  <p>
+    You will finish with a design brief for one real queue: diagnosed with
+    evidence you gathered, redesigned to the level of an ordering rule and its
+    exceptions, costed honestly for whoever ends up worse off, and defended
+    against the strongest version of the alternative you rejected.
   </p>
 
   <h2>Who it is for</h2>
   <p>
-    Say who this is aimed at and what they need to already know. Be specific
-    enough that someone can rule themselves in or out without emailing you.
+    Anyone in second year or beyond. No prerequisites, no prior statistics, no
+    programming required — the simulation work can be done in a spreadsheet, on
+    paper, or with the course simulator, and several people every year do it
+    with dice. What it asks for instead is a willingness to stand in a car park
+    for forty minutes counting people, and to accept that most of the queues you
+    are about to look at are somebody's unexamined decision rather than a fact
+    of nature.
   </p>
 
   <h2>Where to go next</h2>
   <CardGrid columns={2}>
+    <Card title="The shape of the semester" href="/arc/">
+      <p>
+        The three acts, the twelve ideas, and the chain showing what each week
+        stands on. Start here if you want to know whether it holds together.
+      </p>
+    </Card>
+    <Card title="Lectures" href="/lectures/">
+      <p>Twelve weeks, four of them carrying a simulation you can drive yourself.</p>
+    </Card>
     <Card title={sessionLabels.plural} href="/sessions/">
-      <p>The weekly schedule and what happens in each teaching session.</p>
+      <p>The weekly fieldwork: what to bring, what happens, what leaves the room.</p>
     </Card>
     <Card title="Assessment" href="/assessments/">
-      <p>What is marked, what it is worth, and when it is due.</p>
-    </Card>
-    <Card title="People" href="/people/">
-      <p>Who teaches the course and how to reach them.</p>
+      <p>Four pieces — measure, reorder, simulate, redesign. What each is worth and when.</p>
     </Card>
   </CardGrid>
 </ContentLayout>
@@ -53,7 +86,7 @@ import { sessionLabels, siteConfig } from "../site-config";
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-block: 0 2rem;
+    margin-block: 0 1.5rem;
     padding: 0;
     list-style: none;
   }
@@ -64,5 +97,19 @@ import { sessionLabels, siteConfig } from "../site-config";
     color: var(--at-text-secondary);
     background: var(--at-bg-alt);
     font-size: 0.9rem;
+  }
+
+  .thesis {
+    font-size: 1.6rem;
+    line-height: 1.25;
+    font-weight: 600;
+    color: var(--at-primary);
+    border-left: 3px solid var(--at-primary);
+    padding-left: 1rem;
+    margin-block: 0 1.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .thesis { font-size: 2rem; }
   }
 </style>

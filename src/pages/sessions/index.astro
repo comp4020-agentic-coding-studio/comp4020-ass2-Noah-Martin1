@@ -6,13 +6,19 @@ import { sessionLabels, siteConfig } from "../../site-config";
 
 <ContentLayout
   title={sessionLabels.plural}
-  description={`The twelve-week teaching schedule: what happens in each ${sessionLabels.singular.toLowerCase()}, what to prepare, and what leaves the room.`}
+  description="Twelve weeks of fieldwork: what to bring, what happens in the room, and what leaves it."
   {...siteConfig}
 >
   <p>
-    The internal collection and URL stay <code>sessions</code>. Set the visible
-    singular and plural names once in <code>src/site-config.ts</code> and use
-    the language your course deserves everywhere readers see it.
+    The weekly contact hour in this course is a lab rather than a tutorial,
+    because almost everything worth knowing about a queue is only visible from
+    beside it. You will spend these hours counting people, rolling dice,
+    breaking your own schedulers, sorting case cards against the clock, and
+    once, in week 10, boarding a taped-out aircraft cabin four different ways.
+  </p>
+  <p>
+    Each lab lists what to bring. Most weeks the honest answer is a stopwatch
+    and something to write on.
   </p>
   <SessionsGrid />
 </ContentLayout>

@@ -178,8 +178,13 @@ const HEIGHTS: Record<SimVariant, number> = {
   .qsim__play:hover, .qsim__reset:hover { border-color: var(--q-gold); }
   .qsim__play:focus-visible, .qsim__reset:focus-visible { outline: 2px solid var(--q-gold); outline-offset: 2px; }
 
-  @media (max-width: 26rem) {
+  @media (max-width: 30rem) {
     .qsim__readout { gap: 0 0.9rem; font-size: 0.75rem; }
+    /* Sliders take the full row so the buttons stop interleaving between
+       them, which at 390px reads as Play belonging to the load slider. */
+    .qsim__control { flex: 1 0 100%; }
+    .qsim__play { order: 10; }
+    .qsim__reset { order: 11; }
   }
 </style>
 

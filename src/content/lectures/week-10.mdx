@@ -1,0 +1,93 @@
+---
+title: Queues in Networks
+description:
+  The set-piece. Everything from weeks 2, 6 and 8 applied to the aircraft we
+  left in week 2 — and the discovery that fixing one queue can break the system.
+week: 10
+date: 2027-05-10
+act: "III"
+idea: Queues connected to other queues behave unlike any of them alone, and local optimisation can make the whole worse.
+system: Aircraft boarding
+buildsOn: 2
+teachers:
+  - tomas-rehak
+related:
+  - sessions/week-10
+---
+
+In week 2 I left an aircraft at a gate and promised to come back to it. Here it
+is, and it is the best worked example in the course because every tool from the
+preceding nine weeks is needed to say anything true about it.
+
+## Why boarding is hard
+
+An aisle is a queue with a property none of our earlier systems had: **the
+server and the queue occupy the same space.** A passenger stowing a bag is not
+merely slow, they are a moving blockage that stops everyone behind them
+regardless of how fast those people would have been.
+
+So boarding time is not governed by average passenger speed. It is governed by
+how often a stow blocks the aisle and for how long — which is week 2's lesson,
+variance rather than load, in its purest form. An aircraft where everyone had
+identical bags and identical seats would board in a fraction of the time with no
+change whatever to the mean.
+
+## The strategies
+
+**Back to front** is what many airlines use and what intuition endorses. It is
+close to the worst common option. Calling rows 30–36 puts every passenger with a
+bag to stow into the same five metres of aisle at the same moment. You have
+carefully concentrated the interference.
+
+**Random** does better. It sounds absurd and it is well established: scattering
+passengers along the aisle means simultaneous stows mostly do not block one
+another.
+
+**Outside-in** (window seats, then middles, then aisles — often called WILMA)
+does better still, by eliminating the seat shuffle, which is the other blocking
+event.
+
+**Steffen** interleaves both dimensions: alternating rows, outside-in, so
+adjacent boarders are two rows apart and never in each other's way. In field
+trials it roughly halves boarding time against back-to-front.
+
+The simulation below runs all four on the same passenger population. The
+difference is not marginal.
+
+## So why does nobody use the fast one?
+
+This is the actually interesting question and it is not a technical one.
+
+**It fights the revenue model.** Priority boarding is sold. Week 8's lesson
+applies exactly: an operator earning money from congestion has acquired a reason
+to preserve it. Steffen ordering is incompatible with "zone 1 boards first"
+because zone 1 is a product.
+
+**It separates people travelling together.** Families ignore the sequence, and
+Steffen degrades sharply under non-compliance in a way random boarding does not.
+A strategy that is optimal only when everyone obeys is not optimal in an airport.
+
+**It is hard to explain at a gate**, in a second language, over a poor PA, to
+tired people.
+
+That gap — between the best known algorithm and the deployed one — is what I
+came here to teach. The constraint that binds is almost never the one in the
+model.
+
+## The general result
+
+Boarding is one instance of the week's real subject: **once queues are connected,
+improving one of them can make the system worse.**
+
+Speed up check-in and you deliver a denser stream to security, which is now the
+bottleneck; the total journey time is unchanged and you have moved the crowd into
+a smaller room. Open a new motorway lane and the merge point moves downstream,
+where it may be worse. Braess's paradox is the formal version: adding capacity to
+a network can increase everybody's travel time, and it has been observed in real
+road networks.
+
+The practical rule: **a bottleneck that is removed is not gone, it has moved.**
+Before you optimise a stage, find out what is downstream of it, or you will spend
+a budget relocating a queue and call it an improvement.
+
+Next week: what happens when the people in the queue can see it too.

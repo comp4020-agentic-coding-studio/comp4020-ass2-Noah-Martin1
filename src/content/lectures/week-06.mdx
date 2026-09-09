@@ -16,71 +16,118 @@ related:
   - assessments/02-ordering-rule
 ---
 
-Five people arrive at once. Their transactions take 1, 2, 3, 4 and 10 minutes.
-One server.
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import GanttCompare from "../../components/diagrams/GanttCompare.astro";
 
-Serve them in that order and the total waiting is 1+3+6+10 = 20 person-minutes,
-average 4 minutes each.
+Five people arrive at a counter at the same moment. Their transactions take 1,
+2, 3, 4 and 10 minutes. There is one server.
 
-Serve them longest-first and the total is 10+14+17+19 = 60, average 12.
+You cannot make anyone faster. You cannot add staff. You can only decide the
+order.
 
-Same five people. Same server. Same total work. Three times the waiting, purely
-from the order.
+<Beat n={1} label="Guess before you look">
 
-## The result
+<Predict question="How much difference can the order possibly make?">
 
-**Shortest Job First minimises mean waiting time.** Not "usually", not "in
-simulations" — provably, for any fixed set of jobs on a single server. The proof
-is a two-line exchange argument: if a longer job is ever ahead of a shorter one,
-swapping them reduces total wait, so the optimal order has no such pair, so it
-is sorted by length.
+**Three times** the total waiting.
 
-This is the closest thing to a free lunch in the whole course, and it explains a
+Shortest first: 20 person-minutes of waiting. Longest first: 60. Same five
+people, same server, same twenty minutes of work — the server is equally busy
+in both, and finishes at exactly the same moment.
+
+</Predict>
+
+<GanttCompare />
+
+</Beat>
+
+<Beat n={2} label="The result">
+
+<Punch note="Provably, for any fixed set of jobs on a single server. Not usually, not in simulations.">
+  Shortest job first minimises mean waiting time.
+</Punch>
+
+The proof is two lines. If a longer job is ever ahead of a shorter one, swapping
+them reduces total waiting — the short job saves a lot, the long job loses only
+a little. So the optimal order contains no such pair. So it is sorted by length.
+
+This is the closest thing to a free lunch in the course, and it explains a
 supermarket feature you have walked past ten thousand times. The express lane is
 not a courtesy to people buying milk. It is a throughput device, and the
 supermarket is the beneficiary.
 
-## Why the free lunch is not free
+</Beat>
 
-Look again at the numbers. The averages moved. Where did the improvement come
-from?
+<Beat n={3} label="Find the person paying">
 
-It came from the ten-minute customer. Under SJF they wait 10 minutes before
-being served; under longest-first they wait none. **SJF pays for its excellent
-average with somebody's tail**, and the person it charges is always the same
-person: the one with the biggest job.
+Look at the diagram again. The averages moved. Where did the improvement
+actually come from?
 
-Now make the arrivals continuous rather than a single batch, and the problem
-becomes structural. If short jobs keep arriving, the long job is never at the
-front. It is not merely delayed; it can be **starved indefinitely**. A print
-queue running strict SJF will hold your 400-page thesis behind an unending
-trickle of one-page boarding passes.
+It came from the ten-minute job — the pale bar. Under shortest-first it waits
+the full ten minutes before starting; under longest-first it waits none.
 
-This is why every real scheduler that uses SJF also uses something else: ageing
-(a job's priority rises the longer it waits), or a reserved lane for long jobs,
-or a hard cap. Those fixes cost some of the average you gained. That trade — how
-much mean wait to give back in exchange for a bounded tail — is a genuine design
-dial and there is no correct setting for it.
+<Punch>
+  SJF pays for its excellent average with somebody's tail, and it is always the
+  same somebody: the one with the biggest job.
+</Punch>
 
-## The information problem
+Now make the arrivals continuous rather than a single batch and it stops being a
+transfer and becomes structural. If short jobs keep arriving, the long job is
+never at the front. It is not delayed — it is **starved**, indefinitely. A print
+queue running strict SJF will hold your 400-page thesis behind an endless
+trickle of one-page boarding passes, for ever, without anything going wrong.
 
-SJF has a prerequisite that FCFS does not: **you must know how long each job
-will take, before you run it.**
+</Beat>
 
-Sometimes you do. A supermarket approximates it with basket size, which is
-observable and roughly honest. A CPU cannot know, and so real operating systems
-predict from recent history and are frequently wrong.
+<Beat n={4} label="The fix, and what the fix costs">
 
-And where the estimate is self-reported, you have built an incentive. Tell
-people short jobs go first and you will receive a great many jobs described as
-short. The rule has created a strategic environment where none existed, and the
-people best at gaming it are rarely the people the system most wanted to help.
-That is week 11's subject, and it is the reason a rule that is optimal on paper
-can be a disaster in a building.
+Every real scheduler that uses SJF also uses something else: **ageing**, where a
+job's priority rises the longer it has waited. Or a reserved lane for long jobs.
+Or a hard cap.
 
-## For the assignment
+Each of those gives back some of the average you gained. How much mean wait to
+return in exchange for a bounded worst case is a genuine design dial, there is
+no correct setting for it, and you will plot that exact trade-off curve for
+yourself in this week's lab.
 
-Due at the end of this week. You have two rules now — arrival order and job
-length — and a clear statement of what each buys and charges. That is enough to
-change one system deliberately. The 40% attached to naming who pays is there
-because this week's mathematics makes it very easy to forget that anybody does.
+</Beat>
+
+<Beat n={5} label="The prerequisite nobody mentions">
+
+SJF needs something FCFS never asks for: **you must know how long each job will
+take, before you run it.**
+
+Sometimes you can. A supermarket approximates it with basket size, which is
+observable and roughly honest. A CPU cannot, so real operating systems predict
+from recent history and are frequently wrong.
+
+<Predict question="What happens when the estimate is self-reported?">
+
+You have just built an incentive.
+
+Tell people short jobs go first and you will receive a great many jobs described
+as short. The rule has created a strategic environment where none existed, and
+the people best at exploiting it are rarely the people the system most wanted to
+help.
+
+This is week 11's subject, and it is the reason a rule that is optimal on paper
+can be a disaster in a building. Hold the thought: a rule that is optimal when
+obeyed is often worse than a rule that is merely decent when gamed.
+
+</Predict>
+
+</Beat>
+
+<Beat n={6} label="Where this goes">
+
+You now have two rules — arrival order and job length — and a clear statement of
+what each buys and charges. Your assignment is due at the end of this week, and
+the 40% attached to naming who pays is there because this week's mathematics
+makes it very easy to forget that anybody does.
+
+Next week: a rule that sorts on something neither of these can see, in the one
+place where society has already agreed that arrival order is indefensible.
+
+</Beat>

@@ -16,80 +16,124 @@ related:
   - sessions/week-07
 ---
 
-Nobody argues for first-come-first-served in an emergency department. The chest
-pain goes before the sprained wrist, and if you asked the person with the wrist
-they would agree, even though they arrived first and will now wait four hours.
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import TriageOrder from "../../components/diagrams/TriageOrder.astro";
 
-This is the clearest case in the course of a society explicitly rejecting
-arrival order — and it is worth asking why the consent is so total here and so
-absent elsewhere.
+Six people arrive at an emergency department within a few minutes of each
+other. A sprained wrist, a sore throat, a cut hand, back pain, chest pain, a
+rash. One treatment room.
 
-## What triage is
+<Beat n={1} label="Run it first come, first served">
+
+<TriageOrder />
+
+Nobody argues for arrival order here. The chest pain goes first, and if you
+asked the wrist — who arrived an hour earlier and will now wait a further half
+hour — they would agree.
+
+That unanimity is remarkable and worth interrogating, because it is the only
+place in this course where you will find it.
+
+</Beat>
+
+<Predict question="Every other priority rule in this course gets resisted. Why does this one get consent?">
+
+Because the outcomes being traded are not the same kind of thing.
+
+Week 6's shortest-job-first also reordered people, also improved the average,
+also charged somebody — and people resent it, split their baskets to game it,
+and complain about the express lane. Here the wrist gives up thirty minutes of
+discomfort and the chest pain keeps their life. Those are not commensurable, so
+nobody is tempted to compare them.
+
+Which gives you a general and slightly cynical rule for predicting how much
+resistance a priority scheme will meet: **it depends less on the logic of the
+rule than on how unlike each other the consequences are.** When everybody in
+the queue is merely waiting, priority feels like queue-jumping and gets fought.
+
+</Predict>
+
+<Beat n={2} label="What triage actually is">
 
 A priority queue with a fixed number of classes. The Australasian Triage Scale
 uses five, from *immediately life-threatening* to *less urgent*, each with a
 target time to treatment. Within a class, arrival order. Between classes,
 strict priority.
 
-Two properties are doing the work.
+Two properties do the work.
 
 **It is preemptive at the front.** A category 1 arriving at minute 59 of your
 wait goes ahead of you, and there is no cap on how often that can happen.
 
-**It reorders on a dimension FCFS cannot see.** Arrival order is information
-about the queue. Urgency is information about the person. Any rule that improves
-on FCFS does so by using information FCFS throws away, and the whole question is
-whether you can obtain that information cheaply, accurately, and without
-creating an incentive to fake it.
+**It sorts on information FCFS throws away.** Arrival order is a fact about the
+queue. Urgency is a fact about the person.
 
-## Where the free lunch is
+<Punch note="The whole question is whether you can get that information cheaply, accurately, and without creating an incentive to fake it.">
+  Every rule that beats first-come-first-served does so by using information
+  first-come-first-served ignores.
+</Punch>
 
-Unlike SJF, triage does not really trade average for tail — it trades *whose*
-tail. The wrist waits longer so that the heart attack does not die. Almost
-everyone accepts that trade, because the outcomes being traded are radically
-unequal in kind: four hours of discomfort against a life.
+</Beat>
 
-That asymmetry is the reason consent is so total here, and it does not transfer.
-When the outcomes are commensurable — everyone is just waiting — priority feels
-like queue-jumping, and it is resisted fiercely. The strength of your ordering
-rule's mandate depends less on its logic than on how unlike each other the
-consequences are.
+<Beat n={3} label="Priya's half of the lecture">
 
-## Where it breaks — Priya's half of the lecture
+Everything above treats the category as given.
 
-Everything above treats the category as given. It is not given. It is produced,
-in about ninety seconds, by a tired human with incomplete information, and the
-system's performance is bounded by the quality of that judgement rather than by
-the elegance of the queue discipline sitting on top of it.
+It is not given. It is **produced** — in about ninety seconds, by a tired human
+with incomplete information — and the system's performance is bounded by the
+quality of that judgement, not by the elegance of the queue discipline sitting
+on top of it.
 
-Three failure modes, all documented:
+Three failure modes, all documented.
 
 **Under-triage of atypical presentation.** Category descriptions encode a
-prototype. Patients who do not present like the prototype are systematically
-sorted down. Women having heart attacks are the canonical study.
+prototype. Patients who do not present like the prototype get sorted down.
+Women having heart attacks are the canonical study.
 
 **Under-reading of pain in people accustomed to not being believed.** The
-measurement instrument is a conversation, and conversations carry every bias the
-participants brought with them.
+measurement instrument is a conversation, and conversations carry every bias
+the participants brought with them.
 
-**The category-4 wait is unbounded.** Strict priority with a busy department
-means the least-urgent patients can be functionally starved — the same
-mathematics as the thesis stuck behind the boarding passes, with worse
-consequences. Departments handle this with ageing rules, exactly as schedulers
-do, and the rules are largely informal.
+**The bottom category's wait is unbounded.** Strict priority in a busy
+department means the least urgent patients can be functionally starved — the
+same mathematics as week 6's thesis stuck behind the boarding passes, with much
+worse consequences. Departments handle it with ageing rules, exactly as
+schedulers do, and the rules are largely informal.
 
-## The disagreement, stated plainly
+<Predict question="Your classifier is 15% wrong. How much does the queue degrade?">
+
+Nothing like 15%.
+
+The cost does not spread evenly across everyone. It concentrates, almost
+entirely, on the small group being misclassified *downwards* — who then wait
+under the wrong category's target with the wrong condition, while the
+department's aggregate statistics look fine because the other 85% are being
+sorted correctly.
+
+An average is exactly the wrong instrument for finding this. You will produce
+your own error rate in this week's lab, and then apply it.
+
+</Predict>
+
+</Beat>
+
+<Beat n={4} label="The disagreement, stated plainly">
 
 Adaeze's framing is that the ordering rule is where the distributive work
-happens. Priya's is that the rule is only as good as the measurement it runs on,
-and that a beautifully designed priority queue fed by a biased classifier is a
+happens.
+
+Priya's is that the rule is only ever as good as the measurement feeding it, and
+that a beautifully designed priority queue fed by a biased classifier is a
 machine for laundering that bias into something that looks like clinical
 objectivity.
 
-We do not resolve this in the lecture, and you should not expect the course to
-resolve it for you. It is the live question in the field, and the final design
-brief will be marked partly on whether you noticed that your own design has a
-classifier in it somewhere.
+We do not resolve this, and you should not expect the course to resolve it for
+you. It is the live question in the field, and the final design brief is marked
+partly on whether you noticed that your own design has a classifier in it
+somewhere.
 
-Next week: what happens when the information the queue sorts on is not need, but
-what you are willing to pay.
+Next week: a rule that sorts not on need, but on what you are willing to pay.
+
+</Beat>

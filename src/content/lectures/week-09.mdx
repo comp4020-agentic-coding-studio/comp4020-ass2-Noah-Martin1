@@ -16,68 +16,104 @@ related:
   - assessments/03-simulation-report
 ---
 
-A restaurant with no reservations has a queue on the pavement. The same
-restaurant with a booking system has no queue at all.
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import WaitMoved from "../../components/diagrams/WaitMoved.astro";
+
+A restaurant with no reservations has a queue on the pavement.
+
+The same restaurant with a booking system has no queue at all.
+
+<Beat n={1} label="Where did it go?">
 
 It has not become faster. It seats the same number of people in the same
-evening. What has changed is that the waiting now happens at home, four days
-earlier, distributed across everyone who wanted a table — including the people
-who never got one and therefore never appeared in any statistic the restaurant
-keeps.
+evening with the same kitchen.
 
-**The wait did not disappear. It moved somewhere nobody measures.** Hold onto
-that, because it is the trick every system in this lecture is performing.
+What changed is that the waiting now happens at home, four days earlier,
+distributed across everybody who wanted a table — including the people who
+never got one, and who therefore appear in no statistic the restaurant keeps.
 
-## Three ways to move a wait
+<Punch>
+  The wait did not disappear. It moved somewhere nobody measures.
+</Punch>
+
+Every system in this lecture is performing that trick.
+
+</Beat>
+
+<Beat n={2} label="Three ways to move a wait">
 
 **Appointments** convert waiting-in-line into waiting-in-calendar. The gain is
 real: you spend the interval living your life rather than standing in a
-corridor. The costs are two. First, appointment systems are brittle under
-variance — one overrunning consultation cascades through the whole afternoon,
-which is why your 2:30 GP appointment is at 3:10. Second, they require
-commitment in advance, and the people worst served are the ones whose lives are
-least predictable, which correlates depressingly well with the people who most
-need the service.
+corridor. Two costs. They are brittle under variance — one overrunning
+consultation cascades through the whole afternoon, which is why your 2:30
+appointment is at 3:10 — and they demand commitment in advance, which serves
+worst exactly those people whose lives are least predictable.
 
 **Virtual queues** keep the ordering and delete the standing. Take a ticket, go
 away, come back when called. Almost strictly better than a physical line —
-except that it silently requires a phone, a number, an address, somewhere to
-wait, and the literacy to work the system. The queue has been made invisible,
-and so have the people who cannot join it.
+except that it silently requires a phone, a number, somewhere to wait, and the
+literacy to work the system. The queue has been made invisible, and so have the
+people who cannot join it.
 
-**Reservations with deposits** are the paid-priority mechanism of week 8 wearing
-a different coat: allocation by willingness to commit money in advance. Every
-argument from last week applies unchanged.
+**Reservations with deposits** are week 8's mechanism wearing a different coat:
+allocation by willingness to commit money in advance. Every argument from last
+week applies unchanged.
 
-## The measurement trap
+</Beat>
 
-This is the practical point, and it is why the lecture sits here rather than in
-Act I.
+<Beat n={3} label="The trap this sets for measurement">
 
-When a service moves from a physical queue to an appointment system, its
-published waiting time almost always improves dramatically. Of course it does:
-it is now measuring the interval between arriving and being seen, and the
-four-week gap between phoning and arriving is not in that interval.
+<Predict question="A clinic moves from walk-in to booked appointments. Its published average wait falls from 90 minutes to 8. Did anything improve?">
 
-A health service that reports "average wait 8 minutes" while people wait five
-weeks for the appointment is not lying. It is measuring what it defined itself
-as measuring, and the definition is the whole story. Week 3 gave you the tool for
-catching this: apply L = λW at the boundary you actually care about, not the one
-the organisation chose to draw.
+For some people, genuinely yes. For the published number, no — it is measuring
+a different thing and did not say so.
 
-## When it is genuinely the right answer
+The clock now starts when you arrive for an appointment you were given four
+weeks ago. The four weeks are outside the definition, so they are not in the
+statistic.
+
+Nobody lied. The figure measures exactly what the service defined it to
+measure. That is what makes this so hard to argue with, and so common.
+
+</Predict>
+
+<WaitMoved />
+
+A health service reporting an eight-minute average while people wait five weeks
+for the appointment is not committing fraud. It has drawn a boundary, and the
+boundary is the whole story.
+
+Week 3 gave you the tool for catching this: apply L = λW at the boundary you
+actually care about, rather than the one the organisation chose to draw. That
+is your lab this week, on a real published statistic of your choosing.
+
+</Beat>
+
+<Beat n={4} label="The honest case for doing it anyway">
 
 Do not read this as debunking. Moving a wait is often the best available move,
-and here is the honest version: waiting is not uniformly costly. An hour at home
-is worth far more than an hour in a corridor. A system that converts the second
-into the first has created real value even though the clock says nothing
-changed.
+and the reason is precise:
+
+**waiting is not uniformly costly.** An hour at home is worth far more to you
+than an hour in a corridor. A system that converts the second into the first has
+created real value even though the clock says nothing changed — and week 4's
+arithmetic, which priced all hours the same, cannot see that either.
 
 The failure is not using appointments. It is using appointments and then
 believing your own waiting-time statistic.
 
-Act II ends here. You now have five ordering rules — arrival, length, need,
-price, and appointment — and you have seen that each one buys something and
-charges somebody. Act III is about what happens when the system you applied them
-to turns out to be connected to other systems, and to contain people who have
-noticed what you are doing.
+</Beat>
+
+<Beat n={5} label="What Act II gave you">
+
+Five ordering rules: arrival, length, need, price, and appointment. Each one
+buys something. Each one charges somebody. You can now say which, for any of
+them.
+
+Act III is about what happens when the system you applied them to turns out to
+be connected to other systems — and full of people who have worked out what you
+are doing.
+
+</Beat>

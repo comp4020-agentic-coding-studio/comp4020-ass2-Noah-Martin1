@@ -16,96 +16,127 @@ related:
   - assessments/02-ordering-rule
 ---
 
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
 import QueueSim from "../../components/QueueSim.astro";
 
 Sometime around 1970, banks in the United States did something that now looks
-obvious and at the time was controversial enough to need explaining to
-customers: they replaced one queue per teller with a single queue feeding all
-tellers.
+obvious and at the time needed explaining to customers on posters.
 
-Customers hated it at first. It looked longer. It *was* longer — one line of
-thirty instead of six lines of five. What it also was, and what nobody could see
-by looking, was fairer and faster in the way that matters.
+They replaced one queue per teller with a single queue feeding every teller.
 
-## What the single line actually does
+Customers hated it. It looked longer. It *was* longer — one line of thirty
+instead of six lines of five.
 
-Two things. The first one surprises people, including the version of me that
-wrote the first draft of this lecture.
+<Beat n={1} label="Guess the gain before you see it">
 
-**It cuts the average wait, and not by a little.** The servers are identical and
-working at identical speeds, so where does the gain come from? From never
-leaving a server idle while somebody is waiting. In six separate lines a teller
-can be free while three people stand two metres away in the next lane, because
-nobody switches fast enough to notice. That idle time is pure waste; it is
-invisible to everybody in the building; and it gets worse as the system gets
-busier, which is exactly when you can least afford it.
+<Predict question="Six tellers, same customers, same speeds. What does merging the six lines into one actually buy?">
 
-The simulation below runs both against the same arrival stream, with the same
-servers and the same service times. The pooled line comes in around twice as
-fast on the mean. I had assumed, before running it, that the historical gain was
-mostly about fairness and only marginally about speed. That is a common belief
-and it is wrong.
+Both of the things you might have said, and the first one is bigger than nearly
+everyone expects — including the version of me that wrote the first draft of
+this lecture.
 
-One honest caveat: the simulation allows no lane-switching, which is the most
-generous possible treatment of parallel queues in the fairness sense and the
-least generous in the speed sense. Real shoppers jockey, and jockeying recovers
-part of the gap — never all of it, because you can only switch after you have
-already lost the time that told you to.
+**It cuts the average wait, roughly in half.** Not by working faster. The
+servers are identical. By never leaving a teller idle while somebody is
+waiting.
 
-**It destroys the variance.** This is the part customers actually feel. In six
-separate lines you might pick the one behind the man depositing a shoebox of
-coins and wait four times as long as somebody who arrived after you. In one line
-that cannot happen: the order you leave in is the order you arrived in. You have
-swapped a lottery for a promise.
+**It destroys the variance.** In six lines you might pick the one behind the man
+depositing a shoebox of coins. In one line that cannot happen: the order you
+leave in is the order you arrived in.
 
-Watch the second graph as well as the first. The mean improves by roughly half;
-the ninetieth percentile improves by considerably more. Most of the value of most
-queue design is in the tail, and organisations almost invariably report the mean.
+I had assumed the historical gain was mostly about fairness and only marginally
+about speed. That is a common belief and it is wrong, and the simulation below
+is what corrected it.
+
+</Predict>
+
+</Beat>
+
+<Beat n={2} label="Where the speed comes from">
+
+It is worth being precise about this, because it is not obvious where a free
+gain could possibly come from when nobody is working faster.
+
+In six separate lines, a teller can be free while three people stand two metres
+away in the next lane, because nobody switches fast enough to notice. That idle
+time is pure waste. It is invisible to everybody in the building — the teller
+looks like they are between customers, not like they are stranded — and it gets
+worse as the system gets busier, which is exactly when you can least afford it.
+
+A single line makes that state impossible. If anyone is waiting, no server is
+idle. That is the whole mechanism.
 
 <QueueSim
   variant="lanes"
   id="sim-lanes"
   alt="Two configurations running the same arrivals: above, one line feeding four servers; below, four separate lines with one server each. The pooled line stays short while the separate lines develop uneven backlogs, with some servers idle beside a queue."
-  watch="The readout shows pooled first, separate second, for L, W and the 90th percentile. Watch the four separate lanes go uneven — and specifically, watch for a server sitting idle while another lane has three people in it. That idle box is where the pooled line's advantage comes from."
+  watch="The readout shows pooled first, separate second. Watch the four separate lanes go uneven — and specifically, watch for an idle server box sitting beside a lane with three people in it. Every second that box is empty while somebody waits is where the pooled line's advantage comes from."
 />
 
+One honest caveat: the simulation allows no lane-switching, which is the most
+generous treatment of parallel queues on fairness and the least generous on
+speed. Real shoppers jockey, and jockeying recovers part of the gap — never all
+of it, because you can only switch after you have already lost the time that
+told you to.
 
-## The fairness claim, stated properly
+</Beat>
 
-FCFS says: **order of service equals order of arrival, and nothing else is
-considered.**
+<Beat n={3} label="The fairness claim, stated properly">
 
-That is a genuine and defensible commitment. It is transparent — anybody can
-audit it by looking. It is manipulation-resistant; there is nothing to game
-except arriving earlier. It requires no information about the people in it,
-which means it cannot discriminate on information it does not have. For a
-public system dealing with strangers, those are not small properties.
+<Punch note="Transparent, auditable by anyone standing in it, and impossible to game except by arriving earlier.">
+  Order of service equals order of arrival, and nothing else is considered.
+</Punch>
 
-## What it costs
+That is a genuine commitment, and for a public system dealing with strangers
+the properties are not small. It requires no information about the people in
+it, which means it cannot discriminate on information it does not have.
 
-Three things, and you should be able to name all three by the end of the hour.
+</Beat>
+
+<Beat n={4} label="What it costs">
+
+Three things, and Act II is going to spend a week on each of the first two.
 
 **It ignores job length.** The person with a thirty-second query waits behind
-the person with a twenty-minute mortgage restructure. Every one of those
-thirty-second customers pays twenty minutes for a service worth half a minute to
-them. In aggregate this is enormous, and it is week 6's subject.
+the person with a twenty-minute mortgage restructure, paying twenty minutes for
+a service worth half a minute to them. That is next week.
 
 **It ignores urgency.** FCFS applied in an emergency department kills people.
-This is not hyperbole and it is why no emergency department uses it. Week 7.
+Not hyperbole, and it is why no emergency department uses it. Week 7.
 
-**It converts a queue into a test of free time.** "First come" is only fair
-between people who can equally freely come first. A queue that forms at 6am
-outside a housing office is allocating by who can afford to lose a night's sleep
-and a morning's wages. The rule discriminates on nothing — but the *access* to
-the rule is distributed very unevenly, and the rule's blindness is exactly what
-prevents it from noticing.
+**It turns a queue into a test of free time.** This is the one nobody puts on
+the poster. "First come" is only fair between people who can equally freely
+come first. A queue that forms at 6am outside a housing office is allocating by
+who can afford to lose a night's sleep and a morning's wages.
 
-## The point of Act II
+<Predict question="FCFS discriminates on nothing. So how does it manage to land unevenly?">
 
-FCFS is the default, and defaults are the most powerful design decisions there
-are, because they get chosen by not deciding.
+Because access to the rule is not distributed the way the rule assumes.
+
+The rule's blindness is exactly what stops it noticing. It cannot see that the
+person at the front took a day off and the person at the back could not,
+because by design it cannot see anything except arrival order — and week 4
+already told you who is actually standing in that room at 10am on a Tuesday.
+
+A rule that considers nothing does not thereby become fair. It becomes fair
+*conditional on everyone arriving on equal terms*, and that condition is
+almost never checked.
+
+</Predict>
+
+</Beat>
+
+<Beat n={5} label="Why defaults matter most">
+
+FCFS is the default. Defaults are the most powerful design decisions there are,
+because they get chosen by nobody deciding.
 
 For the next four weeks we replace it — with job length, with need, with price,
 and finally with not queueing at all. Each replacement buys something real. Each
-one costs somebody. Your job, in the assignment due next week, is to make one of
-those trades deliberately and then be honest about the bill.
+one charges somebody.
+
+Your job, in the assignment due next week, is to make one of those trades
+deliberately and then be honest about the bill.
+
+</Beat>

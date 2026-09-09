@@ -16,83 +16,113 @@ related:
   - assessments/03-simulation-report
 ---
 
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
 import QueueSim from "../../components/QueueSim.astro";
 
-A theme park sells a pass that lets you skip the line. People find this
-objectionable in a way they do not find objectionable that the park charges
-admission at all, and it is worth working out exactly what the objection is,
-because the obvious version of it does not survive contact with week 4.
+A theme park sells a pass that lets you skip the line.
 
-## The argument for
+People find this objectionable in a way they do not find the admission charge
+objectionable. It is worth working out exactly what the objection is, because
+the obvious version of it does not survive contact with week 4.
 
-Start from where week 4 left us. A queue is already a price. Standing in it for
-ninety minutes costs you ninety minutes, and the people who get to the front are
-the people willing to pay that. **A queue is an auction denominated in time.**
+<Beat n={1} label="The uncomfortable starting point">
 
-Which raises the awkward question: what, exactly, is good about time as a
-currency?
+You already paid to be at the front. You paid in minutes.
 
-It is not that time is equally distributed — it is not. It is not that time is
-harmless — week 4 costed it at millions. And critically, **the time spent in a
-queue is burned**. When you pay ninety minutes, nobody receives ninety minutes.
+<Punch note="A queue is an auction denominated in time. The people who reach the front are the people willing to bid ninety minutes of their life.">
+  Every queue is already sorting by willingness to pay.
+</Punch>
+
+<Predict question="So what exactly is good about time as the currency?">
+
+Not that it is equally distributed — week 4 established that it is not, and that
+who is standing in the room at 10am on a Tuesday is not a random sample.
+
+And here is the part that should genuinely bother you: **the time spent in a
+queue is burned.** When you pay ninety minutes, nobody receives ninety minutes.
 The value is destroyed. When you pay forty dollars, the park receives forty
 dollars, and can in principle hire more staff, lower admission, or open another
 ride.
 
-This is the economist's case and it is genuinely strong: replacing a
-time-auction with a money-auction converts pure waste into transferable value.
-Congestion charging in Singapore, Stockholm and London rests on exactly this
-argument, and it works — the traffic falls, and the revenue funds transit.
+That is the economist's case and it is strong. Congestion charging in Singapore,
+Stockholm and London rests on exactly this argument, and it works: the traffic
+falls and the revenue funds transit.
 
-## The argument against
+</Predict>
 
-Three objections, in ascending order of how hard they are to answer.
+</Beat>
 
-**It sorts by wealth rather than valuation.** Willingness to pay is willingness
-*and ability*. Forty dollars from someone with forty thousand is not the same
-signal as forty dollars from someone with four hundred, so the auction is not
-measuring how much people want the ride. It is measuring what they have. Time,
-for all its faults, is distributed far more equally than money.
+<Beat n={2} label="Three objections, hardest last">
 
-**It can make the free queue worse on purpose.** This is the one that should
-worry you most. A park's revenue from priority passes depends on the standard
-queue being unpleasant. There is a commercial incentive to *not* fix the wait,
-and once a system earns money from congestion it has acquired a reason to
-preserve it. Watch for this: it is the strongest general argument against
-paid-priority schemes, and it applies to airport security, motorway lanes and
-customer support alike.
+**It sorts by wealth, not valuation.** Willingness to pay is willingness *and
+ability*. Forty dollars from someone with forty thousand is not the same signal
+as forty dollars from someone with four hundred, so the auction is not measuring
+how much people want the ride. It measures what they have. Time, for all its
+faults, is distributed far more equally than money.
 
-**It changes what kind of thing the good is.** Some queues are for goods we have
-decided should not be allocated by price at all — organ transplants, emergency
-care, a place in a public school. Introducing payment into those does not just
-reallocate them; it reclassifies them. The final week is about that.
+**It creates a reason not to fix the queue.** This is the one that should worry
+you most. A park's revenue from priority passes depends on the standard queue
+being unpleasant. Once a system earns money from congestion it has acquired an
+interest in preserving it — and this applies to airport security, motorway
+lanes and customer support alike.
 
-## The measurement everyone skips
+**It reclassifies the good.** Some queues are for things we have decided should
+not be allocated by price at all: organ transplants, emergency care, a place at
+a public school. Introducing payment does not just reallocate them, it changes
+what kind of thing they are. That is week 12.
 
-Here is the empirical question almost no public debate about fast lanes bothers
-to ask, and the simulation below is built to answer it: **what actually happens
-to the standard queue?**
+</Beat>
 
-There are two cases, and they are opposites.
+<Beat n={3} label="The measurement everybody skips">
 
-If the paid lane uses *spare* capacity — a counter that was idle — then everyone
-is better off and the objection is purely about symbolism.
+Here is the empirical question almost no public argument about fast lanes
+bothers to ask: **what actually happens to the standard queue?**
 
-If the paid lane uses *the same servers* — and it usually does — then every
-skip is somebody else's delay. The standard queue gets strictly worse, and the
-distribution of the harm is the thing to look at, because the mean barely moves
-while the tail lengthens sharply. Move the slider and watch which graph reacts.
+There are two cases and they give opposite answers.
 
-Which case you are in is an empirical fact about the system, not a matter of
-opinion, and it is astonishing how rarely anyone checks before arguing.
+If the paid lane uses **spare** capacity — a counter that was sitting idle —
+everyone is better off and the objection is purely symbolic.
+
+If the paid lane uses **the same servers**, and it usually does, every skip is
+somebody else's delay.
+
+<Predict question="Ten per cent buy priority, sharing the same servers. What happens to the population's average wait?">
+
+Almost nothing. It barely moves.
+
+Which is exactly why an operator can say, with a straight face and without
+lying, that the fast lane did not make things worse.
+
+Look at the unpaid group's ninetieth percentile instead. That is where the cost
+went, and an average is structurally incapable of showing it to you — the same
+trap as week 7's classifier, in a different building.
+
+</Predict>
 
 <QueueSim
   variant="express"
   id="sim-express"
   alt="One pair of servers taking from two queues: a gold priority queue above and a standard queue below. As the share buying priority rises, the standard queue lengthens while the priority queue stays short until it too fills up."
-  watch="W is shown as priority / standard. Drag the slider from 0 to 80 per cent and watch two things at once: the standard wait climbs steeply, and the priority wait also creeps up as the fast lane fills with other people who paid. Past roughly half, nobody is getting much for their money and the operator is collecting it anyway."
+  watch="W is shown as priority / standard. Drag from 0 to 80 per cent and watch three numbers at once: the standard wait climbs steeply, the priority wait creeps up as the fast lane fills with other people who paid, and the overall mean barely moves at all. Past roughly half, nobody is getting much for their money and the operator is collecting it anyway."
 />
 
+</Beat>
 
-Next week: the alternative nobody in this debate mentions, which is not to have
-the queue at all.
+<Beat n={4} label="The decay nobody advertises">
+
+Push the slider past 50%.
+
+The advantage of the fast lane collapses, because the fast lane is now a queue.
+At high uptake you have a pure transfer from customers to operator with almost
+no change in service — everybody has paid, and nobody is faster.
+
+Find that point for a system you use. It is the number the operator most wants
+to know and least wants published, and finding it is a legitimate basis for
+your simulation report.
+
+Next week: the alternative nobody in this argument ever mentions, which is not
+having the queue at all.
+
+</Beat>

@@ -63,6 +63,10 @@
 .q-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  /* Without these the wrapper is sized by its min-content -- a table with a
+     min-width pushes the whole page sideways instead of scrolling inside. */
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Act labelling. Acts are distinguished by name and position, never by a third

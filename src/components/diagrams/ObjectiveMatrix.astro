@@ -24,29 +24,30 @@ const WORD = ["poor at", "mixed on", "good at"];
 ---
 
 <figure class="q-figure">
-  <div class="q-scroll">
+  <div class="obj__wrap">
     <table class="obj">
       <caption class="obj__caption">
         What each ordering rule optimises, and what it gives up
       </caption>
       <thead>
         <tr>
-          <th scope="col">Rule</th>
+          <th scope="col">Rule, and who pays for it</th>
           {OBJECTIVES.map((o) => <th scope="col">{o}</th>)}
-          <th scope="col">Who pays</th>
         </tr>
       </thead>
       <tbody>
         {RULES.map((r) => (
           <tr>
-            <th scope="row">{r.rule}</th>
+            <th scope="row">
+              {r.rule}
+              <span class="obj__cost">{r.cost}</span>
+            </th>
             {r.scores.map((s, i) => (
               <td>
                 <span aria-hidden="true" class={`obj__m obj__m--${s}`}>{MARK[s]}</span>
                 <span class="obj__sr">{WORD[s]} {OBJECTIVES[i].toLowerCase()}</span>
               </td>
             ))}
-            <td class="obj__cost">{r.cost}</td>
           </tr>
         ))}
       </tbody>
@@ -61,7 +62,8 @@ const WORD = ["poor at", "mixed on", "good at"];
 </figure>
 
 <style>
-  .obj { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.875rem; }
+  .obj { border-collapse: collapse; width: 100%; font-size: 0.875rem; table-layout: fixed; }
+  .obj__wrap { padding-bottom: 0.5rem; }
   .obj__caption {
     text-align: left;
     padding: 1rem 1rem 0.75rem;
@@ -69,13 +71,24 @@ const WORD = ["poor at", "mixed on", "good at"];
     color: var(--q-ink-soft);
   }
   .obj th, .obj td { padding: 0.5rem 0.6rem; text-align: center; }
-  .obj thead th { font-size: 0.75rem; letter-spacing: 0.03em; color: var(--q-ink-soft); font-weight: 600; }
-  .obj tbody th { text-align: left; font-weight: 600; white-space: nowrap; }
+  .obj thead th { font-size: 0.7rem; letter-spacing: 0.02em; color: var(--q-ink-soft); font-weight: 600; }
+  .obj thead th:not(:first-child) { width: 4.4rem; }
+  .obj thead th:first-child { text-align: left; }
+  .obj__m { font-size: 1.2rem; line-height: 1; }
+  .obj th, .obj td { vertical-align: top; }
+  .obj tbody th { text-align: left; font-weight: 600; }
   .obj thead th:first-child, .obj tbody th { padding-left: 1rem; }
   .obj tbody tr { border-top: 1.5px solid var(--q-rule); }
   .obj__m { font-size: 1.05rem; color: var(--q-gold); }
   .obj__m--0 { color: var(--q-ink-soft); opacity: 0.55; }
-  .obj__cost { text-align: left; color: var(--q-ink-soft); font-size: 0.8125rem; padding-right: 1rem; }
+  .obj__cost {
+    display: block;
+    margin-top: 0.15rem;
+    font-weight: 400;
+    color: var(--q-ink-soft);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
   .obj__sr {
     position: absolute;
     width: 1px; height: 1px;

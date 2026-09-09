@@ -15,67 +15,125 @@ related:
   - sessions/week-01
 ---
 
-There is a coffee shop on the ground floor of this building. Between 9:00 and
-9:20 on a teaching morning it serves roughly ninety people, and for most of that
-twenty minutes there is a line out the door.
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import CafeLayouts from "../../components/diagrams/CafeLayouts.astro";
 
-Here is the question the course opens with, and it is not rhetorical: **why is
-the line in that shape?**
+There is a coffee shop on the ground floor of this building.
 
-Not "why is there a line" — that one is easy, more people want coffee than the
-machine can produce at once. The question is why the line runs *along the
-window* rather than doubling back, why there is one queue rather than two, why
-the person taking orders is not the person making the drinks, and why somebody
-who orders a filter coffee waits behind somebody ordering four oat lattes
-instead of being handed their cup in fifteen seconds.
+Between 9:00 and 9:20 on a teaching morning it serves about ninety people, and
+for most of those twenty minutes the line is out of the door.
 
-None of those are laws of physics. Each one is a decision. Some of them were
-made deliberately by somebody who had thought about throughput. Some were made
-by a shopfitter in 2019 who was thinking about power outlets. At least one of
-them is costing about four minutes per customer at peak, and nobody in the
-building could tell you which.
+<Beat n={1} label="Ask the wrong question first">
 
-## The claim this course makes
+Most people, asked why that line exists, answer *not enough staff*.
+
+Hold on to that answer. It is the one this entire course is built to
+complicate, and by week 4 you will be able to say precisely what is wrong with
+it. For now, notice only that it was reached in under a second, by everybody,
+without looking at anything.
+
+Here is a better question, and it is not rhetorical:
+
+<Punch>Why is the line *that shape*?</Punch>
+
+Not why there is a line. Why it runs along the window rather than doubling
+back. Why there is one queue and not two. Why the person taking your order is
+also the person making the drink. Why somebody who wants a filter coffee waits
+behind somebody ordering four oat lattes.
+
+</Beat>
+
+<Beat n={2} label="Look at what the room is actually doing">
+
+Below are three arrangements of the same café: same floor area, same two staff,
+same ninety customers.
+
+<CafeLayouts />
+
+None of these is the natural shape of a queue, because there is no natural
+shape of a queue. Each is a decision. Some of them were made deliberately by
+somebody who had thought about throughput. At least one was made by a
+shopfitter in 2019 who was thinking about where the power outlets go.
+
+</Beat>
+
+<Predict question="One of those three is costing about four minutes per customer at peak. Which, and why?">
+
+The first — one line, one person doing both jobs.
+
+Not because the staff are slow. Because every time the barista stops making a
+drink to take an order and handle payment, the drink-making stops. The two
+tasks interrupt each other, and the interruptions are unpredictable, which as
+you will see next week is much worse than them merely being frequent.
+
+The third arrangement fixes it without adding a single person. It just stops
+the two jobs from blocking one another.
+
+Now the uncomfortable part: nobody in that building could tell you which
+arrangement they are running, or when it was chosen, or by whom.
+
+</Predict>
+
+<Beat n={3} label="The claim this course makes">
 
 > A queue is not a thing that happens to people. It is a rule, applied to
 > people, by someone, usually invisibly.
 
-That rule decides who goes first. Deciding who goes first is deciding whose time
-is spent, and time is the one resource every person in the line is paying with
-whether they agreed to or not. So the rule is doing distributive work — it is
-moving cost from one group of people to another — and it is almost always doing
-it without saying so.
+Every queue has four parts, and almost everything in the next twelve weeks is a
+consequence of turning one of them.
 
-This is what I mean by the economics of waiting, and it is why the course is not
-simply a queueing theory unit. The mathematics is a tool, and a good one; we
-will have the core of it by week 3. But the mathematics answers *how long*. It
-does not answer *who*, and *who* is the interesting question.
+- **Arrivals** — when people turn up
+- **Service** — how long each one takes
+- **Servers** — how many at once
+- **Discipline** — *who goes next*
 
-## What we do today
+The fourth one is the one nobody notices and everybody has opinions about. No
+one has ever been angry about inter-arrival variance. Everyone has been angry
+about queue-jumping.
 
-Three things, in order.
+</Beat>
 
-First, a taxonomy you can use immediately: every queue has an **arrival
-process**, a **service process**, a **number of servers**, and a **discipline** —
-the rule for choosing who is served next. Four knobs. Almost everything in this
-course is a consequence of turning one of them.
+<Beat n={4} label="Why the fourth knob is the political one">
 
-Second, the observation that the discipline is the knob people notice least and
-argue about most, once they notice it. Nobody has strong feelings about
-inter-arrival variance. Everybody has strong feelings about queue-jumping.
+Deciding who goes first is deciding whose time gets spent. Time is what
+everybody in that line is paying with, whether they agreed to or not.
 
-Third, the course's running commitment, which I will hold you to in the final
-brief: **name the rule before you judge it.** A remarkable amount of complaint
-about waiting turns out, on inspection, to be complaint about a rule the
-complainer has never articulated. Once you can state it, you can ask the useful
-question, which is what it would cost to change.
+So the rule is moving cost from one group of people to another — and it is
+almost never saying so, to people who have no way to bill anyone for the hours.
 
-## Where this goes
+<Punch note="It will come back in week 4 with numbers attached, in week 8 with a price attached, and in week 12 attached to a transplant waiting list.">
+  There is no neutral queue.
+</Punch>
 
-Next week we take the four knobs and turn the first one. It will turn out that
-the thing that makes queues unbearable is not how busy a system is — plenty of
-very busy systems have no queue at all — but how *unpredictable* it is. That is
-a more counter-intuitive result than it sounds, and it explains why adding one
-more barista sometimes fixes nothing.
+This is not a queueing theory course, though you will have the core of the
+mathematics by week 3 and it takes about forty minutes. The mathematics answers
+*how long*. It does not answer *who*.
 
-Your lab this week is the ninety seconds of looking that most people never do.
+</Beat>
+
+<Beat n={5} label="The habit to build">
+
+**Name the rule before you judge it.**
+
+A remarkable amount of complaint about waiting turns out, on inspection, to be
+complaint about a rule the complainer has never articulated. Once you can state
+it — as an instruction, beginning *"when a server becomes free, serve…"* — you
+can ask the question that actually goes somewhere: what would it cost to change?
+
+That instruction is your lab exercise this week, and you will find it harder to
+write than it looks.
+
+</Beat>
+
+<Beat n={6} label="Where this goes">
+
+Next week, two systems. Both serve exactly sixty customers an hour. Both have
+one server working at exactly the same average speed.
+
+One of them has no queue at all. The other has eleven people in it.
+
+**Nothing about how busy they are can explain the difference.**
+
+</Beat>

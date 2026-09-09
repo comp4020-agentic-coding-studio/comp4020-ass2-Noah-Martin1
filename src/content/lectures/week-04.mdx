@@ -15,67 +15,115 @@ related:
   - sessions/week-04
 ---
 
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import WaitBill from "../../components/diagrams/WaitBill.astro";
+
 A passport office processes 800 applications a day. The average in-person wait
 is 90 minutes.
 
-That is 1,200 hours of human life per day, spent in a room, at that one office.
-Over a working year it is roughly 300,000 hours — about 150 full-time
-equivalents of people doing nothing. If you costed it at even a modest hourly
-rate you would arrive at a number in the millions.
+You now have the tools to do something with those two numbers that the office
+itself has never done.
 
-Now open the office's budget. That number is not in it. It is not in any line,
-any forecast, any performance report. The office's costs are staff, premises and
-systems; the 300,000 hours are borne entirely by people who are not party to any
-of the office's decisions and have no way to bill anyone for them.
+<Beat n={1} label="Multiply it out">
 
-This is the central economic fact about queues, and everything in Act II depends
-on it: **waiting is a real cost that is systematically invisible to the
-organisation generating it.**
+800 applications × 90 minutes is 1,200 hours of human life per day, at that one
+office. Over a working year, about 300,000 hours — roughly a hundred and sixty
+people's entire working lives, spent sitting in a room.
 
-## Why that matters more than it sounds
+<Predict question="What is that worth, and where does it appear in the office's accounts?">
 
-An organisation optimises what it can see. When the cost of waiting sits
-entirely outside its accounts, the rational internal decision is almost always
-to push the queue rather than the budget — to run at 97% utilisation, to cut the
-counter from four staff to three, to add a verification step that takes the
-office thirty seconds and the queue forty minutes.
+At $40 an hour it is about **$12 million a year** — roughly twice the office's
+entire operating budget.
+
+It appears in no line of that budget. Not in any forecast, any performance
+report, any efficiency review. Not anywhere.
+
+</Predict>
+
+<WaitBill />
+
+</Beat>
+
+<Punch>
+  Waiting is a real cost that is systematically invisible to the organisation
+  generating it.
+</Punch>
+
+<Beat n={2} label="Why that changes behaviour">
+
+An organisation optimises what it can see.
+
+When the cost of waiting sits entirely outside its accounts, the rational
+internal decision is nearly always to push the queue rather than the budget:
+run at 97% utilisation, cut the counter from four staff to three, add a
+verification step that costs the office thirty seconds and the queue forty
+minutes.
 
 None of these are failures of management. Each is a correct decision given the
-information the manager is being scored on. The failure is upstream, in what
-gets measured, and this is why "the staff are lazy" is nearly always the wrong
-diagnosis of a long queue.
+information the manager is scored on. The failure is upstream, in what gets
+measured — which is why *"the staff are lazy"* is almost always the wrong
+diagnosis of a long queue, and why week 1's instinctive answer, *not enough
+staff*, is the wrong one too.
 
-## Whose hour is it?
+</Beat>
 
-Here is where the arithmetic gets uncomfortable.
+<Beat n={3} label="Now the uncomfortable arithmetic">
 
-If we cost waiting time at what people would pay to avoid it, we get a defensible
-economic number — and we also get the result that a barrister's hour is worth
-forty times a pensioner's. Any system that then allocates on that basis will
-serve the barrister first, and it will have a rigorous efficiency argument for
-doing so.
+Say we accept that waiting should be costed. At what rate?
 
-If instead we cost every hour identically, we have made a moral claim rather
-than an economic measurement, and we should say so out loud rather than dress it
-as arithmetic.
+**Price each hour at what that person would pay to avoid it.** This is the
+economically orthodox answer, and it gives a defensible number. It also gives
+the result that a barrister's hour is worth forty times a pensioner's — so any
+system allocating on that basis will serve the barrister first, with a rigorous
+efficiency argument for doing so.
 
-There is no neutral option here, including the option of not choosing, which in
-practice means keeping whatever rule the system already had. This is the course's
-thesis arriving on schedule: **there is no neutral queue.** By declining to
-price waiting you have not avoided a distributional decision. You have made one
-and declined to look at it.
+**Price every hour identically.** This is what most people's instincts prefer.
+It is not a measurement. It is a moral commitment wearing a spreadsheet, and it
+should be defended as one rather than smuggled in as arithmetic.
 
-Notice, too, who is actually standing in the passport queue at 10am on a
-Tuesday. It is disproportionately people who cannot pay to avoid it, cannot send
-somebody else, and cannot do it online. The queue is not a random sample of the
-population, and any rule you apply to it lands on that population, not on an
-average one.
+**Price it at zero.** This is what the passport office is doing right now, and
+it is the option that produced the 300,000 hours.
 
-## What Act I has given you
+<Predict question="Which of those three is the neutral choice?">
+
+None of them. That is the point, and it is the course's thesis arriving on
+schedule.
+
+There is no option here that avoids making a distributional decision, including
+the option of not choosing — which in practice means keeping whatever rule the
+system already had, and enforcing it on everyone who walks in.
+
+By declining to price waiting, the passport office has not stayed out of the
+argument. It has taken the third position, and declined to look at it.
+
+</Predict>
+
+</Beat>
+
+<Beat n={4} label="Who is actually in the room">
+
+One more thing, before Act II starts turning the discipline knob.
+
+Look at who is standing in that passport queue at 10am on a Tuesday. It is
+disproportionately people who cannot pay to avoid it, cannot send somebody
+else, and cannot do it online.
+
+The queue is not a random sample of the population. Any rule you apply to it
+lands on *that* population, not on an average one — and the rules that look
+most neutral in the abstract are often the ones that land hardest, because
+neutrality is exactly what stops them noticing who is there.
+
+</Beat>
+
+<Beat n={5} label="What Act I gave you">
 
 You can now see a queue as a designed object, explain why it forms, measure it
 from the outside, and say what it costs and to whom.
 
-That is the toolkit. From next week we start turning the dial that actually
-decides the outcome — the discipline — and the first thing we do is take apart
-the rule you have been assuming was fair since you were four years old.
+That is the toolkit. From next week we start turning the knob that actually
+decides the outcome — and we begin by taking apart the rule you have believed
+in since you were four years old.
+
+</Beat>

@@ -15,73 +15,117 @@ related:
   - sessions/week-02
 ---
 
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import TwoSystems from "../../components/diagrams/TwoSystems.astro";
 import QueueSim from "../../components/QueueSim.astro";
 
-Two systems. Both serve exactly sixty customers an hour. Both have exactly one
-server, working at exactly the same average speed.
+Two drive-throughs. Both serve exactly sixty cars an hour. Both have one
+window, staffed by one person, working at exactly the same average speed.
 
-One of them has no queue, ever. The other has a queue of eleven people.
+One of them never has a queue. The other has eleven cars in it.
 
-The difference is not effort, staffing, or management. It is that in the first
-system the customers arrive one per minute like clockwork and every transaction
-takes fifty-five seconds. In the second, customers arrive whenever they feel
-like it and some of them order for the whole office.
+<Beat n={1} label="The only difference">
 
-This is the single most useful idea in the first half of the course, and it is
-routinely missed by the people running real systems: **queues are made of
-variability, not of load.** A perfectly predictable system running at 99% of
-capacity has no queue. A wildly unpredictable one at 70% can have a permanent
-one.
+In the first, cars arrive one a minute like a metronome and every order takes
+fifty-five seconds.
 
-## The utilisation trap
+In the second, cars arrive whenever they feel like it, and some of them are
+ordering for the whole office.
 
-Define ρ — "rho" — as the fraction of capacity you are using: arrival rate
-divided by service rate. Everyone's intuition is that as ρ climbs from 0.7 to
-0.9, waiting gets somewhat worse. Roughly 30% worse, say.
+Same throughput. Same staff. Same average service time. Same utilisation.
 
-It gets about **three times** worse. From 0.9 to 0.95, it doubles again.
+<TwoSystems />
 
-The relationship is not linear and it is not close to linear. Queue length grows
-roughly with ρ/(1−ρ), which means the last few per cent of capacity you squeeze
-out of a system are paid for with an enormous amount of somebody else's time.
-Run the simulation below and watch it happen; the dial is the only control, and
-the thing to notice is how ordinary the queue looks at 0.8 and how fast it
-stops looking ordinary after that.
+</Beat>
+
+<Punch note="Week 1 said the room's layout was a decision. This says the thing that makes the queue unbearable is not how much work arrives, but how unevenly.">
+  Queues are made of variability, not of load.
+</Punch>
+
+<Beat n={2} label="Why this is not obvious">
+
+Everyone's instinct is that a queue forms when a system runs out of capacity.
+It does not. A perfectly predictable system running at 99% of capacity has no
+queue at all — you can verify that yourself in the simulation below by dragging
+variability to zero and load to 0.97, and watching the line empty.
+
+What creates a queue is a gap: a moment when work arrives and the server is
+still busy with something that ran long. Regularity closes those gaps.
+Irregularity opens them, and once open they do not close by themselves, because
+the server can only ever work at one speed.
+
+</Beat>
+
+<Beat n={3} label="The trap in the last few per cent">
+
+Define **ρ** — "rho" — as the fraction of capacity you are using: arrival rate
+divided by service rate.
+
+<Predict question="As ρ goes from 0.7 to 0.9, how much worse does waiting get?">
+
+About **three times** worse. Then from 0.9 to 0.95 it roughly doubles again.
+
+Almost nobody guesses this. The intuition is that going from 70% to 90% busy
+makes things maybe 30% worse, because that is what linear feels like.
+
+Queue length grows roughly with **ρ/(1−ρ)**, and that denominator is the whole
+story: as ρ approaches 1 it approaches zero, and the ratio runs away. The last
+few per cent of capacity you squeeze out of a system are paid for with an
+enormous quantity of somebody else's time.
+
+</Predict>
+
+Drive the dial yourself. Start at 0.8 and creep upward.
 
 <QueueSim
   variant="rho"
   id="sim-rho"
-  alt="A single queue feeding one server. Hollow dots are people waiting, a gold dot is the person being served. Raising the load slider lengthens the line; lowering the variability slider shortens it dramatically at the same load."
-  watch="Set variability to zero and push load to 0.97 — the queue empties completely, because a perfectly predictable system has no queue however busy it is. Now put variability back to 1 and drop load to 0.9. Same servers, less work, a far worse queue. That is the whole lecture in two slider moves."
+  alt="A single queue feeding one server. Hollow dots are people waiting, a gold dot is the person being served, and a trace below shows queue length over the run. Raising the load slider lengthens the line sharply; lowering the variability slider empties it at the same load."
+  watch="Two moves. First set variability to zero and push load to 0.97 — the queue empties completely, because a perfectly predictable system has no queue however busy it is. Then put variability back to 1 and drop load to 0.9. Less work arriving, far worse queue. That is the lecture in two slider drags."
 />
 
+</Beat>
 
-This has a direct managerial consequence that almost nobody acts on. A system
-deliberately run at 85% capacity is not a wasteful system. It is a system that
-has bought predictability with slack, and the slack is doing real work. When a
-hospital ward, a motorway or a support desk is pushed to 97% "efficiency", the
-efficiency is real and so is the collapse in service, and the second is not
-usually attributed to the first.
+<Beat n={4} label="What this means for anyone running anything">
 
-## Where the variability comes from
+A system deliberately run at 85% capacity is not a wasteful system. It has
+bought predictability with slack, and the slack is doing real work.
 
-Two places, and it is worth keeping them apart.
+When a hospital ward, a motorway or a support desk is pushed to 97%
+"efficiency", the efficiency is real — and so is the collapse in service. The
+second is rarely attributed to the first, because the utilisation figure went
+in the right direction and utilisation is what gets reported.
+
+</Beat>
+
+<Beat n={5} label="Where variability comes from">
+
+Two sources, worth keeping apart because you can do different things about them.
 
 **Arrival variability** is people turning up when they want. You mostly cannot
-remove it; you can sometimes reshape it, which is week 9's whole subject.
+remove it. You can sometimes reshape it, which is week 9's entire subject.
 
 **Service variability** is transactions taking different lengths of time. You
 can often reduce it, and reducing it is frequently cheaper than adding
-capacity — the drive-through that splits ordering from payment from collection
-has not added a server, it has cut the variance each station sees.
+capacity. The drive-through that splits ordering from payment from collection
+has not added a server — it has cut the variance each station sees. So has the
+café in week 1's third floor plan.
 
-## A system to keep in mind
+</Beat>
 
-Hold on to this: an aircraft boarding through a single door is a queue with
-brutal service variability. Every passenger who stops to load a bag into an
-overhead locker blocks everyone behind them for an unpredictable interval. We
-come back to that aircraft in week 10, with three more tools than we have today,
-and it turns out to be the best worked example in the course.
+<Beat n={6} label="Hold on to this aircraft">
 
-Next week: how to measure any of this from the outside, with no access to the
-system's own data, using one multiplication.
+An aircraft boarding through a single door is a queue with brutal service
+variability. Every passenger who stops to lift a bag into an overhead locker
+blocks everyone behind them, for an unpredictable interval, in a corridor
+nobody can overtake in.
+
+We come back to that aircraft in week 10, with three more tools than we have
+today. It turns out to be the best worked example in the course.
+
+Next week: how to measure any of this from outside, with no access to the
+system's data, using one multiplication.
+
+</Beat>

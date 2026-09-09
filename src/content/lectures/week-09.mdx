@@ -1,0 +1,83 @@
+---
+title: Don't Queue At All
+description:
+  Appointments, reservations and virtual queues do not remove the wait. They
+  move it somewhere you cannot see — which is sometimes exactly right.
+week: 9
+date: 2027-05-03
+act: "II"
+idea: Appointment and virtual systems relocate waiting rather than eliminating it, and the relocation has its own winners.
+system: Restaurant reservation book
+buildsOn: 8
+teachers:
+  - priya-raghunathan
+related:
+  - sessions/week-09
+  - assessments/03-simulation-report
+---
+
+A restaurant with no reservations has a queue on the pavement. The same
+restaurant with a booking system has no queue at all.
+
+It has not become faster. It seats the same number of people in the same
+evening. What has changed is that the waiting now happens at home, four days
+earlier, distributed across everyone who wanted a table — including the people
+who never got one and therefore never appeared in any statistic the restaurant
+keeps.
+
+**The wait did not disappear. It moved somewhere nobody measures.** Hold onto
+that, because it is the trick every system in this lecture is performing.
+
+## Three ways to move a wait
+
+**Appointments** convert waiting-in-line into waiting-in-calendar. The gain is
+real: you spend the interval living your life rather than standing in a
+corridor. The costs are two. First, appointment systems are brittle under
+variance — one overrunning consultation cascades through the whole afternoon,
+which is why your 2:30 GP appointment is at 3:10. Second, they require
+commitment in advance, and the people worst served are the ones whose lives are
+least predictable, which correlates depressingly well with the people who most
+need the service.
+
+**Virtual queues** keep the ordering and delete the standing. Take a ticket, go
+away, come back when called. Almost strictly better than a physical line —
+except that it silently requires a phone, a number, an address, somewhere to
+wait, and the literacy to work the system. The queue has been made invisible,
+and so have the people who cannot join it.
+
+**Reservations with deposits** are the paid-priority mechanism of week 8 wearing
+a different coat: allocation by willingness to commit money in advance. Every
+argument from last week applies unchanged.
+
+## The measurement trap
+
+This is the practical point, and it is why the lecture sits here rather than in
+Act I.
+
+When a service moves from a physical queue to an appointment system, its
+published waiting time almost always improves dramatically. Of course it does:
+it is now measuring the interval between arriving and being seen, and the
+four-week gap between phoning and arriving is not in that interval.
+
+A health service that reports "average wait 8 minutes" while people wait five
+weeks for the appointment is not lying. It is measuring what it defined itself
+as measuring, and the definition is the whole story. Week 3 gave you the tool for
+catching this: apply L = λW at the boundary you actually care about, not the one
+the organisation chose to draw.
+
+## When it is genuinely the right answer
+
+Do not read this as debunking. Moving a wait is often the best available move,
+and here is the honest version: waiting is not uniformly costly. An hour at home
+is worth far more than an hour in a corridor. A system that converts the second
+into the first has created real value even though the clock says nothing
+changed.
+
+The failure is not using appointments. It is using appointments and then
+believing your own waiting-time statistic.
+
+Act II ends here. You now have five ordering rules — arrival, length, need,
+price, and appointment — and you have seen that each one buys something and
+charges somebody. Act III is about what happens when the system you applied them
+to turns out to be connected to other systems, and to contain people who have
+noticed what you are doing.

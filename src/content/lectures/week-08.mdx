@@ -1,0 +1,88 @@
+---
+title: "Pay to Skip: Order by Price"
+description:
+  Every queue already sorts by willingness to pay — in time. Charging money
+  instead is the most efficient and least popular thing in the course.
+week: 8
+date: 2027-04-26
+act: "II"
+idea: Prices sort by willingness to pay while queues sort by willingness to wait, and the two select different people.
+system: Theme park priority pass
+buildsOn: 4
+teachers:
+  - adaeze-nkemelu
+related:
+  - sessions/week-08
+  - assessments/03-simulation-report
+---
+
+A theme park sells a pass that lets you skip the line. People find this
+objectionable in a way they do not find objectionable that the park charges
+admission at all, and it is worth working out exactly what the objection is,
+because the obvious version of it does not survive contact with week 4.
+
+## The argument for
+
+Start from where week 4 left us. A queue is already a price. Standing in it for
+ninety minutes costs you ninety minutes, and the people who get to the front are
+the people willing to pay that. **A queue is an auction denominated in time.**
+
+Which raises the awkward question: what, exactly, is good about time as a
+currency?
+
+It is not that time is equally distributed — it is not. It is not that time is
+harmless — week 4 costed it at millions. And critically, **the time spent in a
+queue is burned**. When you pay ninety minutes, nobody receives ninety minutes.
+The value is destroyed. When you pay forty dollars, the park receives forty
+dollars, and can in principle hire more staff, lower admission, or open another
+ride.
+
+This is the economist's case and it is genuinely strong: replacing a
+time-auction with a money-auction converts pure waste into transferable value.
+Congestion charging in Singapore, Stockholm and London rests on exactly this
+argument, and it works — the traffic falls, and the revenue funds transit.
+
+## The argument against
+
+Three objections, in ascending order of how hard they are to answer.
+
+**It sorts by wealth rather than valuation.** Willingness to pay is willingness
+*and ability*. Forty dollars from someone with forty thousand is not the same
+signal as forty dollars from someone with four hundred, so the auction is not
+measuring how much people want the ride. It is measuring what they have. Time,
+for all its faults, is distributed far more equally than money.
+
+**It can make the free queue worse on purpose.** This is the one that should
+worry you most. A park's revenue from priority passes depends on the standard
+queue being unpleasant. There is a commercial incentive to *not* fix the wait,
+and once a system earns money from congestion it has acquired a reason to
+preserve it. Watch for this: it is the strongest general argument against
+paid-priority schemes, and it applies to airport security, motorway lanes and
+customer support alike.
+
+**It changes what kind of thing the good is.** Some queues are for goods we have
+decided should not be allocated by price at all — organ transplants, emergency
+care, a place in a public school. Introducing payment into those does not just
+reallocate them; it reclassifies them. The final week is about that.
+
+## The measurement everyone skips
+
+Here is the empirical question almost no public debate about fast lanes bothers
+to ask, and the simulation below is built to answer it: **what actually happens
+to the standard queue?**
+
+There are two cases, and they are opposites.
+
+If the paid lane uses *spare* capacity — a counter that was idle — then everyone
+is better off and the objection is purely about symbolism.
+
+If the paid lane uses *the same servers* — and it usually does — then every
+skip is somebody else's delay. The standard queue gets strictly worse, and the
+distribution of the harm is the thing to look at, because the mean barely moves
+while the tail lengthens sharply. Move the slider and watch which graph reacts.
+
+Which case you are in is an empirical fact about the system, not a matter of
+opinion, and it is astonishing how rarely anyone checks before arguing.
+
+Next week: the alternative nobody in this debate mentions, which is not to have
+the queue at all.

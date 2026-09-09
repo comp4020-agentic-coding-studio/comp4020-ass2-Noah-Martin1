@@ -1,0 +1,95 @@
+---
+title: "Triage: Order by Need"
+description:
+  The one place we already accept that arrival order is indefensible — and a
+  live disagreement between the two people teaching it.
+week: 7
+date: 2027-04-19
+act: "II"
+idea: Ordering by urgency saves lives and depends entirely on the quality of a ninety-second judgement.
+system: Emergency department
+buildsOn: 6
+teachers:
+  - adaeze-nkemelu
+  - priya-raghunathan
+related:
+  - sessions/week-07
+---
+
+Nobody argues for first-come-first-served in an emergency department. The chest
+pain goes before the sprained wrist, and if you asked the person with the wrist
+they would agree, even though they arrived first and will now wait four hours.
+
+This is the clearest case in the course of a society explicitly rejecting
+arrival order — and it is worth asking why the consent is so total here and so
+absent elsewhere.
+
+## What triage is
+
+A priority queue with a fixed number of classes. The Australasian Triage Scale
+uses five, from *immediately life-threatening* to *less urgent*, each with a
+target time to treatment. Within a class, arrival order. Between classes,
+strict priority.
+
+Two properties are doing the work.
+
+**It is preemptive at the front.** A category 1 arriving at minute 59 of your
+wait goes ahead of you, and there is no cap on how often that can happen.
+
+**It reorders on a dimension FCFS cannot see.** Arrival order is information
+about the queue. Urgency is information about the person. Any rule that improves
+on FCFS does so by using information FCFS throws away, and the whole question is
+whether you can obtain that information cheaply, accurately, and without
+creating an incentive to fake it.
+
+## Where the free lunch is
+
+Unlike SJF, triage does not really trade average for tail — it trades *whose*
+tail. The wrist waits longer so that the heart attack does not die. Almost
+everyone accepts that trade, because the outcomes being traded are radically
+unequal in kind: four hours of discomfort against a life.
+
+That asymmetry is the reason consent is so total here, and it does not transfer.
+When the outcomes are commensurable — everyone is just waiting — priority feels
+like queue-jumping, and it is resisted fiercely. The strength of your ordering
+rule's mandate depends less on its logic than on how unlike each other the
+consequences are.
+
+## Where it breaks — Priya's half of the lecture
+
+Everything above treats the category as given. It is not given. It is produced,
+in about ninety seconds, by a tired human with incomplete information, and the
+system's performance is bounded by the quality of that judgement rather than by
+the elegance of the queue discipline sitting on top of it.
+
+Three failure modes, all documented:
+
+**Under-triage of atypical presentation.** Category descriptions encode a
+prototype. Patients who do not present like the prototype are systematically
+sorted down. Women having heart attacks are the canonical study.
+
+**Under-reading of pain in people accustomed to not being believed.** The
+measurement instrument is a conversation, and conversations carry every bias the
+participants brought with them.
+
+**The category-4 wait is unbounded.** Strict priority with a busy department
+means the least-urgent patients can be functionally starved — the same
+mathematics as the thesis stuck behind the boarding passes, with worse
+consequences. Departments handle this with ageing rules, exactly as schedulers
+do, and the rules are largely informal.
+
+## The disagreement, stated plainly
+
+Adaeze's framing is that the ordering rule is where the distributive work
+happens. Priya's is that the rule is only as good as the measurement it runs on,
+and that a beautifully designed priority queue fed by a biased classifier is a
+machine for laundering that bias into something that looks like clinical
+objectivity.
+
+We do not resolve this in the lecture, and you should not expect the course to
+resolve it for you. It is the live question in the field, and the final design
+brief will be marked partly on whether you noticed that your own design has a
+classifier in it somewhere.
+
+Next week: what happens when the information the queue sorts on is not need, but
+what you are willing to pay.

@@ -1,0 +1,87 @@
+---
+title: First Come, First Served
+description:
+  The rule you have believed in since you were four years old, examined for the
+  first time — including what it costs and what it quietly gets wrong.
+week: 5
+date: 2027-03-22
+act: "II"
+idea: FCFS is a choice with a specific fairness claim and a measurable efficiency price.
+system: Bank branch
+buildsOn: 4
+teachers:
+  - adaeze-nkemelu
+related:
+  - sessions/week-05
+  - assessments/02-ordering-rule
+---
+
+Sometime around 1970, banks in the United States did something that now looks
+obvious and at the time was controversial enough to need explaining to
+customers: they replaced one queue per teller with a single queue feeding all
+tellers.
+
+Customers hated it at first. It looked longer. It *was* longer — one line of
+thirty instead of six lines of five. What it also was, and what nobody could see
+by looking, was fairer and faster in the way that matters.
+
+## What the single line actually does
+
+It does almost nothing to your average wait. If six tellers serve the same
+customers at the same rate, the mean is roughly unchanged, and this surprises
+people who assume the innovation was an efficiency measure.
+
+What it destroys is **variance**. In six separate lines you might pick the one
+behind the man depositing a shoebox of coins and wait four times as long as the
+person who arrived after you. In one line that cannot happen: the order you
+leave in is the order you arrived in. You have swapped a lottery for a promise.
+
+The simulation below runs both against the same arrival stream. Watch the means
+sit almost on top of each other while the spread collapses. Most of the value of
+most queue design is in the second graph, not the first, and organisations
+consistently report the first.
+
+There is also a real efficiency gain, and it is worth naming precisely: a single
+line has **no idle servers while anyone waits**. In parallel lines a teller can
+be free while three people stand in the next lane, because nobody switches fast
+enough. That is pure waste, and it grows as the system gets busier.
+
+## The fairness claim, stated properly
+
+FCFS says: **order of service equals order of arrival, and nothing else is
+considered.**
+
+That is a genuine and defensible commitment. It is transparent — anybody can
+audit it by looking. It is manipulation-resistant; there is nothing to game
+except arriving earlier. It requires no information about the people in it,
+which means it cannot discriminate on information it does not have. For a
+public system dealing with strangers, those are not small properties.
+
+## What it costs
+
+Three things, and you should be able to name all three by the end of the hour.
+
+**It ignores job length.** The person with a thirty-second query waits behind
+the person with a twenty-minute mortgage restructure. Every one of those
+thirty-second customers pays twenty minutes for a service worth half a minute to
+them. In aggregate this is enormous, and it is week 6's subject.
+
+**It ignores urgency.** FCFS applied in an emergency department kills people.
+This is not hyperbole and it is why no emergency department uses it. Week 7.
+
+**It converts a queue into a test of free time.** "First come" is only fair
+between people who can equally freely come first. A queue that forms at 6am
+outside a housing office is allocating by who can afford to lose a night's sleep
+and a morning's wages. The rule discriminates on nothing — but the *access* to
+the rule is distributed very unevenly, and the rule's blindness is exactly what
+prevents it from noticing.
+
+## The point of Act II
+
+FCFS is the default, and defaults are the most powerful design decisions there
+are, because they get chosen by not deciding.
+
+For the next four weeks we replace it — with job length, with need, with price,
+and finally with not queueing at all. Each replacement buys something real. Each
+one costs somebody. Your job, in the assignment due next week, is to make one of
+those trades deliberately and then be honest about the bill.

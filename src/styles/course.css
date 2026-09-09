@@ -197,6 +197,7 @@
   padding: 1.15rem;
 }
 
+.q-panels--1 { grid-template-columns: 1fr; }
 .q-panels--2 { grid-template-columns: 1fr; }
 .q-panels--3 { grid-template-columns: 1fr; }
 
@@ -236,7 +237,7 @@
 .q-box--idle { stroke-dasharray: 4 4; opacity: 0.45; }
 .q-line { stroke: var(--q-rule); stroke-width: 1.5; fill: none; }
 .q-line--dash { stroke-dasharray: 3 6; }
-.q-line--gold { stroke: var(--q-gold); stroke-width: 2; }
+.q-line--gold { stroke: var(--q-gold); stroke-width: 2; fill: none; }
 .q-fill { fill: var(--q-gold); }
 .q-fill--soft { fill: var(--q-gold); opacity: 0.22; }
 .q-fill--ink { fill: var(--q-ink); opacity: 0.07; }

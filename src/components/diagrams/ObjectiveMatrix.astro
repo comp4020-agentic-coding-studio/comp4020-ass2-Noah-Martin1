@@ -1,0 +1,85 @@
+---
+/**
+ * The closing diagram, and a table rather than a picture on purpose: the point
+ * is that you can read straight along a row and find no rule with four filled
+ * circles, because there is no such rule.
+ *
+ * A real <table> also means a screen reader gets the comparison rather than a
+ * description of one.
+ */
+type Score = 2 | 1 | 0;
+
+const OBJECTIVES = ["Mean wait", "Worst case", "Fairness", "Revenue"];
+
+const RULES: { rule: string; scores: Score[]; cost: string }[] = [
+  { rule: "First come, first served", scores: [0, 1, 2, 0], cost: "Ignores both urgency and job length" },
+  { rule: "Shortest job first", scores: [2, 0, 0, 0], cost: "Starves the longest job indefinitely" },
+  { rule: "Triage by need", scores: [1, 2, 1, 0], cost: "Only as good as a 90-second judgement" },
+  { rule: "Pay to skip", scores: [1, 0, 0, 2], cost: "Sorts by ability to pay, and rewards congestion" },
+  { rule: "Appointments", scores: [2, 1, 1, 1], cost: "Moves the wait somewhere nobody measures" },
+];
+
+const MARK = ["○", "◑", "●"];
+const WORD = ["poor at", "mixed on", "good at"];
+---
+
+<figure class="q-figure">
+  <div class="q-scroll">
+    <table class="obj">
+      <caption class="obj__caption">
+        What each ordering rule optimises, and what it gives up
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Rule</th>
+          {OBJECTIVES.map((o) => <th scope="col">{o}</th>)}
+          <th scope="col">Who pays</th>
+        </tr>
+      </thead>
+      <tbody>
+        {RULES.map((r) => (
+          <tr>
+            <th scope="row">{r.rule}</th>
+            {r.scores.map((s, i) => (
+              <td>
+                <span aria-hidden="true" class={`obj__m obj__m--${s}`}>{MARK[s]}</span>
+                <span class="obj__sr">{WORD[s]} {OBJECTIVES[i].toLowerCase()}</span>
+              </td>
+            ))}
+            <td class="obj__cost">{r.cost}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <figcaption class="q-figure__caption">
+    <b>What to notice:</b> read along any row and there is no rule with four
+    filled circles, because there is no such rule. Every queue you have met this
+    semester has already picked a column to be good at — including the ones that
+    picked by never discussing it.
+  </figcaption>
+</figure>
+
+<style>
+  .obj { border-collapse: collapse; width: 100%; min-width: 34rem; font-size: 0.875rem; }
+  .obj__caption {
+    text-align: left;
+    padding: 1rem 1rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--q-ink-soft);
+  }
+  .obj th, .obj td { padding: 0.5rem 0.6rem; text-align: center; }
+  .obj thead th { font-size: 0.75rem; letter-spacing: 0.03em; color: var(--q-ink-soft); font-weight: 600; }
+  .obj tbody th { text-align: left; font-weight: 600; white-space: nowrap; }
+  .obj thead th:first-child, .obj tbody th { padding-left: 1rem; }
+  .obj tbody tr { border-top: 1.5px solid var(--q-rule); }
+  .obj__m { font-size: 1.05rem; color: var(--q-gold); }
+  .obj__m--0 { color: var(--q-ink-soft); opacity: 0.55; }
+  .obj__cost { text-align: left; color: var(--q-ink-soft); font-size: 0.8125rem; padding-right: 1rem; }
+  .obj__sr {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+</style>

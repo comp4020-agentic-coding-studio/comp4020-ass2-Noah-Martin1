@@ -1,0 +1,78 @@
+---
+/**
+ * Week 1: the same coffee shop, the same staff, the same customers, three
+ * arrangements. Nothing here is a law of nature; each one is a decision
+ * somebody made, and two of them were probably made by a shopfitter.
+ */
+import Figure from "./Figure.astro";
+import Panel from "./Panel.astro";
+
+const W = 170;
+const H = 128;
+
+/** A row of waiting dots along a path. */
+const queue = (pts: [number, number][]) =>
+  pts.map(([cx, cy]) => `<circle cx="${cx}" cy="${cy}" r="4" class="q-dot" />`).join("");
+---
+
+<Figure
+  columns={3}
+  caption="Same room, same two staff, same ninety customers between nine and twenty past. The third arrangement serves them measurably faster than the first, because splitting ordering from making cuts the variance each station sees rather than adding capacity. None of these is the natural shape of a queue. Somebody chose — and in most cafés nobody in the building could tell you who, or when, or why."
+>
+  <Panel
+    title="One line along the window"
+    note="Simple, visible, and it puts the tail out of the door in the rain. One person doing both jobs."
+  >
+    <svg viewBox={`0 0 ${W} ${H}`} class="q-svg" role="img"
+      aria-label="A café plan with a single queue running along the window wall and out through the door, feeding one counter where the same person takes the order and makes it.">
+      <rect x="10" y="10" width={W - 20} height={H - 30} rx="3" class="q-line" fill="none" />
+      <rect x={W - 52} y="18" width="34" height="18" rx="2" class="q-box q-box--busy" />
+      <circle cx={W - 35} cy="27" r="4" class="q-dot--served" />
+      <Fragment set:html={queue([
+        [126, 52], [110, 52], [94, 52], [78, 52], [62, 52], [46, 52], [30, 52],
+        [22, 68], [22, 84], [30, 98], [46, 98],
+      ] as [number, number][])} />
+      <line x1="10" y1={H - 20} x2="46" y2={H - 20} class="q-line--dash" />
+      <text x="28" y={H - 6} text-anchor="middle" class="q-tick">door</text>
+    </svg>
+  </Panel>
+
+  <Panel
+    title="Two lines, two tills"
+    note="Feels faster and is not. You can now pick the wrong one, and a till can stand idle beside a full lane."
+  >
+    <svg viewBox={`0 0 ${W} ${H}`} class="q-svg" role="img"
+      aria-label="The same room split into two separate queues feeding two counters. One counter is busy with six people behind it; the other is idle with one.">
+      <rect x="10" y="10" width={W - 20} height={H - 30} rx="3" class="q-line" fill="none" />
+      <rect x={W - 52} y="18" width="34" height="18" rx="2" class="q-box q-box--busy" />
+      <circle cx={W - 35} cy="27" r="4" class="q-dot--served" />
+      <rect x={W - 52} y="66" width="34" height="18" rx="2" class="q-box q-box--idle" />
+      <Fragment set:html={queue([
+        [104, 27], [88, 27], [72, 27], [56, 27], [40, 27], [24, 27],
+        [104, 75],
+      ] as [number, number][])} />
+    </svg>
+  </Panel>
+
+  <Panel
+    title="Order here, collect there"
+    note="Two stations, two short queues. The barista never stops to take money, so neither station waits on the other."
+  >
+    <svg viewBox={`0 0 ${W} ${H}`} class="q-svg" role="img"
+      aria-label="The same room with ordering split from collection. A short queue feeds the order point, and a second short group waits at the collection point where drinks are made.">
+      <rect x="10" y="10" width={W - 20} height={H - 30} rx="3" class="q-line" fill="none" />
+      <rect x="26" y="18" width="32" height="18" rx="2" class="q-box q-box--busy" />
+      <circle cx="42" cy="27" r="4" class="q-dot--served" />
+      <text x="42" y="50" text-anchor="middle" class="q-tick">order</text>
+      <rect x={W - 58} y="18" width="32" height="18" rx="2" class="q-box q-box--busy" />
+      <circle cx={W - 42} cy="27" r="4" class="q-dot--served" />
+      <text x={W - 42} y="50" text-anchor="middle" class="q-tick">collect</text>
+      <Fragment set:html={queue([
+        [42, 68], [42, 84], [42, 100],
+      ] as [number, number][])} />
+      <Fragment set:html={queue([
+        [112, 68], [128, 68], [120, 84],
+      ] as [number, number][])} />
+    </svg>
+  </Panel>
+</Figure>

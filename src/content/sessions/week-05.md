@@ -36,13 +36,16 @@ all six.
 **Then the numbers.** Put every individual wait on the board as a dot plot, both
 runs side by side. Two things fall out, reliably, every year:
 
-The means are close. Often within a few seconds. Students who expected the
-single line to be dramatically faster are surprised, and this is worth sitting
-with, because it is the result most likely to be misremembered afterwards.
+The single line wins on the mean, and by more than most of the room predicted
+beforehand — we take predictions first, in writing, precisely so that you cannot
+later remember having expected it. The gain is not speed of service. It is that
+run two never has a teller standing idle while somebody waits, and run one does,
+constantly.
 
-The spreads are not close at all. Run one has someone who waited four times the
-median. Run two does not have that person. What the single line sold was not
-speed; it was the elimination of the bad draw.
+The spreads are further apart still. Run one has someone who waited four times
+the median. Run two does not have that person, and cannot. Ask yourself which of
+the two differences you would notice as a customer, and which one a manager
+would be able to see in their reporting.
 
 **The subjective round.** Finally, before you see the data, everyone writes down
 which run *felt* worse. A reliable minority say the single line, because thirty

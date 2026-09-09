@@ -27,24 +27,38 @@ by looking, was fairer and faster in the way that matters.
 
 ## What the single line actually does
 
-It does almost nothing to your average wait. If six tellers serve the same
-customers at the same rate, the mean is roughly unchanged, and this surprises
-people who assume the innovation was an efficiency measure.
+Two things. The first one surprises people, including the version of me that
+wrote the first draft of this lecture.
 
-What it destroys is **variance**. In six separate lines you might pick the one
-behind the man depositing a shoebox of coins and wait four times as long as the
-person who arrived after you. In one line that cannot happen: the order you
-leave in is the order you arrived in. You have swapped a lottery for a promise.
+**It cuts the average wait, and not by a little.** The servers are identical and
+working at identical speeds, so where does the gain come from? From never
+leaving a server idle while somebody is waiting. In six separate lines a teller
+can be free while three people stand two metres away in the next lane, because
+nobody switches fast enough to notice. That idle time is pure waste; it is
+invisible to everybody in the building; and it gets worse as the system gets
+busier, which is exactly when you can least afford it.
 
-The simulation below runs both against the same arrival stream. Watch the means
-sit almost on top of each other while the spread collapses. Most of the value of
-most queue design is in the second graph, not the first, and organisations
-consistently report the first.
+The simulation below runs both against the same arrival stream, with the same
+servers and the same service times. The pooled line comes in around twice as
+fast on the mean. I had assumed, before running it, that the historical gain was
+mostly about fairness and only marginally about speed. That is a common belief
+and it is wrong.
 
-There is also a real efficiency gain, and it is worth naming precisely: a single
-line has **no idle servers while anyone waits**. In parallel lines a teller can
-be free while three people stand in the next lane, because nobody switches fast
-enough. That is pure waste, and it grows as the system gets busier.
+One honest caveat: the simulation allows no lane-switching, which is the most
+generous possible treatment of parallel queues in the fairness sense and the
+least generous in the speed sense. Real shoppers jockey, and jockeying recovers
+part of the gap — never all of it, because you can only switch after you have
+already lost the time that told you to.
+
+**It destroys the variance.** This is the part customers actually feel. In six
+separate lines you might pick the one behind the man depositing a shoebox of
+coins and wait four times as long as somebody who arrived after you. In one line
+that cannot happen: the order you leave in is the order you arrived in. You have
+swapped a lottery for a promise.
+
+Watch the second graph as well as the first. The mean improves by roughly half;
+the ninetieth percentile improves by considerably more. Most of the value of most
+queue design is in the tail, and organisations almost invariably report the mean.
 
 ## The fairness claim, stated properly
 

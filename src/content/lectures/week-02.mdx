@@ -1,0 +1,77 @@
+---
+title: Variability, Not Busyness
+description:
+  Queues do not form because a system is busy. They form because it is
+  unpredictable — and the closer to capacity it runs, the worse that gets.
+week: 2
+date: 2027-03-01
+act: "I"
+idea: Variability creates queues, and congestion grows non-linearly as load approaches capacity.
+system: Drive-through window
+buildsOn: 1
+teachers:
+  - adaeze-nkemelu
+related:
+  - sessions/week-02
+---
+
+Two systems. Both serve exactly sixty customers an hour. Both have exactly one
+server, working at exactly the same average speed.
+
+One of them has no queue, ever. The other has a queue of eleven people.
+
+The difference is not effort, staffing, or management. It is that in the first
+system the customers arrive one per minute like clockwork and every transaction
+takes fifty-five seconds. In the second, customers arrive whenever they feel
+like it and some of them order for the whole office.
+
+This is the single most useful idea in the first half of the course, and it is
+routinely missed by the people running real systems: **queues are made of
+variability, not of load.** A perfectly predictable system running at 99% of
+capacity has no queue. A wildly unpredictable one at 70% can have a permanent
+one.
+
+## The utilisation trap
+
+Define ρ — "rho" — as the fraction of capacity you are using: arrival rate
+divided by service rate. Everyone's intuition is that as ρ climbs from 0.7 to
+0.9, waiting gets somewhat worse. Roughly 30% worse, say.
+
+It gets about **three times** worse. From 0.9 to 0.95, it doubles again.
+
+The relationship is not linear and it is not close to linear. Queue length grows
+roughly with ρ/(1−ρ), which means the last few per cent of capacity you squeeze
+out of a system are paid for with an enormous amount of somebody else's time.
+Run the simulation below and watch it happen; the dial is the only control, and
+the thing to notice is how ordinary the queue looks at 0.8 and how fast it
+stops looking ordinary after that.
+
+This has a direct managerial consequence that almost nobody acts on. A system
+deliberately run at 85% capacity is not a wasteful system. It is a system that
+has bought predictability with slack, and the slack is doing real work. When a
+hospital ward, a motorway or a support desk is pushed to 97% "efficiency", the
+efficiency is real and so is the collapse in service, and the second is not
+usually attributed to the first.
+
+## Where the variability comes from
+
+Two places, and it is worth keeping them apart.
+
+**Arrival variability** is people turning up when they want. You mostly cannot
+remove it; you can sometimes reshape it, which is week 9's whole subject.
+
+**Service variability** is transactions taking different lengths of time. You
+can often reduce it, and reducing it is frequently cheaper than adding
+capacity — the drive-through that splits ordering from payment from collection
+has not added a server, it has cut the variance each station sees.
+
+## A system to keep in mind
+
+Hold on to this: an aircraft boarding through a single door is a queue with
+brutal service variability. Every passenger who stops to load a bag into an
+overhead locker blocks everyone behind them for an unpredictable interval. We
+come back to that aircraft in week 10, with three more tools than we have today,
+and it turns out to be the best worked example in the course.
+
+Next week: how to measure any of this from the outside, with no access to the
+system's own data, using one multiplication.

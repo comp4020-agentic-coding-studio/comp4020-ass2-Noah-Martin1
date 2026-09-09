@@ -1,0 +1,78 @@
+---
+title: Little's Law
+description:
+  One equation, provable in a page, that lets you measure a queue you have no
+  access to — and catches most people's intuition out.
+week: 3
+date: 2027-03-08
+act: "I"
+idea: L equals lambda times W, so any two of length, throughput and wait give you the third.
+system: Airport security screening
+buildsOn: 2
+teachers:
+  - adaeze-nkemelu
+related:
+  - sessions/week-03
+  - assessments/01-queue-census
+---
+
+You are at the back of the airport security line. You cannot see the front. No
+sign tells you the wait, and if one did you would be right not to believe it.
+
+You can, however, see two things. You can count roughly how many people are
+ahead of you — call it 240. And you can stand still for two minutes and count
+how many people pass a fixed point, which gives you a throughput — say 40 per
+minute.
+
+Your expected wait is six minutes. You now know something the airport has not
+told you, using arithmetic you did in primary school.
+
+## The law
+
+**L = λW.** The average number of items in a system equals the average arrival
+rate multiplied by the average time each one spends there.
+
+That is the whole thing. What makes it remarkable is not the algebra but the
+generality: it holds for any queue in steady state, with any arrival
+distribution, any service distribution, any number of servers, and *any
+discipline whatsoever*. First come first served, shortest job first, random,
+priority, corrupt — Little's Law does not care. It is one of the very few
+results in this field that survives contact with a real system unmodified.
+
+The proof is a page of accounting and we will do it properly in the lecture. The
+intuition is simpler: over a long window, everyone who came in went out, so the
+total person-minutes accumulated inside the system can be counted two ways —
+by watching the room, or by adding up individual stays. Both counts are of the
+same quantity, so they are equal.
+
+## What it is actually good for
+
+Three things, in rising order of usefulness.
+
+**Estimating a wait from the outside.** As above. Useful, slightly parlour-trick.
+
+**Catching a lie.** If a service claims an average wait of 10 minutes, and you
+can see 500 people in the system and count 20 arrivals a minute, the claimed
+wait is inconsistent with the observable facts by a factor of two and a half.
+Someone is measuring from a different starting line than you are — often the
+moment a ticket is *called* rather than the moment it is *taken*. Nearly every
+published waiting-time statistic hides a definitional choice like this, and
+L = λW is the cheapest tool for finding it.
+
+**Sizing a system you have not built.** Rearranged, W = L/λ tells you how long
+people will wait given a capacity, before you commit to the capacity.
+
+## The trap
+
+Steady state. The law describes a system where what comes in matches what goes
+out over your measurement window. Point it at a lunch rush that starts empty and
+ends with forty people still queueing and it will give you a confident, precise,
+wrong answer.
+
+That failure is not a footnote — it is most of the difficulty in your first
+assignment, which is due at the end of this week. Measuring a real queue is
+mostly the discipline of noticing when the assumptions you are relying on have
+quietly stopped being true.
+
+Next week: the law tells us how long people wait. It says nothing about what
+that costs, or who pays it. That turns out to be the harder half.

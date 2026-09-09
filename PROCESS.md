@@ -1,53 +1,56 @@
-# Process overview
-
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
-Written by you, for a reader: how you got from the brief to the harness and
-agentic workflow behind this submission. Markers read this file and follow its
-citations; they don't trawl the repo for evidence you didn't point at.
-
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and its
-[word counts](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#word-counts)
-cover every deliverable.
+# Process
 
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+**SLOP2710 — The Economics of Waiting**, a twelve-week SlopU course arguing that
+every queue is running an ordering rule somebody chose, that the rule decides
+whose time is worth less, and that there is therefore no neutral queue. Twelve
+lectures in three acts, twelve labs of fieldwork, four assessments, and four
+simulations a reader can drive.
 
 ## How I got here
 
-The account of the process: how the work actually went, and how you knew the
-result was right. Tell it in whatever order makes it clear. A weekly prototype
-needs a paragraph or two; an assignment needs more.
+I think a course is one idea explored for twelve weeks, and that the usual way
+that fails is twelve topics sharing a subject. My first outline had exactly that
+failure: it ran airports, elevators, restaurants, hospitals, traffic — a venue a
+week. I threw it out for a mechanism-led arc where each week introduces one new
+rule for deciding who goes first and venues become evidence rather than
+chapters. Aircraft boarding is teased in week 2 and returns as the week 10
+set-piece carrying weeks 6 and 8 with it.
 
-Cite the record as you go, as links whose text is the commit hash or range and
-whose target is this repo's commit or compare URL, so a reader clicks straight
-to the evidence:
+That is easy to claim and hard to keep true across twenty-eight files, so I made
+it checkable before writing any of it. Every lecture declares an `act`, an
+`idea`, a headline `system` and the earlier week it `buildsOn`, and
+[`6f05794`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/6f05794) asserts that the chain points strictly backwards
+and terminates at week 1, and that no system headlines twice. The `/arc/` page
+renders from those same four fields, so the diagram and the checks cannot
+disagree — the page is the checks' input. Those tests were written and failing
+before a word of content existed.
 
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
+The checks earned it. The due-date assertion caught the simulation report dated
+30 April, which is week 8's Friday, not week 9's
+[`39b09e7`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/39b09e7). The bigger catch was not a test but a
+measurement: my week 5 lecture asserted that pooling servers "does almost
+nothing to your average wait" and only cuts variance. The simulator said the
+mean roughly halves, because a pooled line never leaves a server idle while
+someone waits. I had written a confident, wrong thing; the lecture and the lab
+were both corrected [`ff1d0fd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/ff1d0fd). Validating that engine
+against M/M/1 also exposed a rounding bias that drove ρ to exactly 1.0 in the
+deterministic case, which had made the low-variance run look *worse* than the
+random one.
 
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
+My CLAUDE.md rule that visuals must be checked rather than assumed paid for
+itself twice. The theme defines its colour tokens as `light-dark()` pairs, so
+canvas silently kept its previous fill and every rule and label rendered gold —
+invisible to every test, obvious in a screenshot
+[`9225eeb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/9225eeb). And Chrome clamps `--window-size` to about
+500px on macOS, so my 390px screenshots were a 500px layout cropped; I wrote a
+CDP tool with real device emulation before trusting anything I saw
+[`6bec983`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/6bec983).
 
-> the prompt, verbatim
+What I deliberately did not encode: prose quality. I considered a check on
+reading level or repeated phrasing and decided a green test would license
+exactly the generic writing it was meant to prevent. Whether week 7 sounds like
+a person is a judgement, and I left it as one.
 
-Screenshots are welcome where one carries the point better than a sentence does.
-Commit the file to this repo and link it with a **relative** path, which is what
-makes it render on GitHub: `![alt text](docs/before.png)`. Images don't count
-towards the word count and don't replace the citation.
-
-## Before you ship
-
-`pnpm check:evidence` verifies that this comment is gone, that your citations
-resolve to real commits, that a crit week's reflection entry is in
-`reflections/`, and that your `CLAUDE.md` is there. It checks that your account
-is traceable, not that it is good: that is the marker's call.
-
-Images aren't checked: unlike a citation whose SHA doesn't resolve, a broken
-image is visible the moment this file is rendered on GitHub.
+Full history: [`ab8a430...af25fd3`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/compare/ab8a430...af25fd3).

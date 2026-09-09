@@ -26,3 +26,24 @@ mise.local.toml
 # your course API key, and this repo goes public when you ship. Your tracked
 # harness is CLAUDE.md (and any AGENTS.md), not this directory.
 .claude/
+
+# Starter content, permanently.
+#
+# These files were deleted early on and kept reappearing on disk with their
+# original mtimes -- something outside the repo restores them. Astro's content
+# loader globs the filesystem, so a restored week-02.md silently shadows the
+# real week-02.mdx and renders starter text; and because `git add -A` picked
+# them back up, they kept re-entering the history too.
+#
+# Ignoring them makes the second failure impossible. spec/no-starter-remains.ts
+# catches the first, by asserting the built API node-for-node.
+src/content/lectures/week-01.md
+src/content/lectures/week-02.md
+src/content/sessions/01-getting-started.md
+src/content/sessions/02-first-review.md
+src/content/assessments/assignment-1.md
+src/content/assessments/final-project.md
+src/content/people/idris-fenn.md
+src/content/people/idris-fenn.avif
+src/content/people/marisol-quaye.md
+src/content/people/marisol-quaye.avif

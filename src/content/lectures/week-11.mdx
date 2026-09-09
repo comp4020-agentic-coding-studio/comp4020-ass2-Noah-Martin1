@@ -16,70 +16,97 @@ related:
   - assessments/04-design-brief
 ---
 
-Every model so far has treated the things in the queue as jobs: they arrive, they
-wait however long they are made to, they leave. Print jobs behave like this.
-People do not.
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import FeedbackLoop from "../../components/diagrams/FeedbackLoop.astro";
 
-## Three things jobs never do
+Every model in this course so far has treated the things in the queue as jobs:
+they arrive, they wait however long they are made to, they leave.
 
-**Balking.** Seeing the queue and not joining. This is why a busy shop's measured
-demand is not its actual demand, and why a system under strain can look like it
-is coping — it is turning people away before they enter the statistics.
+Print jobs behave like this. People do not.
+
+<Beat n={1} label="Three things jobs never do">
+
+**Balking.** Seeing the queue and not joining. This is why a busy shop's
+measured demand is not its actual demand, and why a system under strain can look
+like it is coping — it is turning people away before they enter the statistics.
 
 **Reneging.** Joining and then leaving. In a call centre, abandonment is the
 single most informative metric and the one most often reported as a cost rather
 than read as a signal.
 
-**Gaming.** Discovering the rule and optimising against it. Week 6 warned about
-this: any rule that sorts on self-reported information creates an incentive to
+**Gaming.** Finding the rule and optimising against it. Week 6 warned about
+this: any rule sorting on self-reported information creates an incentive to
 misreport. Ticket scalping is a queueing attack — bots defeat a
 first-come-first-served allocation by being better at coming first, and the
-resale price is a measure of how much value the original rule was leaving on the
-table.
+resale price measures exactly how much value the original rule was leaving on
+the table.
 
-Each of these makes the queue a **feedback system**: its state changes people's
+</Beat>
+
+<Beat n={2} label="The loop">
+
+Each of those makes the queue a feedback system: its state changes people's
 behaviour, which changes its state.
 
-## Telling people the wait
+<Predict question="You install an accurate live wait estimate. What happens to its accuracy?">
 
-Now the counter-intuitive part, and the most practically useful finding in the
-week.
+It destroys itself.
 
-Display an accurate estimated wait and some people leave who would otherwise have
-stayed. The queue shortens. The wait for those remaining falls. The estimate you
-displayed is now wrong — because you displayed it.
+Display forty minutes and some people leave who would have stayed. The queue
+shortens. The wait falls. The number you displayed is now wrong — **because you
+displayed it**.
 
-This is not a defect to be engineered away; it is what it means to publish
-information about a system to the system's own participants. It has three real
-consequences.
+This is not a defect to engineer away. It is what it means to publish
+information about a system to that system's own participants. The estimate is
+only ever correct for the counterfactual world in which it was not shown.
 
-**Accurate estimates are self-defeating in a specific direction.** They are
-correct only for the counterfactual in which they were not shown.
+</Predict>
 
-**Perceived waiting is not measured waiting.** An unexplained ten-minute wait is
-worse than an explained twenty. Progress information, position in queue, and a
-visible reason all reduce dissatisfaction with no change to the clock. This is
-the cheapest intervention in the entire course and it improves no metric that
-appears in Act I.
+<FeedbackLoop />
 
-**Which means it can be abused.** A system that makes waiting feel shorter has
-removed its own pressure to make waiting *be* shorter. Pleasant queues are not
-automatically good queues, and week 8's warning applies again: watch for the
-operator whose incentive is to manage the perception rather than the wait.
+</Beat>
 
-## The design consequence
+<Beat n={3} label="The cheapest intervention in the course">
 
-Once you accept feedback, the queue stops being something you can specify in
-advance and becomes something you steer. A rule that is optimal against a fixed
-population will be met by a population that adapts to it, and the second-round
-behaviour is frequently the whole story — the express lane fills with people
-splitting their baskets, the priority category fills with people who learned the
-magic words.
+Perceived waiting is not measured waiting.
 
-You cannot design this out. You can only design knowing it happens, which mostly
-means preferring rules that are robust when gamed over rules that are optimal
-when obeyed.
+An unexplained ten-minute wait is worse than an explained twenty. Progress
+information, a position in the queue, and a visible reason all reduce
+dissatisfaction with no change whatever to the clock.
+
+That is genuinely the cheapest thing in this entire course, and it improves not
+one metric from Act I.
+
+<Punch note="Week 8's warning again: watch for the operator whose incentive is to manage the perception rather than the wait.">
+  Which is exactly why it can be abused. A system that makes waiting feel
+  shorter has removed its own pressure to make waiting be shorter.
+</Punch>
+
+Pleasant queues are not automatically good queues.
+
+</Beat>
+
+<Beat n={4} label="What this does to design">
+
+Once you accept feedback, a queue stops being something you specify and becomes
+something you steer.
+
+A rule that is optimal against a fixed population will be met by a population
+that adapts to it, and the second-round behaviour is frequently the whole story:
+the express lane fills with people splitting their baskets, the priority
+category fills with people who learned the magic words.
+
+<Punch>
+  Prefer rules that are robust when gamed over rules that are optimal when
+  obeyed.
+</Punch>
+
+You cannot design this out. You can only design knowing it happens — and your
+brief needs a paragraph on what your design does when people lie to it.
 
 One week left. Everything so far has been about how queues behave. The last
-lecture asks the question the whole course has been circling: what should a queue
-be *for*?
+lecture asks what a queue should be *for*.
+
+</Beat>

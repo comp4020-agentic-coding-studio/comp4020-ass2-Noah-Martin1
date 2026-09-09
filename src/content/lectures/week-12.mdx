@@ -17,83 +17,110 @@ related:
   - assessments/04-design-brief
 ---
 
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import ObjectiveMatrix from "../../components/diagrams/ObjectiveMatrix.astro";
+
 Almost every queue you have met this semester was optimising something without
-saying so. This one had to say so, in public, and argue about it for years.
+saying so.
 
-## The list
+This one had to say so, in public, and argue about it for two decades.
 
-There are more people needing a kidney than there are kidneys. No amount of
-process improvement fixes that; it is not a queueing problem in the sense of the
-first nine weeks, because there is no throughput to be found. The only question
-is order, and order here decides who lives.
+<Beat n={1} label="A queue with no throughput to find">
 
-Every rule you have learned has been proposed for it, seriously, by serious
-people.
+There are more people needing a kidney than there are kidneys.
+
+No amount of process improvement fixes that. It is not a queueing problem in the
+sense of the first nine weeks, because there is no efficiency left to extract —
+every organ gets used. The only question is order, and here order decides who
+lives.
+
+Every rule you have learned has been seriously proposed for it.
+
+</Beat>
+
+<Beat n={2} label="Run your five rules on it">
 
 **First come, first served** — allocate by time on the list. Transparent,
 ungameable, requires no judgement about whose life is worth more. It also wastes
-organs: a kidney given to a 70-year-old yields far fewer life-years than the same
-kidney given to a 25-year-old, and under pure FCFS that difference is invisible
-by design.
+organs: a kidney given to a 70-year-old yields far fewer life-years than the
+same kidney given to a 25-year-old, and under pure FCFS that difference is
+invisible by design.
 
-**Shortest job first**, in this context, is allocation by expected benefit —
-give the organ where it produces the most life-years. Maximises the good done
-per organ. It also systematically deprioritises the old, the diabetic and the
-already-sick, which is to say it allocates least to those who are worst off.
+**Shortest job first** becomes allocation by expected benefit — most life-years
+per organ. Maximises the good done. It also systematically deprioritises the
+old, the diabetic and the already-sick, which is to say it allocates least to
+those who are worst off.
 
-**Triage** — allocate by urgency, sickest first. Matches the medical instinct
-and our week 7 consent. It is also the least efficient rule available: the
-sickest patients have the worst outcomes, so this maximises organs used and
-minimises life-years produced.
+**Triage** — sickest first. Matches the medical instinct and week 7's consent.
+It is also the *least* efficient rule available, because the sickest patients
+have the worst outcomes: it maximises organs used and minimises life-years
+produced.
 
 **Price.** Illegal almost everywhere. Iran is the notable exception and the
-literature on it is genuinely worth reading rather than dismissing. Notice that
-the objection here is not efficiency — a market would clear — but that we have
-decided this is not a thing that should be allocated by ability to pay at all.
+literature is worth reading rather than dismissing. Notice that the objection
+here is not efficiency — a market would clear — but that we have decided this is
+not a thing that should be allocated by ability to pay at all.
 
-The actual US system, after two decades of public argument, is a weighted
-composite that pleases nobody entirely, revised repeatedly, with the weights
-published. That is not a failure to find the right answer. **It is what choosing
-looks like when you are forced to do it in the open.**
+<Predict question="So which one did the United States pick?">
 
-## The four objectives
+None of them, and that is the answer.
 
-Every queue in this course optimises for some mixture of four things, and they
-genuinely conflict:
+After two decades of public argument it runs a **weighted composite** that
+pleases nobody entirely, gets revised repeatedly, and publishes its weights.
 
-- **the mean** — total waiting, minimised
-- **the tail** — the worst case, bounded
-- **fairness** — however you have defined it, and you must define it
-- **revenue** — value captured by the operator
+That is not a failure to find the right answer. It is what choosing looks like
+when you are forced to do it in the open, with everybody watching, and cannot
+retreat into the pretence that the current rule is just how things are done.
 
-Week 6 showed mean and tail pulling against each other. Week 8 showed revenue
-pulling against both. Week 7 showed that fairness is not one thing. There is no
-setting that maximises all four, which means **every queue has already made this
-trade** — including, especially, the ones that have never discussed it.
+</Predict>
 
-## The thesis, finally
+</Beat>
 
-> There is no neutral queue.
+<Beat n={3} label="The four objectives, and why you cannot have them all">
 
-A system that has not chosen has not escaped the choice. It has inherited one,
-usually from whoever laid out the room, and it is enforcing that choice on
-everybody who walks in, without the courtesy of having said what it is.
+<ObjectiveMatrix />
+
+Week 6 showed mean and worst-case pulling against each other. Week 8 showed
+revenue pulling against both. Week 7 showed that fairness is not even one thing.
+
+There is no setting that maximises all four. Which means **every queue has
+already made this trade** — including, especially, the ones that have never
+discussed it.
+
+</Beat>
+
+<Beat n={4} label="The thesis, finally">
+
+<Punch note="It has inherited one, usually from whoever laid out the room, and it is enforcing that choice on everybody who walks in without the courtesy of having said what it is.">
+  There is no neutral queue. A system that has not chosen has not escaped the
+  choice.
+</Punch>
 
 This is why the course spent four weeks on measurement before touching a single
 ordering rule. You cannot argue about what a queue should optimise until you can
-say what it currently does, in numbers, and name who is paying. That is the whole
-method: **observe, model, experiment, cost, decide** — and then say out loud what
-you decided.
+say what it currently does, in numbers, and name who is paying.
 
-## What you can do now that you could not in February
+That is the whole method: **observe, model, experiment, cost, decide** — and
+then say out loud what you decided.
 
-You can walk into a building, watch a line for ninety seconds, and state the rule
-it is running. You can measure it from the outside with a stopwatch. You can put
-a number on what it costs and say who is holding the bill. You can propose a
-different rule and predict, quantitatively, who wins and who loses. And you can
-tell the difference between a queue that is badly designed and a queue that is
-designed against you.
+</Beat>
 
-Your design brief is due Friday. The final page asks you to state what your queue
-optimises for. Everything since week 1 has been preparation for being able to
-finish that sentence honestly.
+<Beat n={5} label="What you can do now that you could not in February">
+
+You can walk into a building, watch a line for ninety seconds, and state the
+rule it is running.
+
+You can measure it from outside with a stopwatch. You can put a number on what
+it costs and say who is holding the bill. You can propose a different rule and
+predict, quantitatively, who wins and who loses. And you can tell the difference
+between a queue that is badly designed and a queue that is designed against you.
+
+Your brief is due Friday. The final page asks you to state what your queue
+optimises for.
+
+Everything since week 1 has been preparation for being able to finish that
+sentence honestly.
+
+</Beat>

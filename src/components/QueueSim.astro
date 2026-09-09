@@ -29,7 +29,7 @@ const HEIGHTS: Record<SimVariant, number> = {
   rho: 156,
   lanes: 250,
   express: 196,
-  boarding: 300,
+  boarding: 208,
 };
 ---
 
@@ -44,12 +44,23 @@ const HEIGHTS: Record<SimVariant, number> = {
   </div>
 
   <dl class="qsim__readout" data-qsim-readout>
-    <div><dt>λ</dt><dd data-r="lambda">—</dd></div>
-    <div><dt>μ</dt><dd data-r="mu">—</dd></div>
-    <div><dt>ρ</dt><dd data-r="rho">—</dd></div>
-    <div><dt>L</dt><dd data-r="L">—</dd></div>
-    <div><dt>W</dt><dd data-r="W">—</dd></div>
-    <div><dt>W<span>90</span></dt><dd data-r="W90">—</dd></div>
+    {variant === "boarding" ? (
+      <>
+        <div><dt>Seated</dt><dd data-r="seated">—</dd></div>
+        <div><dt>Tick</dt><dd data-r="tick">—</dd></div>
+        <div><dt>Full run</dt><dd data-r="full">—</dd></div>
+        <div><dt>vs back to front</dt><dd data-r="delta">—</dd></div>
+      </>
+    ) : (
+      <>
+        <div><dt>λ</dt><dd data-r="lambda">—</dd></div>
+        <div><dt>μ</dt><dd data-r="mu">—</dd></div>
+        <div><dt>ρ</dt><dd data-r="rho">—</dd></div>
+        <div><dt>L</dt><dd data-r="L">—</dd></div>
+        <div><dt>W</dt><dd data-r="W">—</dd></div>
+        <div><dt>W<span>90</span></dt><dd data-r="W90">—</dd></div>
+      </>
+    )}
   </dl>
 
   <div class="qsim__controls">
@@ -82,9 +93,9 @@ const HEIGHTS: Record<SimVariant, number> = {
 
     {variant === "express" && (
       <div class="qsim__control">
-        <label for={`${id}-share`}>Buying priority <output data-out="share">10%</output></label>
+        <label for={`${id}-share`}>Buying priority <output data-out="share">30%</output></label>
         <input id={`${id}-share`} data-qsim-input="share" type="range"
-          min="0" max="80" value="10" step="5" />
+          min="0" max="80" value="30" step="5" />
       </div>
     )}
 
@@ -121,6 +132,7 @@ const HEIGHTS: Record<SimVariant, number> = {
     font-variant-numeric: tabular-nums;
     font-size: 0.8125rem;
   }
+  .qsim__readout[hidden] { display: none; }
   .qsim__readout > div { display: flex; gap: 0.35rem; align-items: baseline; }
   .qsim__readout dt { color: var(--q-ink-soft); font-style: italic; }
   .qsim__readout dt span { font-size: 0.75em; font-style: normal; }
@@ -182,15 +194,37 @@ const HEIGHTS: Record<SimVariant, number> = {
   /** Sim ticks advanced per real second while animating. */
   const TICKS_PER_SEC = 14;
 
-  function ink(el: HTMLElement) {
-    const cs = getComputedStyle(el);
-    return {
-      ink: cs.getPropertyValue("--q-ink").trim() || "#222",
-      soft: cs.getPropertyValue("--q-ink-soft").trim() || "#777",
-      gold: cs.getPropertyValue("--q-gold").trim() || "#b97d1c",
-      rule: cs.getPropertyValue("--q-rule").trim() || "#ccc",
-      bg: cs.getPropertyValue("--at-bg").trim() || "#fff",
+  type Ink = { ink: string; soft: string; gold: string; rule: string; bg: string };
+
+  /**
+   * Canvas needs real colours, and reading the custom properties directly does
+   * not give them: the theme defines its tokens as light-dark() pairs, which
+   * getPropertyValue hands back verbatim. Assigning that to strokeStyle fails
+   * silently and the context keeps whatever colour it had, which is how every
+   * rule and label on this canvas came out gold.
+   *
+   * Setting `color` on a probe element and reading it back makes the browser
+   * resolve light-dark(), var() and everything else to an rgb() triple.
+   */
+  function readInk(root: HTMLElement): Ink {
+    const probe = document.createElement("span");
+    probe.style.display = "none";
+    root.appendChild(probe);
+    const get = (value: string, fallback: string) => {
+      probe.style.color = "";
+      probe.style.color = value;
+      const resolved = getComputedStyle(probe).color;
+      return resolved && resolved !== "rgba(0, 0, 0, 0)" ? resolved : fallback;
     };
+    const colours: Ink = {
+      ink: get("var(--q-ink)", "#222"),
+      soft: get("var(--q-ink-soft)", "#777"),
+      gold: get("var(--q-gold)", "#b97d1c"),
+      rule: get("var(--q-rule)", "#ccc"),
+      bg: get("var(--at-bg)", "#fff"),
+    };
+    probe.remove();
+    return colours;
   }
 
   function setupOne(root: HTMLElement) {
@@ -218,6 +252,12 @@ const HEIGHTS: Record<SimVariant, number> = {
     const num = (key: string, fallback: number) =>
       controls[key] ? Number((controls[key] as HTMLInputElement).value) : fallback;
 
+    let colours = readInk(root);
+    const themeWatcher = new MutationObserver(() => { colours = readInk(root); draw(); });
+    themeWatcher.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    /** Rolling queue-length history, so the left of the canvas shows the run. */
+    let history: number[] = [];
     let visual: QueueSim[] = [];
     let boarding: BoardingSim | null = null;
     let playing = false;
@@ -245,7 +285,7 @@ const HEIGHTS: Record<SimVariant, number> = {
         ];
       }
       // express
-      const share = num("share", 10) / 100;
+      const share = num("share", 30) / 100;
       return [{
         ...base, servers: 2, lanes: 1, lambda: MU * 2 * 0.85,
         discipline: "priority" as const, priorityShare: share,
@@ -255,11 +295,17 @@ const HEIGHTS: Record<SimVariant, number> = {
     function rebuild() {
       if (variant === "boarding") {
         const strategy = (controls.strategy?.value ?? "back-to-front") as BoardingStrategy;
-        boarding = new BoardingSim(strategy, 14, 3, 7);
+        boarding = new BoardingSim(strategy, 12, 6, 7);
         if (reduced.matches) { let g = 0; while (!boarding.done && g++ < 20000) boarding.step(); }
+        else { for (let i = 0; i < 80; i++) boarding.step(); }
       } else {
         visual = configs().map((c) => new QueueSim(c, 0));
-        if (reduced.matches) visual.forEach((s) => s.run(400));
+        // Open on a populated queue rather than an empty one. A first paint
+        // showing nothing teaches nothing, and it is what a reader who never
+        // presses play, or who has reduced motion on, will be looking at.
+        history = [];
+        const warm = reduced.matches ? 600 : 260;
+        for (let i = 0; i < warm; i++) { visual[0].step(); visual.slice(1).forEach((s) => s.step()); history.push(visual[0].inSystem); }
       }
       refreshStats();
       draw();
@@ -273,10 +319,17 @@ const HEIGHTS: Record<SimVariant, number> = {
       };
 
       if (variant === "boarding") {
-        readout!.hidden = true;
+        if (!boarding) return;
+        const strategy = boarding.strategy;
+        const full = BoardingSim.timeFor(strategy, 12, 6, 7);
+        const baseline = BoardingSim.timeFor("back-to-front", 12, 6, 7);
+        const delta = Math.round(((full - baseline) / baseline) * 100);
+        out("seated", `${boarding.seated}/${boarding.rows * boarding.cols}`);
+        out("tick", String(boarding.tick));
+        out("full", `${full} ticks`);
+        out("delta", strategy === "back-to-front" ? "baseline" : `${delta > 0 ? "+" : ""}${delta}%`);
         return;
       }
-      readout!.hidden = false;
 
       const cfgs = configs();
       const headless = cfgs.map((c) => { const s = new QueueSim(c); s.run(STATS_TICKS); return s; });
@@ -314,14 +367,14 @@ const HEIGHTS: Record<SimVariant, number> = {
     }
 
     // --- drawing primitives, in the two-ink grammar -----------------------
-    function person(c: CanvasRenderingContext2D, x: number, y: number, served: boolean, col: ReturnType<typeof ink>) {
+    function person(c: CanvasRenderingContext2D, x: number, y: number, served: boolean, col: Ink) {
       c.beginPath();
       c.arc(x, y, 5, 0, Math.PI * 2);
       if (served) { c.fillStyle = col.gold; c.fill(); }
       else { c.strokeStyle = col.ink; c.lineWidth = 1.5; c.stroke(); }
     }
 
-    function serverBox(c: CanvasRenderingContext2D, x: number, y: number, busy: boolean, col: ReturnType<typeof ink>) {
+    function serverBox(c: CanvasRenderingContext2D, x: number, y: number, busy: boolean, col: Ink) {
       c.beginPath();
       c.rect(x - 9, y - 9, 18, 18);
       c.strokeStyle = busy ? col.gold : col.rule;
@@ -337,13 +390,29 @@ const HEIGHTS: Record<SimVariant, number> = {
     }
 
     /** One queue on one baseline: dots flowing right into a server box. */
-    function drawLane(c: CanvasRenderingContext2D, sim: QueueSim, laneIndex: number, y: number, w: number, col: ReturnType<typeof ink>, caption?: string) {
-      const rightPad = 26;
-      const serverX = w - rightPad - 14 * (sim.config.servers - 1) - 14;
-      if (caption) label(c, caption, 14, y - 22, col.soft, 11);
+    function drawLane(c: CanvasRenderingContext2D, sim: QueueSim, laneIndex: number, y: number, w: number, col: Ink, caption?: string, left = 58) {
+      // Rightmost box must sit fully inside the canvas: its centre plus half a
+      // box plus a margin. Anchoring from the left ran the last one off-screen.
+      const serverX = w - 22 - (sim.config.servers - 1) * 26;
+      if (caption) label(c, caption, left, y - 22, col.soft, 11);
+
+      // An arrivals marker at the mouth of the lane. Without it a lane holding
+      // three people looks like a rendering failure rather than a short queue.
+      label(c, "in", left - 44, y + 4, col.soft, 10);
+      c.beginPath();
+      c.moveTo(left - 28, y);
+      c.lineTo(left - 8, y);
+      c.strokeStyle = col.soft;
+      c.lineWidth = 1;
+      c.stroke();
+      c.beginPath();
+      c.moveTo(left - 12, y - 3.5);
+      c.lineTo(left - 8, y);
+      c.lineTo(left - 12, y + 3.5);
+      c.stroke();
 
       c.beginPath();
-      c.moveTo(14, y);
+      c.moveTo(left, y);
       c.lineTo(w - 14, y);
       c.strokeStyle = col.rule;
       c.lineWidth = 1;
@@ -359,18 +428,18 @@ const HEIGHTS: Record<SimVariant, number> = {
 
       const queue = sim.queues[laneIndex] ?? [];
       const startX = serverX - 34;
-      const shown = Math.min(queue.length, Math.floor((startX - 16) / 13));
+      const shown = Math.min(queue.length, Math.max(0, Math.floor((startX - left) / 13)));
       for (let i = 0; i < shown; i++) {
         person(c, startX - i * 13, y, false, col);
       }
       if (queue.length > shown) {
-        label(c, `+${queue.length - shown}`, 14, y + 4, col.soft, 10, "left");
+        label(c, `+${queue.length - shown}`, left, y + 4, col.soft, 10, "left");
       }
     }
 
     function draw() {
       const { w, h } = sizeCanvas();
-      const col = ink(root);
+      const col = colours;
       ctx!.clearRect(0, 0, w, h);
 
       if (variant === "boarding" && boarding) {
@@ -380,90 +449,155 @@ const HEIGHTS: Record<SimVariant, number> = {
       if (!visual.length) return;
 
       if (variant === "rho") {
-        drawLane(ctx!, visual[0], 0, 62, w, col);
+        drawLane(ctx!, visual[0], 0, 40, w, col);
+        drawHistory(ctx!, 58, 68, w - 72, 66, col);
         const n = visual[0].inSystem;
-        label(ctx!, `${n} in system at tick ${visual[0].tick}`, 14, 118, col.soft, 11);
+        label(ctx!, `${n} in system now · tick ${visual[0].tick}`, 58, 150, col.soft, 11);
       } else if (variant === "lanes") {
-        drawLane(ctx!, visual[0], 0, 46, w, col, "One line, four servers");
+        drawLane(ctx!, visual[0], 0, 46, w, col, "One line, four servers", 58);
         for (let l = 0; l < 4; l++) {
-          drawLane(ctx!, visual[1], l, 132 + l * 30, w, col, l === 0 ? "Four lines, one server each" : undefined);
+          drawLane(ctx!, visual[1], l, 132 + l * 30, w, col, l === 0 ? "Four lines, one server each" : undefined, 58);
         }
       } else if (variant === "express") {
         const sim = visual[0];
         const priority = sim.queues[0].filter((c) => c.priority);
         const standard = sim.queues[0].filter((c) => !c.priority);
-        label(ctx!, "Priority", 14, 34, col.gold, 11);
-        for (let i = 0; i < Math.min(priority.length, Math.floor((w - 120) / 13)); i++) {
-          person(ctx!, w - 90 - i * 13, 52, false, col);
-          ctx!.beginPath(); ctx!.arc(w - 90 - i * 13, 52, 5, 0, Math.PI * 2);
+        label(ctx!, "Priority", 20, 34, col.gold, 11);
+        const qStart = w - 68;
+        for (let i = 0; i < Math.min(priority.length, Math.floor((qStart - 20) / 13)); i++) {
+          ctx!.beginPath(); ctx!.arc(qStart - i * 13, 52, 5, 0, Math.PI * 2);
           ctx!.strokeStyle = col.gold; ctx!.lineWidth = 2; ctx!.stroke();
         }
-        label(ctx!, "Standard", 14, 104, col.soft, 11);
-        for (let i = 0; i < Math.min(standard.length, Math.floor((w - 120) / 13)); i++) {
-          person(ctx!, w - 90 - i * 13, 122, false, col);
+        label(ctx!, "Standard", 20, 104, col.soft, 11);
+        for (let i = 0; i < Math.min(standard.length, Math.floor((qStart - 20) / 13)); i++) {
+          person(ctx!, qStart - i * 13, 122, false, col);
         }
         for (let s = 0; s < 2; s++) {
           const cust = sim.busy[0][s];
-          serverBox(ctx!, w - 44, 52 + s * 70, Boolean(cust), col);
-          if (cust) person(ctx!, w - 44, 52 + s * 70, true, col);
+          serverBox(ctx!, w - 26, 52 + s * 70, Boolean(cust), col);
+          if (cust) person(ctx!, w - 26, 52 + s * 70, true, col);
         }
-        label(ctx!, `${priority.length} priority · ${standard.length} standard waiting`, 14, 168, col.soft, 11);
+        label(ctx!, `${priority.length} priority · ${standard.length} standard waiting`, 20, 168, col.soft, 11);
       }
     }
 
-    function drawBoarding(c: CanvasRenderingContext2D, sim: BoardingSim, w: number, h: number, col: ReturnType<typeof ink>) {
+    /** Queue length over the run so far. The shape is the lesson. */
+    function drawHistory(c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, col: Ink) {
+      if (history.length < 2) return;
+      const peak = Math.max(4, ...history);
+      const span = Math.min(history.length, 600);
+      const from = history.length - span;
+
+      c.beginPath();
+      c.moveTo(x, y + h);
+      c.lineTo(x + w, y + h);
+      c.strokeStyle = col.rule;
+      c.lineWidth = 1;
+      c.stroke();
+
+      c.beginPath();
+      for (let i = 0; i < span; i++) {
+        const px = x + (i / (span - 1)) * w;
+        const py = y + h - (history[from + i] / peak) * h;
+        if (i === 0) c.moveTo(px, py);
+        else c.lineTo(px, py);
+      }
+      c.strokeStyle = col.gold;
+      c.lineWidth = 1.5;
+      c.stroke();
+
+      c.lineTo(x + w, y + h);
+      c.lineTo(x, y + h);
+      c.closePath();
+      c.globalAlpha = 0.12;
+      c.fillStyle = col.gold;
+      c.fill();
+      c.globalAlpha = 1;
+
+      label(c, `peak ${peak}`, x, y - 4, col.soft, 10);
+      label(c, "queue length over the run", x + w, y - 4, col.soft, 10, "right");
+    }
+
+    function drawBoarding(c: CanvasRenderingContext2D, sim: BoardingSim, w: number, h: number, col: Ink) {
       const rows = sim.rows;
-      const left = 16;
-      const usable = w - left - 16;
-      const cw = Math.min(usable / rows, 26);
-      const top = 40;
-      const seatH = 15;
+      const perSide = sim.cols / 2;
+      const seatH = 14;
+      const gap = 3;
+      const aisleGap = 16;
 
-      label(c, `${sim.strategy} · tick ${sim.tick} · ${sim.seated}/${rows * sim.cols} seated`, left, 22, col.soft, 11);
+      const cw = Math.min((w - 40) / rows, 52);
+      const cabinW = cw * rows;
+      const left = (w - cabinW) / 2;
+      const top = 34;
+      const sideH = perSide * (seatH + gap);
+      const aisleY = top + sideH + aisleGap / 2;
 
-      // seats above and below, aisle in the middle
+      label(c, `${sim.strategy} · tick ${sim.tick} · ${sim.seated} of ${rows * sim.cols} seated`, left, 20, col.soft, 11);
+      label(c, "front", left, aisleY + 4, col.soft, 10, "right");
+
+      // Seat y for a column: 1..3 above the aisle (1 = window, furthest),
+      // 4..6 below it (6 = window, furthest).
+      const seatY = (colIndex: number) => {
+        const above = colIndex < perSide;
+        const rank = above ? colIndex : colIndex - perSide;
+        return above
+          ? top + rank * (seatH + gap)
+          : aisleY + aisleGap / 2 + rank * (seatH + gap);
+      };
+
       for (let r = 0; r < rows; r++) {
-        const x = left + r * cw + cw / 2;
+        const x = left + r * cw;
         for (let s = 0; s < sim.cols; s++) {
-          const y = s < 2 ? top + s * seatH : top + 2 * seatH + 20 + (s - 2) * seatH;
+          const y = seatY(s);
           c.beginPath();
-          c.rect(x - cw / 2 + 2, y, Math.max(cw - 4, 6), seatH - 3);
+          c.rect(x + 2, y, Math.max(cw - 4, 6), seatH);
           c.strokeStyle = col.rule;
           c.lineWidth = 1;
           c.stroke();
+          if (sim.seatedGrid[r]?.[s]) {
+            c.beginPath();
+            c.arc(x + cw / 2, y + seatH / 2, 4, 0, Math.PI * 2);
+            c.fillStyle = col.gold;
+            c.globalAlpha = 0.55;
+            c.fill();
+            c.globalAlpha = 1;
+          }
         }
       }
 
-      // aisle line
-      const aisleY = top + 2 * seatH + 10;
       c.beginPath();
       c.moveTo(left, aisleY);
-      c.lineTo(left + rows * cw, aisleY);
+      c.lineTo(left + cabinW, aisleY);
       c.strokeStyle = col.rule;
       c.lineWidth = 1;
       c.setLineDash([2, 4]);
       c.stroke();
       c.setLineDash([]);
 
-      // seated passengers fill their seat; walkers sit on the aisle line
       for (let r = 0; r < rows; r++) {
-        const person0 = sim.aisle[r];
-        if (!person0) continue;
+        const walker = sim.aisle[r];
+        if (!walker) continue;
         const x = left + r * cw + cw / 2;
-        const stowing = person0.at === person0.seatRow - 1;
+        const stowing = walker.at === walker.seatRow - 1;
         c.beginPath();
-        c.arc(x, aisleY, 5, 0, Math.PI * 2);
-        if (stowing) { c.fillStyle = col.gold; c.fill(); }
-        else { c.strokeStyle = col.ink; c.lineWidth = 1.5; c.stroke(); }
+        c.arc(x, aisleY, 5.5, 0, Math.PI * 2);
+        if (stowing) {
+          c.fillStyle = col.gold;
+          c.fill();
+        } else {
+          c.strokeStyle = col.ink;
+          c.lineWidth = 1.5;
+          c.stroke();
+        }
       }
 
-      label(c, `${sim.queue.length} still on the jetway`, left, h - 34, col.soft, 11);
-      const barW = (w - left * 2) * (sim.seated / (rows * sim.cols));
-      c.fillStyle = col.gold;
-      c.fillRect(left, h - 24, barW, 6);
+      const barY = h - 22;
+      label(c, `${sim.queue.length} still on the jetway`, left, barY - 8, col.soft, 11);
       c.strokeStyle = col.rule;
       c.lineWidth = 1;
-      c.strokeRect(left, h - 24, w - left * 2, 6);
+      c.strokeRect(left, barY, cabinW, 6);
+      c.fillStyle = col.gold;
+      c.fillRect(left, barY, cabinW * (sim.seated / (rows * sim.cols)), 6);
     }
 
     // --- loop -------------------------------------------------------------
@@ -479,9 +613,11 @@ const HEIGHTS: Record<SimVariant, number> = {
           if (boarding && !boarding.done) boarding.step();
         } else {
           visual.forEach((s) => s.step());
+          history.push(visual[0].inSystem);
+          if (history.length > 900) history.shift();
         }
       }
-      if (variant === "boarding" && boarding?.done) stop();
+      if (variant === "boarding") { refreshStats(); if (boarding?.done) stop(); }
       draw();
       raf = requestAnimationFrame(frame);
     }

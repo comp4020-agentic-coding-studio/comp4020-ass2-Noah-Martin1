@@ -46,6 +46,7 @@ const PAD = 40;
 const BASE = 132;
 const R = 15;
 const W = PAD * 2 + STEP * (weeks.length - 1);
+const H = BASE + 62;
 const x = (week: number) => PAD + (week - 1) * STEP;
 
 const edges = weeks
@@ -94,9 +95,9 @@ const chainSummary = weeks
   <figure class="q-figure arc-figure">
     <div class="q-figure__stage q-scroll">
       <svg
-        viewBox={`0 0 ${W} ${BASE + 46}`}
+        viewBox={`0 0 ${W} ${H}`}
         width={W}
-        height={BASE + 46}
+        height={H}
         class="arc-svg"
         role="img"
         aria-label={`The dependency chain of the twelve teaching weeks. ${chainSummary}.`}
@@ -111,7 +112,7 @@ const chainSummary = weeks
               rx="18"
               class="arc-band"
             />
-            <text x={x(act.first) - R - 9} y={BASE + R + 34} class="arc-band-label">
+            <text x={x(act.first) - R - 9} y={BASE + R + 32} class="arc-band-label">
               Act {act.id}
             </text>
           </g>

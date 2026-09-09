@@ -297,6 +297,8 @@ export class BoardingSim {
   cols: number;
   queue: Passenger[] = [];
   aisle: (Passenger | null)[] = [];
+  /** seatedGrid[row - 1][col - 1] once that seat is occupied. */
+  seatedGrid: boolean[][] = [];
   seated = 0;
   tick = 0;
   done = false;
@@ -306,7 +308,7 @@ export class BoardingSim {
 
   strategy: BoardingStrategy;
 
-  constructor(strategy: BoardingStrategy, rows = 16, cols = 3, seed = 7) {
+  constructor(strategy: BoardingStrategy, rows = 12, cols = 6, seed = 7) {
     this.strategy = strategy;
     this.rows = rows;
     this.cols = cols;
@@ -321,6 +323,9 @@ export class BoardingSim {
     this.seated = 0;
     this.done = false;
     this.aisle = Array.from({ length: this.rows }, () => null);
+    this.seatedGrid = Array.from({ length: this.rows }, () =>
+      Array.from({ length: this.cols }, () => false),
+    );
 
     const all: Passenger[] = [];
     for (let row = 1; row <= this.rows; row++) {
@@ -338,24 +343,41 @@ export class BoardingSim {
     this.queue = this.order(all);
   }
 
+  /**
+   * Seats are numbered across a 3-3 cabin: 1,2,3 one side of the aisle and
+   * 4,5,6 the other, so 3 and 4 are the aisle seats and 1 and 6 the windows.
+   */
+  aisleDistance(col: number): number {
+    return col <= 3 ? 4 - col : col - 3;
+  }
+
   private order(all: Passenger[]): Passenger[] {
     const shuffled = [...all].sort(() => this.rng() - 0.5);
     switch (this.strategy) {
       case "back-to-front":
         return shuffled.sort((a, b) => b.seatRow - a.seatRow);
       case "outside-in":
-        return shuffled.sort((a, b) => b.seatCol - a.seatCol);
-      case "steffen":
-        // Alternating rows, outside-in: consecutive boarders are two rows
-        // apart, so nobody is ever stowing directly behind anybody else.
+        // Windows, then middles, then aisles. Removes the seat shuffle, which
+        // is the second blocking event after bag stowing.
+        return shuffled.sort(
+          (a, b) => this.aisleDistance(b.seatCol) - this.aisleDistance(a.seatCol),
+        );
+      case "steffen": {
+        // Windows down one side in alternating rows, then the other side, and
+        // so on inwards. Consecutive boarders end up two rows apart, so nobody
+        // is ever stowing directly behind anybody else.
+        const key = (p: Passenger) => {
+          const ring = 3 - this.aisleDistance(p.seatCol); // 0 window .. 2 aisle
+          const side = p.seatCol <= 3 ? 0 : 1;
+          const parity = p.seatRow % 2;
+          return ((ring * 2 + side) * 2) + parity;
+        };
         return shuffled.sort((a, b) => {
-          const key = (p: Passenger) =>
-            (p.seatCol === 3 ? 0 : p.seatCol === 2 ? 2 : 4) +
-            (p.seatRow % 2 === 0 ? 0 : 1);
           const ka = key(a);
           const kb = key(b);
           return ka === kb ? b.seatRow - a.seatRow : ka - kb;
         });
+      }
       default:
         return shuffled;
     }
@@ -376,6 +398,7 @@ export class BoardingSim {
         if (person.stowTicks <= 0) {
           this.aisle[row] = null;
           person.seated = true;
+          this.seatedGrid[person.seatRow - 1][person.seatCol - 1] = true;
           this.seated += 1;
         }
         continue;
@@ -399,7 +422,7 @@ export class BoardingSim {
   }
 
   /** Ticks to seat everybody. Runs to completion; used for the comparison bars. */
-  static timeFor(strategy: BoardingStrategy, rows = 16, cols = 3, seed = 7): number {
+  static timeFor(strategy: BoardingStrategy, rows = 12, cols = 6, seed = 7): number {
     const sim = new BoardingSim(strategy, rows, cols, seed);
     let guard = 0;
     while (!sim.done && guard++ < 20000) sim.step();

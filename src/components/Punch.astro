@@ -1,0 +1,18 @@
+---
+/**
+ * The one line a section exists to deliver. Used sparingly -- at most once per
+ * week, or it stops meaning anything.
+ */
+import "../styles/course.css";
+
+interface Props {
+  note?: string;
+}
+
+const { note } = Astro.props;
+---
+
+<p class="q-punch">
+  <slot />
+  {note && <small>{note}</small>}
+</p>

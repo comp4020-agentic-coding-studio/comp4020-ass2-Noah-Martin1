@@ -75,3 +75,169 @@
   color: var(--q-ink-soft);
   font-weight: 600;
 }
+
+/* ---------------------------------------------------------------------------
+ * The explanation grammar
+ *
+ * A week page is meant to read the way a good explainer video watches: a
+ * concrete scene, then one idea at a time, each with a picture, each ending in
+ * the question that forces the next one. These are the parts that shape it.
+ *
+ * Diagrams are composed of SMALL SVGs in a responsive grid, with every label
+ * in HTML rather than inside the SVG. A single wide SVG scaled down to a 390px
+ * phone takes its 15px labels to 8px; HTML labels stay readable at any width
+ * and the panels simply stack.
+ * ------------------------------------------------------------------------ */
+
+/* A numbered step in the argument. */
+.q-beat {
+  position: relative;
+  margin-block: 2.75rem;
+}
+
+.q-beat__label {
+  display: flex;
+  font-family: inherit;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--q-gold);
+}
+
+.q-beat__n {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1.5px solid var(--q-gold);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  flex: none;
+}
+
+.q-beat > :not(.q-beat__label) { margin-left: 0; }
+
+@media (min-width: 52rem) {
+  .q-beat { padding-left: 2.6rem; }
+  .q-beat__label { margin-left: -2.6rem; }
+}
+
+/* The pause-and-guess moment. A details element so it works with no JS, is
+   keyboard operable, and is announced properly. */
+.q-predict {
+  margin-block: 1.75rem;
+  border: var(--q-stroke) solid var(--q-gold);
+  border-radius: var(--at-radius, 4px);
+  background: color-mix(in srgb, var(--q-gold) 7%, transparent);
+}
+
+.q-predict > summary {
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  gap: 0.6rem;
+  align-items: baseline;
+}
+
+.q-predict > summary::-webkit-details-marker { display: none; }
+
+.q-predict > summary::before {
+  content: "?";
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: none;
+  border-radius: 999px;
+  background: var(--q-gold);
+  color: var(--at-bg);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.q-predict[open] > summary::before { content: "!"; }
+.q-predict > summary:focus-visible { outline: 2px solid var(--q-gold); outline-offset: -2px; }
+.q-predict__body { padding: 0 1rem 0.85rem 3rem; }
+.q-predict__body > :first-child { margin-top: 0; }
+.q-predict__body > :last-child { margin-bottom: 0; }
+
+/* The line the whole section is built around. */
+.q-punch {
+  margin-block: 2.25rem;
+  padding: 1.25rem 0 1.25rem 1.15rem;
+  border-left: 3px solid var(--q-gold);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--q-ink);
+}
+
+.q-punch small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--q-ink-soft);
+}
+
+@media (min-width: 40rem) {
+  .q-punch { font-size: 1.6rem; }
+}
+
+/* Diagram panels: side by side where there is room, stacked where there isn't. */
+.q-panels {
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.15rem;
+}
+
+.q-panels--2 { grid-template-columns: 1fr; }
+.q-panels--3 { grid-template-columns: 1fr; }
+
+@media (min-width: 34rem) {
+  .q-panels--2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 46rem) {
+  .q-panels--3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+.q-panel__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--q-ink);
+}
+
+.q-panel__note {
+  margin: 0.55rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--q-ink-soft);
+}
+
+.q-panel__note b { color: var(--q-ink); font-weight: 600; }
+
+.q-svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* The shared marks. Every diagram on the site draws from exactly these. */
+.q-dot { fill: none; stroke: var(--q-ink); stroke-width: 1.7; }
+.q-dot--served { fill: var(--q-gold); stroke: none; }
+.q-dot--ghost { stroke: var(--q-ink); opacity: 0.28; }
+.q-box { fill: none; stroke: var(--q-ink); stroke-width: 1.7; }
+.q-box--busy { stroke: var(--q-gold); stroke-width: 2.6; }
+.q-box--idle { stroke-dasharray: 4 4; opacity: 0.45; }
+.q-line { stroke: var(--q-rule); stroke-width: 1.5; fill: none; }
+.q-line--dash { stroke-dasharray: 3 6; }
+.q-line--gold { stroke: var(--q-gold); stroke-width: 2; }
+.q-fill { fill: var(--q-gold); }
+.q-fill--soft { fill: var(--q-gold); opacity: 0.22; }
+.q-fill--ink { fill: var(--q-ink); opacity: 0.07; }
+.q-tick { font-size: 11px; fill: var(--q-ink-soft); }

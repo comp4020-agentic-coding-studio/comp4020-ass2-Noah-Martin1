@@ -1,0 +1,89 @@
+---
+/**
+ * Little's Law as an area counted twice.
+ *
+ * L = lambda W is usually taught as a formula to memorise. It is really a
+ * statement that one shaded region can be measured in two directions: slice it
+ * vertically and you are counting how many people are present at an instant;
+ * slice it horizontally and you are counting how long one person stayed. Both
+ * give the same total person-minutes, so the two averages must agree.
+ *
+ * Same eight customers in both panels. Only the direction of the cut changes.
+ */
+import Figure from "./Figure.astro";
+import Panel from "./Panel.astro";
+
+// [arrival, duration] in minutes. Fixed rather than random so the arithmetic
+// in the notes below is checkable by a reader with a pencil.
+const PEOPLE: [number, number][] = [
+  [0, 5], [1, 4], [3, 6], [4, 3], [7, 5], [8, 2], [10, 6], [12, 4],
+];
+
+const T_MAX = 18;
+const W = 300;
+const H = 168;
+const X0 = 16;
+const X1 = W - 10;
+const x = (t: number) => X0 + (t / T_MAX) * (X1 - X0);
+const y = (i: number) => 12 + i * 16;
+const BAR = 10;
+
+const SLICE = 8;
+const present = PEOPLE.map(([a, d], i) => ({ i, in: a <= SLICE && a + d > SLICE }));
+const nPresent = present.filter((p) => p.in).length;
+
+const FOCUS = 6; // the 6-minute stay singled out in the second panel
+const totalArea = PEOPLE.reduce((sum, [, d]) => sum + d, 0);
+const meanStay = totalArea / PEOPLE.length;
+---
+
+<Figure
+  columns={2}
+  caption={`Both panels shade the same ${totalArea} person-minutes. Cutting downward counts how many are present at once; cutting sideways counts how long each person stayed. Because it is one area, the two averages are locked together — and that lock is L = λW. Nothing here assumed anything about how people arrive or how long service takes, which is why the law survives contact with real systems.`}
+>
+  <Panel
+    title="Cut downward — how many are here?"
+    note={`At the marked instant, <b>${nPresent}</b> people are in the system. Average that over the whole window and you have <b>L</b>.`}
+  >
+    <svg viewBox={`0 0 ${W} ${H}`} class="q-svg" role="img"
+      aria-label={`Eight horizontal bars, one per customer, on a time axis. A vertical line at minute ${SLICE} crosses ${nPresent} of them, showing ${nPresent} people present at that instant.`}>
+      <rect x={x(SLICE) - 3} y="6" width="6" height={y(PEOPLE.length - 1) + BAR - 2} class="q-fill--ink" />
+      {PEOPLE.map(([a, d], i) => (
+        <rect x={x(a)} y={y(i)} width={x(a + d) - x(a)} height={BAR} rx="2"
+          class={present[i].in ? "q-fill--soft" : "q-fill--ink"} />
+      ))}
+      {PEOPLE.map(([a, d], i) => present[i].in && (
+        <rect x={x(a)} y={y(i)} width={x(a + d) - x(a)} height={BAR} rx="2"
+          fill="none" class="q-line--gold" />
+      ))}
+      <line x1={x(SLICE)} y1="4" x2={x(SLICE)} y2={y(PEOPLE.length - 1) + BAR + 8} class="q-line--gold" />
+      <line x1={X0} y1={H - 26} x2={X1} y2={H - 26} class="q-line" />
+      <text x={x(SLICE)} y={H - 10} text-anchor="middle" class="q-tick">minute {SLICE}</text>
+    </svg>
+  </Panel>
+
+  <Panel
+    title="Cut sideways — how long did you stay?"
+    note={`This person was in the system <b>${FOCUS} minutes</b>. Average that over everyone and you have <b>W</b> — here ${meanStay.toFixed(2)} minutes.`}
+  >
+    <svg viewBox={`0 0 ${W} ${H}`} class="q-svg" role="img"
+      aria-label={`The same eight bars. One bar is highlighted end to end with a measurement bracket beneath it, showing a single customer's ${FOCUS}-minute stay.`}>
+      {PEOPLE.map(([a, d], i) => (
+        <rect x={x(a)} y={y(i)} width={x(a + d) - x(a)} height={BAR} rx="2"
+          class={d === FOCUS && i === 6 ? "q-fill--soft" : "q-fill--ink"} />
+      ))}
+      <rect x={x(PEOPLE[6][0])} y={y(6)} width={x(PEOPLE[6][0] + PEOPLE[6][1]) - x(PEOPLE[6][0])}
+        height={BAR} rx="2" fill="none" class="q-line--gold" />
+      {/* Measurement drawn across the bar rather than beneath it: rows are
+          16px apart and a bracket underneath collided with the next bar. */}
+      <line x1={x(PEOPLE[6][0])} y1={y(6) + BAR / 2} x2={x(PEOPLE[6][0] + PEOPLE[6][1])}
+        y2={y(6) + BAR / 2} class="q-line--gold" />
+      <line x1={x(PEOPLE[6][0])} y1={y(6) - 3} x2={x(PEOPLE[6][0])} y2={y(6) + BAR + 3} class="q-line--gold" />
+      <line x1={x(PEOPLE[6][0] + PEOPLE[6][1])} y1={y(6) - 3}
+        x2={x(PEOPLE[6][0] + PEOPLE[6][1])} y2={y(6) + BAR + 3} class="q-line--gold" />
+      <line x1={X0} y1={H - 26} x2={X1} y2={H - 26} class="q-line" />
+      <text x={(x(PEOPLE[6][0]) + x(PEOPLE[6][0] + PEOPLE[6][1])) / 2} y={H - 10}
+        text-anchor="middle" class="q-tick">{FOCUS} minutes</text>
+    </svg>
+  </Panel>
+</Figure>

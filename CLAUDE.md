@@ -68,6 +68,8 @@ The twelve weeks should have a clear narrative arc. A possible structure is:
 
 This is a starting point, not a fixed syllabus. Improve it when a stronger narrative emerges.
 
+
+
 ---
 
 ## Examples to explore
@@ -147,6 +149,8 @@ The same system can then be revisited later when discussing efficiency, fairness
 
 Lecture slides are part of the course website, not separate documents.
 
+Each lecture deck must contain a simulation. simulations must be aesthetic - not a textbook demo but more so a viusalisation similar to those shown in veritasium and 3blue1brown videos - beautiful animations telling a story. 
+
 When creating a lecture deck:
 
 1. Establish the question being investigated.
@@ -206,9 +210,9 @@ Before making substantial changes:
 3. Understand the existing page structure and components.
 4. Propose a plan before implementing a large section.
 5. Keep the course structure coherent across weeks.
-6. Reuse existing components where appropriate, but create new components when they improve the course.
-7. Check that new content agrees with existing content.
-8. Run the available checks after meaningful changes.
+6. create new components when they improve the course.
+1. Check that new content agrees with existing content.
+2. Run the available checks after meaningful changes.
 
 Do not invent a new structure when the template already provides an appropriate one.
 
@@ -233,7 +237,7 @@ The course should have a distinct point of view about waiting, queues and system
 
 ## Design philosophy
 
-The site should make students want to investigate queues.
+The site should make students want to investigate queues. - the course should unfold like a documentary on queues - elaborate understanding but beautiful visually and inspiring thought experiments.
 
 Prefer questions over declarations.
 
@@ -256,3 +260,5 @@ Do not treat the initial syllabus or examples in this file as final.
 When there is an opportunity to make the course more coherent, distinctive or interesting, propose the change and explain why it strengthens the course.
 
 The course designer makes the final decisions about curriculum, tone, content and direction.
+
+The site must not follow a textbook style - info dump - detailed explanation. The site and course is to use students experiences and everyday life interactions to fuel curiosity - binded with simulation and explanation.

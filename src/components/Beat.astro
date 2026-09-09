@@ -1,0 +1,25 @@
+---
+/**
+ * One step in a week's argument.
+ *
+ * The weeks are written to a fixed sequence -- look at something real, model
+ * it, test the model, then say what follows -- and numbering the steps makes
+ * that sequence visible instead of leaving it implicit in the prose.
+ */
+import "../styles/course.css";
+
+interface Props {
+  n: number;
+  label: string;
+}
+
+const { n, label } = Astro.props;
+---
+
+<section class="q-beat">
+  <h2 class="q-beat__label">
+    <span class="q-beat__n" aria-hidden="true">{n}</span>
+    <span>{label}</span>
+  </h2>
+  <slot />
+</section>

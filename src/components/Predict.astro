@@ -1,0 +1,22 @@
+---
+/**
+ * Ask before you tell.
+ *
+ * A reader who has committed to a guess reads the answer differently from one
+ * who is being handed it, and most of this course's results are ones people
+ * predict wrongly. Built on <details> so it needs no JavaScript, is keyboard
+ * operable, and survives a reader who has scripts off.
+ */
+import "../styles/course.css";
+
+interface Props {
+  question: string;
+}
+
+const { question } = Astro.props;
+---
+
+<details class="q-predict">
+  <summary>{question}</summary>
+  <div class="q-predict__body"><slot /></div>
+</details>

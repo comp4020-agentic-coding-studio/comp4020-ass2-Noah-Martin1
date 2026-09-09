@@ -16,63 +16,143 @@ related:
   - assessments/01-queue-census
 ---
 
-You are at the back of the airport security line. You cannot see the front. No
-sign tells you the wait, and if one did you would be right not to believe it.
+import Beat from "../../components/Beat.astro";
+import Predict from "../../components/Predict.astro";
+import Punch from "../../components/Punch.astro";
+import LittlesLawArea from "../../components/diagrams/LittlesLawArea.astro";
 
-You can, however, see two things. You can count roughly how many people are
-ahead of you — call it 240. And you can stand still for two minutes and count
-how many people pass a fixed point, which gives you a throughput — say 40 per
-minute.
+You are at the back of the airport security line.
 
-Your expected wait is six minutes. You now know something the airport has not
-told you, using arithmetic you did in primary school.
+You cannot see the front. No sign tells you the wait, and if one did you would
+be right not to believe it. Nobody is going to tell you anything.
 
-## The law
+You are about to work it out anyway, in about ninety seconds, using arithmetic
+you did when you were nine.
 
-**L = λW.** The average number of items in a system equals the average arrival
-rate multiplied by the average time each one spends there.
+<Beat n={1} label="Look at what you can actually see">
 
-That is the whole thing. What makes it remarkable is not the algebra but the
-generality: it holds for any queue in steady state, with any arrival
-distribution, any service distribution, any number of servers, and *any
-discipline whatsoever*. First come first served, shortest job first, random,
-priority, corrupt — Little's Law does not care. It is one of the very few
-results in this field that survives contact with a real system unmodified.
+Two things are available to you from where you are standing, and neither
+requires anyone's cooperation.
 
-The proof is a page of accounting and we will do it properly in the lecture. The
-intuition is simpler: over a long window, everyone who came in went out, so the
-total person-minutes accumulated inside the system can be counted two ways —
-by watching the room, or by adding up individual stays. Both counts are of the
-same quantity, so they are equal.
+**How many people are ahead of you.** Not exactly — but you can count one
+switchback and multiply. Call it 240.
 
-## What it is actually good for
+**How fast the line is moving.** Stand still, pick a fixed point, and count how
+many people cross it in two minutes. Say 80. That is 40 per minute.
 
-Three things, in rising order of usefulness.
+That is the entire measurement. No access, no data request, no one to ask.
 
-**Estimating a wait from the outside.** As above. Useful, slightly parlour-trick.
+</Beat>
 
-**Catching a lie.** If a service claims an average wait of 10 minutes, and you
-can see 500 people in the system and count 20 arrivals a minute, the claimed
-wait is inconsistent with the observable facts by a factor of two and a half.
-Someone is measuring from a different starting line than you are — often the
-moment a ticket is *called* rather than the moment it is *taken*. Nearly every
-published waiting-time statistic hides a definitional choice like this, and
-L = λW is the cheapest tool for finding it.
+<Predict question="Before you scroll — how long is your wait?">
 
-**Sizing a system you have not built.** Rearranged, W = L/λ tells you how long
+Six minutes.
+
+240 people ahead of you, leaving at 40 per minute, is 240 ÷ 40 = 6.
+
+If that felt too easy, hold on to the feeling. The arithmetic really is that
+simple. What is not simple is knowing when you are allowed to do it, which is
+the rest of the lecture and most of your first assignment.
+
+</Predict>
+
+<Beat n={2} label="The law behind the arithmetic">
+
+<Punch note="L is the average number in the system, λ the average arrival rate, W the average time each one spends there.">
+  L = λW
+</Punch>
+
+What makes this remarkable is not the algebra. It is the range of things it
+does not care about.
+
+It holds for **any** arrival pattern. **Any** service time distribution. **Any**
+number of servers. And — this is the part people find hardest to believe — **any
+discipline whatsoever**. First come first served, shortest job first, random,
+priority, outright corrupt: Little's Law does not notice. Everything Act II is
+about, the entire question of who goes first, is invisible to it.
+
+Very few results in this field survive contact with a real system unmodified.
+This one does.
+
+</Beat>
+
+<Beat n={3} label="Why it is true">
+
+The proof is a page of accounting, and we will do it properly on the board. But
+the picture below is the whole idea, and once you have seen it you will not need
+the algebra.
+
+Draw one horizontal bar per customer: it starts when they arrive and ends when
+they leave. The shaded region is **person-minutes** — the total amount of human
+time the system has absorbed.
+
+Now measure that region twice.
+
+<LittlesLawArea />
+
+Cut it into vertical strips and you are asking *how many people are here right
+now* — average that and you get L. Cut it into horizontal strips and you are
+asking *how long did this person stay* — average that and you get W. The strips
+are different shapes. The area is the same.
+
+That is the whole theorem. It is not a fact about queues; it is a fact about
+rectangles, which is exactly why no assumption about arrivals or service or
+priority can break it.
+
+</Beat>
+
+<Beat n={4} label="What it is good for">
+
+Three uses, in rising order of how much they matter.
+
+**Estimating a wait from outside.** As above. Useful, slightly parlour-trick.
+
+**Catching a lie.** This is the real one. If a service claims an average wait of
+10 minutes, and you can see 500 people in the system and count 20 arrivals a
+minute, then the observable facts say 25 minutes. Somebody is measuring from a
+different starting line than you are — very often from the moment a ticket is
+*called* rather than the moment it is *taken*.
+
+Nearly every published waiting-time statistic hides a definitional choice like
+that, and L = λW is the cheapest tool ever invented for finding it. We will use
+it as a lie detector properly in week 9.
+
+**Sizing something you have not built.** Rearranged, W = L/λ tells you how long
 people will wait given a capacity, before you commit to the capacity.
 
-## The trap
+</Beat>
 
-Steady state. The law describes a system where what comes in matches what goes
-out over your measurement window. Point it at a lunch rush that starts empty and
-ends with forty people still queueing and it will give you a confident, precise,
-wrong answer.
+<Beat n={5} label="The trap">
 
-That failure is not a footnote — it is most of the difficulty in your first
-assignment, which is due at the end of this week. Measuring a real queue is
-mostly the discipline of noticing when the assumptions you are relying on have
-quietly stopped being true.
+Everything above assumed **steady state**: over your measurement window, what
+came in matched what went out.
 
-Next week: the law tells us how long people wait. It says nothing about what
-that costs, or who pays it. That turns out to be the harder half.
+<Predict question="You watch a lunch rush from an empty room to a queue of forty. What does L = λW give you?">
+
+A confident, precise, wrong answer.
+
+Nothing in the arithmetic warns you. You will get a number, it will have
+decimal places, and it will be meaningless — because the shaded region in that
+picture has not closed. People are still inside it when you stop counting, so
+the person-minutes you measured are not the person-minutes they will eventually
+spend.
+
+</Predict>
+
+This is not a footnote. It is most of the difficulty in your first assignment,
+due at the end of this week. Measuring a real queue turns out to be mostly the
+discipline of noticing when an assumption you were relying on quietly stopped
+being true — and the queue never tells you.
+
+</Beat>
+
+<Beat n={6} label="Where this goes">
+
+You can now measure any queue in the world from the outside.
+
+Which raises the question the whole of Act I has been walking toward, and that
+this law is completely silent on:
+
+**that wait you just measured — what does it cost, and who is paying for it?**
+
+</Beat>

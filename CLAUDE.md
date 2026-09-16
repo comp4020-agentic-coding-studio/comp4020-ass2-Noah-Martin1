@@ -25,7 +25,7 @@ The course should feel like a real university course rather than a collection of
 
 Build the course around a progression of ideas rather than twelve disconnected topics.
 
-Each week should introduce something that gives students a new way to understand queues, and later weeks should build on earlier ideas.
+Each week should introduce something that gives students a new way to understand queues, and later weeks should build on earlier ideas. Each week should be animated - a designed sim so the user can interact whereever possible - and animated with play pause reset options whereever sim isnt possible (simulation preferred).
 
 Prefer:
 
@@ -47,26 +47,146 @@ The course should repeatedly ask:
 
 ---
 
+## Visual direction
+
+Colour theme:
+follow the colour pallete of the slop university colours, to create a baseline for the course website - so information appears regular and ordered - like its been created solely for the course. 
+
+We want to use a few colours to highlight important and regular features of a lecture site - Light pink to highlight main concepts - where the student should really pay attention / remember the fraise. Forest Green for animations - and continuous colour accent in the animations to make them feel a little separated from the page. Find the appropriate feature for the sim / animation to colour green. e.g. cafe example: pot plants in the cafe are coloured this green. 
+
 ## Course structure
 
 Before generating large amounts of content, propose a coherent semester structure.
 
-The twelve weeks should have a clear narrative arc. A possible structure is:
+The twelve weeks should have a clear narrative arc. The structure is:
 
-1. **Why Queues Exist** — everyday queues and the economics of waiting
-2. **The Anatomy of a Queue** — arrivals, service, capacity and congestion
-3. **The Cost of Waiting** — time as an economic resource
-4. **First Come, First Served** — fairness, simplicity and its weaknesses
-5. **Airports and Airplanes** — boarding systems and competing strategies
-6. **Elevators** — scheduling, batching and prioritisation
-7. **Restaurants and Supermarkets** — multiple servers and queue design
-8. **Hospitals and Emergency Rooms** — priority queues and unequal waiting
-9. **Traffic** — congestion, bottlenecks and network effects
-10. **Digital Queues** — servers, websites, cloud computing and invisible waiting
-11. **Designing the Better Queue** — comparing algorithms and objectives
-12. **The Economics of Waiting** — what should an ideal queue optimise?
+Wk: 1
+Topic: The Queue You Didn't Notice
+Argued from: Campus coffee shop
+Visual: CafeLayouts
+Type: Static, 3 panels
+What it depicts: The same café three ways — one line along the window, two lines/two tills, order-here/collect-there. One
+till drawn dashed and idle beside a full lane. Same room, same staff, different throughput.
 
-This is a starting point, not a fixed syllabus. Improve it when a stronger narrative emerges.
+Animate the viusal, the diagram needs to be bringing the reader in - drawing curiosity to gather their focus - fuel their learning. Continue with a aesthetic cafe look. accent green plants - neat anmation with shading and smooth animated features.
+────────────────────────────────────────
+Wk: 2
+Topic: Variability, Not Busyness
+Argued from: Drive-through window
+Visual: TwoSystems
+Type: Static, 2 panels
+What it depicts: Arrival ticks + service blocks + queue-length trace, for two systems with identical load. Left:
+clockwork, trace never rises above the one in service. Right: irregular, peaks at 4.
+
+As we progress through the webpage we want to reference this visual - doing so by snippiting animated part of it rather than referring to it as "figure X". Acrtuallt make the visual depict cars on highway to show what its referring to - rather than just plain diagram dots.
+
+────────────────────────────────────────
+Wk: 3
+Topic: Little's Law
+Argued from: Airport security
+Visual: LittlesLawArea
+Type: Static, 2 panels
+What it depicts: The area argument. Eight customer bars on a time axis; panel one cuts vertically (3 present at minute 8 →
+L), panel two cuts horizontally (one 6-minute stay → W). Same 35 person-minutes, two directions.
+
+again make sure the visuals are animated or user controlled sim - use accent green where visually needed - make sure the diagram depicts the real world situation.
+────────────────────────────────────────
+Wk: 4
+Topic: The Cost of Waiting
+Argued from: Passport office
+Visual: WaitBill
+Type: Static, 2 panels
+What it depicts: Two bars at the same scale. Left: the office's $6.0m budget, solid and stacked. Right: the queue's
+$12.0m, drawn as a dashed empty outline because it appears in no account.
+
+Make sure this isnt a static visual - create characters for the visual and link real world data to the scene. the reader is meant to know what the aniamtion is about kust by looking at it rather than reading the detailed context.
+
+Act II — Who goes first
+
+Wk: 5
+Topic: First Come, First Served
+Argued from: Bank branch
+Visual: QueueSim variant="lanes"
+Type: Live sim
+What it depicts: Same arrival stream into two configurations: one line/four servers above, four lines/one server below.
+Load slider. Readout shows pooled / separate side by side for L, W, W₉₀.
+
+Dont make the visual too broad - narate the visual with a scene - a common occurance where this happens - common-sense context helps bring the reader up to speed.
+────────────────────────────────────────
+Wk: 6
+Topic: Shortest Job First
+Argued from: Express checkout
+Visual: GanttCompare
+Type: Static, 2 panels
+What it depicts: Five jobs (1,2,3,4,10 min), one server. Grey = waiting, gold = served, pale = the 10-minute job. 20
+person-minutes of grey vs 60 — visible at a glance.
+
+Bring context and goodlooking visual direction - simulate with user control.
+────────────────────────────────────────
+Wk: 7
+Topic: Triage — order by need
+Argued from: Emergency department
+Visual: TriageOrder
+Type: Static, 2 panels
+What it depicts: Six patients, one room. Panel one in arrival order (chest pain starts at minute 70); panel two by urgency
+(minute 0). The critical block outlined gold in both.
+
+Create a situation a script where the queue is important - the delivery of the queue outcome should spark the interest into how it works 
+────────────────────────────────────────
+Wk: 8
+Topic: Pay to Skip — order by price
+Argued from: Theme park pass
+Visual: QueueSim variant="express"
+Type: Live sim
+What it depicts: Gold priority queue above, standard below, sharing two servers. Slider for share buying priority (0–80%).
+W reported as priority / standard so the transfer is visible while the mean sits still.
+
+link to real world data - disney fast pass - real world data brings importance and relevance to the topic. create the visuals around the topic to give visual context.
+────────────────────────────────────────
+Wk: 9
+Topic: Don't Queue At All
+Argued from: Restaurant reservations
+Visual: WaitMoved
+Type: Static, 2 panels
+What it depicts: One person, one appointment, two timelines. Gold bracket marks the window the service counts — most of
+the walk-in bar, a sliver of the booked one.
+
+Stoires are the heart of this course - history brings context to why these queues exist and why some dont work - visually - make the animation / sim undeniably a resturant reservation.
+
+Act III — Systems that fight back
+
+Wk: 10
+Topic: Queues in Networks
+Argued from: Aircraft boarding
+Visual: QueueSim variant="boarding"
+Type: Live sim
+What it depicts: 3-3 cabin, 12 rows, 72 passengers, seen from above. Walkers are hollow dots; gold means stowing and
+blocking. Seats fill as people sit. Strategy selector: back-to-front / random / outside-in / Steffen, with
+ticks-to-board and % vs baseline.
+
+Provide strong visual queues that the animation / sim isnt just a diagrams of dots - use accent tones and provide neat clear and well shaded animation of the plane - its important that not only inside of the animation is relevant and created with effort but the outside too. Create snippets where possible and when refferring to the animation.
+────────────────────────────────────────
+Wk: 11
+Topic: Queues That Know You're Waiting
+Argued from: Call centre
+Visual: FeedbackLoop
+Type: Static, 1 panel
+What it depicts: A four-node cycle with arrowed arcs: queue grows → sign updates → people leave → queue shrinks → the sign
+is now wrong because it was shown. Numbered key beside it.
+
+To setup the animation provide a short non-replayable intro animation to the scene - almost like a load screen for context - only seen on refresh - gives a interactive story feel to the animation. 
+────────────────────────────────────────
+Wk: 12
+Topic: There Is No Neutral Queue
+Argued from: Organ transplant list
+Visual: ObjectiveMatrix
+Type: Static table
+What it depicts: Five rules × four objectives (mean / worst case / fairness / revenue), filled-half-empty circles, with
+each rule's cost under its name. Read any row: no rule has four filled circles.
+
+This is where the aniamtions need to come together - this can be a longer page with snippets to each where needed. A final effort with very high quaility visuals.
+
+Improve it by connecting themes together to form a fluid course. Prioritise viusal explanation over textbook style learning.
 
 
 
@@ -262,3 +382,9 @@ When there is an opportunity to make the course more coherent, distinctive or in
 The course designer makes the final decisions about curriculum, tone, content and direction.
 
 The site must not follow a textbook style - info dump - detailed explanation. The site and course is to use students experiences and everyday life interactions to fuel curiosity - binded with simulation and explanation.
+
+Themes/ topics / simulations / real world references shouldnt be just mentioned once and forgotten - we are building on knowledge - its ok/ encouraged to (whereever natural) to refernce to topics mentioned in previous lectures to help build this process
+
+## Testing 
+
+The lectures webpages and the course in general is a very viusal learning experience . Take screenshots to refine the animations and simulations - and the fluidity of the webpages. Iterate this process until viusally stunning and capturing the whole concept of the topic. 

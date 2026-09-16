@@ -17,6 +17,7 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
 import LittlesLawArea from "../../components/diagrams/LittlesLawArea.astro";
@@ -65,8 +66,8 @@ the rest of the lecture and most of your first assignment.
 What makes this remarkable is not the algebra. It is the range of things it
 does not care about.
 
-It holds for **any** arrival pattern. **Any** service time distribution. **Any**
-number of servers. And — this is the part people find hardest to believe — **any
+It holds for <Key>**any** arrival pattern, **any** service time distribution, **any**
+number of servers</Key>. And — this is the part people find hardest to believe — **any
 discipline whatsoever**. First come first served, shortest job first, random,
 priority, outright corrupt: Little's Law does not notice. Everything Act II is
 about, the entire question of who goes first, is invisible to it.
@@ -95,8 +96,8 @@ now* — average that and you get L. Cut it into horizontal strips and you are
 asking *how long did this person stay* — average that and you get W. The strips
 are different shapes. The area is the same.
 
-That is the whole theorem. It is not a fact about queues; it is a fact about
-rectangles, which is exactly why no assumption about arrivals or service or
+That is the whole theorem. <Key>It is not a fact about queues; it is a fact about
+rectangles</Key>, which is exactly why no assumption about arrivals or service or
 priority can break it.
 
 </Beat>
@@ -124,7 +125,7 @@ people will wait given a capacity, before you commit to the capacity.
 
 <Beat n={5} label="The trap">
 
-Everything above assumed **steady state**: over your measurement window, what
+Everything above assumed <Key>**steady state**</Key>: over your measurement window, what
 came in matched what went out.
 
 <Predict question="You watch a lunch rush from an empty room to a queue of forty. What does L = λW give you?">

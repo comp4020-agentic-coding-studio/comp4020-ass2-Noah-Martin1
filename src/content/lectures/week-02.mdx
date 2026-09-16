@@ -16,6 +16,7 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
 import TwoSystems from "../../components/diagrams/TwoSystems.astro";
@@ -51,8 +52,8 @@ It does not. A perfectly predictable system running at 99% of capacity has no
 queue at all — you can verify that yourself in the simulation below by dragging
 variability to zero and load to 0.97, and watching the line empty.
 
-What creates a queue is a gap: a moment when work arrives and the server is
-still busy with something that ran long. Regularity closes those gaps.
+What creates a queue is <Key>a gap: a moment when work arrives and the server is
+still busy with something that ran long</Key>. Regularity closes those gaps.
 Irregularity opens them, and once open they do not close by themselves, because
 the server can only ever work at one speed.
 
@@ -70,7 +71,7 @@ About **three times** worse. Then from 0.9 to 0.95 it roughly doubles again.
 Almost nobody guesses this. The intuition is that going from 70% to 90% busy
 makes things maybe 30% worse, because that is what linear feels like.
 
-Queue length grows roughly with **ρ/(1−ρ)**, and that denominator is the whole
+Queue length grows roughly with <Key>**ρ/(1−ρ)**</Key>, and that denominator is the whole
 story: as ρ approaches 1 it approaches zero, and the ratio runs away. The last
 few per cent of capacity you squeeze out of a system are paid for with an
 enormous quantity of somebody else's time.
@@ -90,8 +91,8 @@ Drive the dial yourself. Start at 0.8 and creep upward.
 
 <Beat n={4} label="What this means for anyone running anything">
 
-A system deliberately run at 85% capacity is not a wasteful system. It has
-bought predictability with slack, and the slack is doing real work.
+A system deliberately run at 85% capacity is not a wasteful system. <Key>It has
+bought predictability with slack</Key>, and the slack is doing real work.
 
 When a hospital ward, a motorway or a support desk is pushed to 97%
 "efficiency", the efficiency is real — and so is the collapse in service. The

@@ -1,11 +1,7 @@
 /*
  * SLOP2710's own layer, on top of the theme's brand tokens.
  *
- * Everything visual in this course is drawn in two inks on the page ground,
- * because the Slop identity is a two-ink risograph and because a consistent
- * grammar across twelve weeks is worth more than twelve clever pictures.
- *
- * The grammar, used by every diagram and every simulation:
+ * The grammar every diagram and simulation draws from:
  *
  *   a person waiting     hollow dot, ink outline
  *   a person in service  filled dot, gold
@@ -13,8 +9,19 @@
  *   time                 runs left to right
  *   accumulated cost     a gold bar
  *
- * Colours are derived from --at-* so both themes and any future rebrand
- * follow automatically. Nothing here restates a brand colour literally.
+ * Two inks plus two jobs. Gold and ink carry meaning and are derived from
+ * --at-*, so a rebrand follows automatically. Pink and green are fixed hues
+ * with fixed jobs and are therefore stated literally:
+ *
+ *   --q-pink   marks a phrase worth remembering, inline in prose
+ *   --q-green  the accent prop inside a scene, and nowhere else
+ *
+ * An earlier version of this file said everything here was drawn in two inks
+ * and that a third colour would break the discipline the diagrams depend on.
+ * CLAUDE.md's visual direction overrides that deliberately: the colours now
+ * have to do navigational work across twelve weeks, which austerity was not
+ * doing. Gold still means in service; ink still means waiting. The two new
+ * hues were given jobs rather than added for variety.
  */
 
 :root {
@@ -24,9 +31,35 @@
   --q-rule: var(--at-border);
   --q-ground: var(--at-bg-alt);
 
+  /* Concept highlight. Light wash in light mode, deep rose in dark, so body
+     ink stays the text colour in both and never needs overriding -- a light
+     pink behind light text is the obvious way to fail the axe contrast gate. */
+  --q-pink: light-dark(#f7d9e3, #50242f);
+  --q-pink-edge: light-dark(#e9a8bf, #8c4459);
+
+  /* Forest. Scene accent only: the plant, the roadside trees, the livery
+     stripe. Deliberately not --at-success, which means "success" and whose
+     dark value (#4ade80) is a mint, not a forest. */
+  --q-green: light-dark(#2f6b46, #63b989);
+  --q-green-dark: light-dark(#1f4a2f, #3f8a5f);
+
   --q-dot: 0.5rem;
   --q-gap: 0.35rem;
   --q-stroke: 1.5px;
+}
+
+/* The marker pen. A phrase a student should be able to skim a week and
+   collect. Uses <mark>, which is what the element is for, so the highlight
+   is announced rather than purely decorative. */
+.q-key {
+  background: var(--q-pink);
+  color: inherit;
+  padding: 0.08em 0.22em;
+  margin: 0 -0.04em;
+  border-radius: 0.18em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  font-weight: 500;
 }
 
 /* A figure wrapper shared by static diagrams and live simulations, so the two
@@ -34,7 +67,7 @@
 .q-figure {
   margin: 2rem 0;
   border: var(--q-stroke) solid var(--q-rule);
-  border-radius: var(--at-radius, 4px);
+  border-radius: var(--at-border-radius, 4px);
   background: var(--q-ground);
   overflow: hidden;
 }
@@ -135,7 +168,7 @@
 .q-predict {
   margin-block: 1.75rem;
   border: var(--q-stroke) solid var(--q-gold);
-  border-radius: var(--at-radius, 4px);
+  border-radius: var(--at-border-radius, 4px);
   background: color-mix(in srgb, var(--q-gold) 7%, transparent);
 }
 

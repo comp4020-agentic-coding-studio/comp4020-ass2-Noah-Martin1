@@ -1,0 +1,16 @@
+---
+/**
+ * The marker pen.
+ *
+ * Wraps a phrase the reader should be able to come back and find. Renders a
+ * <mark>, which is the element for "text marked for reference", so a screen
+ * reader is told the phrase is highlighted instead of the emphasis being
+ * purely visual.
+ *
+ * Used inline, mid-sentence, a few times a week. It is not a replacement for
+ * Punch -- Punch is the one line a section exists to deliver, on its own.
+ */
+import "../styles/course.css";
+---
+
+<mark class="q-key"><slot /></mark>

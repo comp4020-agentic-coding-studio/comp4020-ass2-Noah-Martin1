@@ -21,6 +21,7 @@ import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
 import TwoSystems from "../../components/diagrams/TwoSystems.astro";
 import QueueSim from "../../components/QueueSim.astro";
+import Snip from "../../components/Snip.astro";
 
 Two drive-throughs. Both serve exactly sixty cars an hour. Both have one
 window, staffed by one person, working at exactly the same average speed.
@@ -39,9 +40,25 @@ Same throughput. Same staff. Same average service time. Same utilisation.
 
 <TwoSystems />
 
+Last week's café was about *where* the line goes. Same two staff, three ways
+round the room, and the arrangement decided how long you stood there:
+
+<Snip
+  scene="cafe"
+  region="counter"
+  height={112}
+  href="/lectures/week-01/#cafe"
+  alt="A live crop of week one's café scene: the counter, the barista behind it, and the head of the queue standing at the till in gold."
+  label="Week 1 — the counter, still running at a customer and a half a minute."
+/>
+
+Nothing about that arrangement is changing this week. The two drive-throughs
+above have one window each and one person at it. The room is not the variable
+any more.
+
 </Beat>
 
-<Punch note="Week 1 said the room's layout was a decision. This says the thing that makes the queue unbearable is not how much work arrives, but how unevenly.">
+<Punch note="Same throughput, same staff, same speed, same utilisation. Everything a manager would measure is identical, and one of these has a queue.">
   Queues are made of variability, not of load.
 </Punch>
 

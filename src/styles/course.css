@@ -102,9 +102,9 @@
   min-width: 0;
 }
 
-/* Act labelling. Acts are distinguished by name and position, never by a third
-   colour -- introducing a hue per act would break the two-ink discipline the
-   diagrams depend on. */
+/* Act labelling. Pink and green have jobs -- a concept, and a scene accent --
+   and giving an act a hue as well would spend a colour on something the act's
+   own name and position already say. So acts stay uncoloured. */
 .q-act-label {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -353,4 +353,43 @@
   .qsim__control { flex: 1 0 100%; }
   .qsim__play { order: 10; }
   .qsim__reset { order: 11; }
+}
+
+/* --- recall strips --------------------------------------------------------
+ *
+ * A live crop of a scene from an earlier week, sitting in the prose. Framed
+ * differently from a figure on purpose: a figure is something to study, a
+ * recall is something to recognise, so it gets a rule down one side instead
+ * of a box, and no caption.
+ */
+.qsnip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  margin: 1.5rem 0;
+  padding: 0.45rem 0 0.55rem 0.9rem;
+  border-left: 3px solid var(--q-green);
+  background: color-mix(in srgb, var(--q-green) 4%, transparent);
+}
+
+/* Capped in the component to the crop's own footprint; see Snip.astro. */
+.qsnip__frame {
+  flex: 1 1 15rem;
+}
+
+.qsnip__canvas {
+  display: block;
+  width: 100%;
+}
+
+.qsnip__label {
+  flex: 1 1 13rem;
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--q-ink-soft);
+}
+
+.qsnip__label a {
+  white-space: nowrap;
 }

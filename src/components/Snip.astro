@@ -1,0 +1,96 @@
+---
+/**
+ * A recall.
+ *
+ * CLAUDE.md asks that a visual already on the site be referred to by replaying
+ * a piece of it rather than by writing "as we saw in figure 3" -- so this is a
+ * small live crop of a named region of a scene from an earlier week, running
+ * the same renderer at that scene's own default settings, with a link back to
+ * the whole thing.
+ *
+ * It emits data-qsnip and never data-qsim: the simulation spec counts sims by
+ * data-qsim and demands one "what to watch" caption for each, and a recall is
+ * not a simulation the reader is meant to drive. It does carry a real
+ * aria-label, because it is still a canvas and the same spec -- rightly --
+ * checks every canvas on any page that has a scene on it.
+ */
+import { withBase } from "astro-theme-university/url";
+import "../styles/course.css";
+import { DEPTH_X, DEPTH_Y, HEIGHT_Y } from "../lib/scene/project";
+import { scenes } from "../lib/scene/registry";
+
+interface Props {
+  /** Key in the scene registry. */
+  scene: string;
+  /** Named region of that scene to crop to. */
+  region: string;
+  /** One line saying what this is a piece of. */
+  label: string;
+  /**
+   * Link back to the full scene, as a site-root path with its anchor. Passed
+   * through withBase, because the deployment lives under a repository path and
+   * the theme's link checker fails the build on a root-absolute href.
+   */
+  href: string;
+  /** Text alternative. Still a canvas, so still required. */
+  alt: string;
+  /** Canvas height in CSS pixels. */
+  height?: number;
+}
+
+const { scene, region, label, href, alt, height = 96 } = Astro.props;
+
+const def = scenes[scene];
+if (!def) {
+  throw new Error(`Snip: scene "${scene}" is not in the registry.`);
+}
+const box = def.regions?.[region];
+if (!box) {
+  throw new Error(
+    `Snip: scene "${scene}" has no region "${region}". Declared: ${
+      Object.keys(def.regions ?? {}).join(", ") || "none"
+    }.`,
+  );
+}
+
+/**
+ * How wide the crop actually wants to be.
+ *
+ * A region is a shallow, wide box, so at a recall's height the camera runs out
+ * of vertical room long before it runs out of horizontal, and a canvas spanning
+ * the prose column ends up with the set in the middle and a third of the strip
+ * empty on either side. So the crop is capped at the width its own footprint
+ * needs, and the label sits in the space left over -- which is also how a
+ * marginal note wants to read. Below about 560px the two stack.
+ *
+ * SNIP_PAD has to match the pad the host passes to fitCamera, or this is a
+ * guess rather than an answer.
+ */
+const SNIP_PAD = 4;
+const footprintW = box.x1 - box.x0 + Math.abs(DEPTH_X) * (box.y1 - box.y0);
+const footprintH = DEPTH_Y * (box.y1 - box.y0) + HEIGHT_Y * box.z1;
+const cropWidth = Math.round(
+  ((height - SNIP_PAD * 2) * footprintW) / footprintH + SNIP_PAD * 2,
+);
+---
+
+<aside class="qsnip" data-qsnip data-qsnip-scene={scene} data-qsnip-region={region}>
+  <div class="qsnip__frame" style={`max-width:${cropWidth}px`}>
+    <canvas
+      class="qsnip__canvas"
+      data-qsnip-canvas
+      data-height={height}
+      role="img"
+      aria-label={alt}></canvas>
+  </div>
+  <p class="qsnip__label">
+    {label} <a href={withBase(href)}>See it again</a>
+  </p>
+</aside>
+
+<script>
+  import { mountSnips } from "../lib/scene/host";
+  import { scenes } from "../lib/scene/registry";
+
+  mountSnips(scenes);
+</script>

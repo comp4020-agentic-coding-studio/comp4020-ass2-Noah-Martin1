@@ -255,3 +255,162 @@ export function mountScenes(registry: Record<string, AnyScene>): void {
   attach();
   document.addEventListener("astro:page-load", attach);
 }
+
+/**
+ * A recall strip: a small live crop of a scene the reader has already met.
+ *
+ * CLAUDE.md asks for cross-week references made by replaying a piece of the
+ * visual rather than by writing "as we saw in figure 3". So a snippet runs the
+ * same renderer as the full scene, with the camera fitted to one of that
+ * scene's named regions instead of the whole set, at the scene's own default
+ * settings -- there are no controls, because a recall is not a thing you drive.
+ *
+ * It only animates while it is on screen. Three of these on a page would
+ * otherwise each hold a requestAnimationFrame loop for the whole visit, for a
+ * canvas nobody has scrolled to.
+ */
+function mountSnip<M>(root: HTMLElement, def: SceneDef<M>): void {
+  if (root.dataset.qsnipReady === "1") return;
+  root.dataset.qsnipReady = "1";
+
+  const canvas = root.querySelector<HTMLCanvasElement>("[data-qsnip-canvas]");
+  const ctx = canvas?.getContext("2d");
+  const regionKey = root.dataset.qsnipRegion ?? "";
+  const region = def.regions?.[regionKey];
+  if (!canvas || !ctx || !region) return;
+
+  // The band holds the crop and the label side by side, so the canvas takes its
+  // width from its own frame rather than from the whole strip.
+  const holder = canvas.parentElement ?? root;
+
+  // A snippet shows the scene as the week that owns it set it up.
+  const defaults = new Map(def.controls.map((spec) => [spec.key, String(spec.value)]));
+  const controls = {
+    num: (key: string, fallback = 0) =>
+      defaults.has(key) ? Number(defaults.get(key)) : fallback,
+    str: (key: string, fallback = "") => defaults.get(key) ?? fallback,
+  };
+
+  const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const rate = (def.rate ?? DEFAULT_RATE) * 0.7;
+  const height = Number(canvas.dataset.height ?? 96);
+
+  let palette = readPalette(root);
+  let model = def.build(controls);
+  let tick = 0;
+  let raf = 0;
+  let last = 0;
+  let carry = 0;
+  let sized = { w: 0, dpr: 0 };
+  let running = false;
+
+  function draw(): void {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = holder.clientWidth || 260;
+    if (sized.w !== w || sized.dpr !== dpr) {
+      canvas!.width = Math.round(w * dpr);
+      canvas!.height = Math.round(height * dpr);
+      canvas!.style.height = `${height}px`;
+      sized = { w, dpr };
+    }
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx!.clearRect(0, 0, w, height);
+    def.draw({
+      c: ctx!,
+      cam: fitCamera(w, height, region!, 4),
+      p: palette,
+      model,
+      w,
+      h: height,
+      tick,
+      reduced: reducedQuery.matches,
+      region: regionKey,
+    });
+  }
+
+  function frame(now: number): void {
+    if (!running) return;
+    const dt = Math.min((now - last) / 1000, 0.25);
+    last = now;
+    carry += dt * rate;
+    const steps = Math.floor(carry);
+    carry -= steps;
+    for (let i = 0; i < steps; i++) {
+      def.step(model);
+      tick++;
+    }
+    draw();
+    raf = requestAnimationFrame(frame);
+  }
+
+  function start(): void {
+    if (running || reducedQuery.matches) return;
+    running = true;
+    last = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+
+  function stop(): void {
+    running = false;
+    cancelAnimationFrame(raf);
+  }
+
+  const warm = Math.round((def.warm ?? 0) * (reducedQuery.matches ? REDUCED_WARM : 1));
+  for (let i = 0; i < warm; i++) {
+    def.step(model);
+    tick++;
+  }
+  if (def.representative) {
+    for (let i = 0; i < 4000 && !def.representative(model); i++) {
+      def.step(model);
+      tick++;
+    }
+  }
+  draw();
+
+  const seen = new IntersectionObserver(
+    (entries) => entries.forEach((entry) => (entry.isIntersecting ? start() : stop())),
+    { rootMargin: "80px" },
+  );
+  seen.observe(root);
+
+  const themeWatcher = new MutationObserver(() => {
+    palette = readPalette(root);
+    draw();
+  });
+  themeWatcher.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+
+  let resizeTimer = 0;
+  const onResize = () => {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(draw, 120);
+  };
+  window.addEventListener("resize", onResize);
+
+  document.addEventListener(
+    "astro:before-swap",
+    () => {
+      stop();
+      seen.disconnect();
+      themeWatcher.disconnect();
+      window.removeEventListener("resize", onResize);
+    },
+    { once: true },
+  );
+}
+
+/** Mount every recall strip on the page. Idempotent, like mountScenes. */
+export function mountSnips(registry: Record<string, AnyScene>): void {
+  const attach = () => {
+    document.querySelectorAll<HTMLElement>("[data-qsnip]").forEach((root) => {
+      const id = root.dataset.qsnipScene;
+      const def = id ? registry[id] : undefined;
+      if (def) mountSnip(root, def);
+    });
+  };
+  attach();
+  document.addEventListener("astro:page-load", attach);
+}

@@ -699,6 +699,19 @@ export function car(
 
 // --- annotation ------------------------------------------------------------
 
+/**
+ * Label size for the current camera.
+ *
+ * Text is the one thing in a scene that cannot scale with the set: at 390px
+ * the camera drops to about a third of its desktop scale, and 11px labels that
+ * read as annotation on a wide canvas start to dominate the room and overrun
+ * the props they name. So type shrinks with the camera, within bounds, and
+ * anything that would land under `min` should be dropped rather than drawn.
+ */
+export function textSize(cam: Camera, max = 11, min = 7): number {
+  return Math.max(min, Math.min(max, cam.s * 0.11));
+}
+
 /** Screen-space text. Rotated 11px canvas text is unreadable; this is not. */
 export function label(
   c: CanvasRenderingContext2D,
@@ -729,11 +742,14 @@ export function chip(
   x: number,
   y: number,
   size = 11,
+  /** Canvas width, to keep the chip inside the frame. */
+  limit?: number,
 ): void {
   c.font = `600 ${size}px ui-sans-serif, system-ui, sans-serif`;
   const w = c.measureText(text).width + size * 1.1;
   const h = size * 1.7;
   const r = h / 2;
+  if (limit !== undefined) x = Math.max(4, Math.min(x, limit - w - 4));
   c.beginPath();
   c.moveTo(x + r, y);
   c.lineTo(x + w - r, y);

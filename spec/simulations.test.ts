@@ -32,6 +32,7 @@ describe("every simulation demonstrates something", () => {
       .filter((path) => path.startsWith("/lectures/"))
       .sort();
     expect(lecturePages).toEqual([
+      "/lectures/week-01/index.html",
       "/lectures/week-02/index.html",
       "/lectures/week-05/index.html",
       "/lectures/week-08/index.html",

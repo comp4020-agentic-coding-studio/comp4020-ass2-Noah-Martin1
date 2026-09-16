@@ -1,0 +1,114 @@
+---
+/**
+ * The frame every scene in the course sits in.
+ *
+ * Takes a scene id and renders its canvas, readout and controls from the
+ * declaration in src/lib/scene/registry.ts -- so a week adds an animation by
+ * describing a set, not by writing an interface. The predecessor had four
+ * hand-written blocks of markup for four variants; twelve would have been
+ * twelve.
+ *
+ * `watch` is required, not optional. A simulation that cannot say what it is
+ * demonstrating is decoration, and spec/simulations.test.ts fails the build if
+ * one ships without a caption.
+ */
+import "../styles/course.css";
+import { scenes } from "../lib/scene/registry";
+
+interface Props {
+  /** Key in the scene registry. */
+  scene: string;
+  /** What the reader should look at. Rendered as the figure caption. */
+  watch: string;
+  /** Text alternative describing the scene for anyone not seeing it. */
+  alt: string;
+  id: string;
+}
+
+const { scene, watch, alt, id } = Astro.props;
+
+const def = scenes[scene];
+if (!def) {
+  throw new Error(
+    `Scene "${scene}" is not in the registry. Add it to src/lib/scene/registry.ts.`,
+  );
+}
+
+/** Initial text for a range control's live value, matching the client format. */
+const shown = (value: number, key: string) => {
+  const spec = def.controls.find((control) => control.key === key);
+  return spec && spec.kind === "range" && spec.format
+    ? spec.format(value)
+    : String(value);
+};
+---
+
+<figure class="q-figure qscene" data-qsim data-qsim-scene={scene} id={id}>
+  <div class="q-figure__stage">
+    <canvas
+      class="qsim__canvas"
+      data-qsim-canvas
+      role="img"
+      aria-label={alt}></canvas>
+  </div>
+
+  {def.readout.length > 0 && (
+    <dl class="qsim__readout" data-qsim-readout>
+      {def.readout.map((cell) => (
+        <div>
+          <dt>{cell.term}{cell.sub && <span>{cell.sub}</span>}</dt>
+          <dd data-r={cell.key}>—</dd>
+        </div>
+      ))}
+    </dl>
+  )}
+
+  <div class="qsim__controls">
+    <button type="button" class="qsim__play" data-qsim-play aria-pressed="false">
+      Play
+    </button>
+
+    {def.controls.map((control) =>
+      control.kind === "range" ? (
+        <div class="qsim__control">
+          <label for={`${id}-${control.key}`}>
+            {control.label} <output data-out={control.key}>{shown(control.value, control.key)}</output>
+          </label>
+          <input
+            id={`${id}-${control.key}`}
+            data-qsim-input={control.key}
+            type="range"
+            min={control.min}
+            max={control.max}
+            step={control.step}
+            value={control.value}
+          />
+        </div>
+      ) : (
+        <div class="qsim__control qsim__control--select">
+          <label for={`${id}-${control.key}`}>{control.label}</label>
+          <select id={`${id}-${control.key}`} data-qsim-input={control.key}>
+            {control.options.map((option) => (
+              <option value={option.value} selected={option.value === control.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      ),
+    )}
+
+    <button type="button" class="qsim__reset" data-qsim-reset>Reset</button>
+  </div>
+
+  <figcaption class="q-figure__caption">
+    <b>What to watch:</b> {watch}
+  </figcaption>
+</figure>
+
+<script>
+  import { mountScenes } from "../lib/scene/host";
+  import { scenes } from "../lib/scene/registry";
+
+  mountScenes(scenes);
+</script>

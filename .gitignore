@@ -47,3 +47,9 @@ src/content/people/idris-fenn.md
 src/content/people/idris-fenn.avif
 src/content/people/marisol-quaye.md
 src/content/people/marisol-quaye.avif
+
+# Deleted in this round but restored on disk by something on this machine
+# (cause never found; ten starter files do the same with their original Sep 4
+# mtimes). Ignored so a git add -A cannot quietly resurrect them in a commit.
+src/components/diagrams/CafeLayouts.astro
+src/pages/simcheck.astro

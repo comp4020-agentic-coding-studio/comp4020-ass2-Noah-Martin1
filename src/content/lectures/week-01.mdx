@@ -19,12 +19,13 @@ import Beat from "../../components/Beat.astro";
 import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import CafeLayouts from "../../components/diagrams/CafeLayouts.astro";
+import Scene from "../../components/Scene.astro";
 
 There is a coffee shop on the ground floor of this building.
 
-Between 9:00 and 9:20 on a teaching morning it serves about ninety people, and
-for most of those twenty minutes the line is out of the door.
+Between 9:00 and 9:20 on a teaching morning it serves about thirty people, on
+two members of staff, and for most of those twenty minutes the line is out of
+the door.
 
 <Beat n={1} label="Ask the wrong question first">
 
@@ -48,10 +49,17 @@ behind somebody ordering four oat lattes.
 
 <Beat n={2} label="Look at what the room is actually doing">
 
-Below are three arrangements of the same café: same floor area, same two staff,
-same ninety customers.
+Below is the same café three ways: same floor area, same two staff, same
+customers arriving at the same rate. The only thing the selector changes is how
+the room is organised. Run each one through the morning rush and watch where the
+line ends up.
 
-<CafeLayouts />
+<Scene
+  scene="cafe"
+  id="cafe"
+  alt="A three-quarter view into the campus coffee shop. A timber counter runs along the back wall with an espresso machine and stacked cups on it and a barista behind it; a fig stands on the windowsill down the left-hand wall, two tables sit by the window, and a door opens at the front right. A queue of customers waits along a dashed line on the floor, and whoever is at the counter is drawn in gold."
+  watch="Switch between the three arrangements at the same load. The first puts its tail out of the door, and the person at the counter is the same person making the drink. The second halves the line and lets one till stand idle beside a full one. The third has the same two staff as the second and a visibly shorter line, which is the part worth explaining."
+/>
 
 None of these is the natural shape of a queue, because <Key>there is no natural
 shape of a queue</Key>. Each is a decision. Some of them were made deliberately by
@@ -62,18 +70,25 @@ shopfitter in 2019 who was thinking about where the power outlets go.
 
 <Predict question="One of those three is costing about four minutes per customer at peak. Which, and why?">
 
-The first — one line, one person doing both jobs.
+The first — one line, one person doing both jobs. At a rush of a customer and a
+half a minute it costs about **4.7 minutes** each. The third arrangement, on the
+same two staff, costs **0.8**.
 
-Not because the staff are slow. Because every time the barista stops making a
-drink to take an order and handle payment, the drink-making stops. The two
-tasks interrupt each other, and the interruptions are unpredictable, which as
-you will see next week is much worse than them merely being frequent.
+Not because anybody is working harder. Taking an order is ten seconds and making
+the drink is twenty-five, so one person doing both spends thirty-five seconds a
+customer and the machine stands idle for ten of them. Split the two jobs across
+the same two people and the slow one never stops: the room's capacity is now set
+by the drink alone.
 
-The third arrangement fixes it without adding a single person. It just stops
-the two jobs from blocking one another.
+Then push the rush past two a minute and something awkward happens. The *third*
+arrangement runs out of capacity before the *second* does, because two
+specialists in series can only go as fast as the slower of them, while two
+generalists share all the work. Two lines are worse at the rush the café
+actually gets and better at the one it does not.
 
-Now the uncomfortable part: nobody in that building could tell you which
-arrangement they are running, or when it was chosen, or by whom.
+Which is the real lesson, and it is not "this layout is best": each of these
+rooms is optimal for a different morning, and nobody in that building could tell
+you which morning they chose, or when, or why.
 
 </Predict>
 

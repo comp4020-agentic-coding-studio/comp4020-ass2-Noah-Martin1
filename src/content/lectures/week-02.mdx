@@ -19,8 +19,7 @@ import Beat from "../../components/Beat.astro";
 import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import TwoSystems from "../../components/diagrams/TwoSystems.astro";
-import QueueSim from "../../components/QueueSim.astro";
+import Scene from "../../components/Scene.astro";
 import Snip from "../../components/Snip.astro";
 
 Two drive-throughs. Both serve exactly sixty cars an hour. Both have one
@@ -38,7 +37,12 @@ ordering for the whole office.
 
 Same throughput. Same staff. Same average service time. Same utilisation.
 
-<TwoSystems />
+<Scene
+  scene="drivethru"
+  id="drivethru"
+  alt="A three-quarter view of two identical drive-throughs standing side by side. Each is a small kiosk with a lit SLOP BURGER sign, a serving window and someone behind the window, and each has its own lane of asphalt running away from the viewer with a dashed gold line down the middle and a menu board on a post beside it. The left-hand lane, labelled CLOCKWORK, is empty apart from a single gold car at the window. The right-hand lane, labelled REAL TRAFFIC, is nose to tail with cars showing their tail lights, and a pink badge counts the ones still back down the road out of shot. Trees and a planter stand in the verges."
+  watch="Both lanes are fed the same number of cars at the same rate, and both windows take the same fifty-five seconds, so the readout shows one utilisation for both of them. Now look at the lanes. Drag irregularity down to clockwork and the right-hand queue disappears without the load changing at all; drag it back up and the queue rebuilds out of nothing but timing. The left-hand lane never holds more than the car at the window, at any load this slider can reach."
+/>
 
 Last week's café was about *where* the line goes. Same two staff, three ways
 round the room, and the arrangement decided how long you stood there:
@@ -53,8 +57,8 @@ round the room, and the arrangement decided how long you stood there:
 />
 
 Nothing about that arrangement is changing this week. The two drive-throughs
-above have one window each and one person at it. The room is not the variable
-any more.
+above have one window each and one person at it, on identical lanes, with
+identical menus. The room is not the variable any more.
 
 </Beat>
 
@@ -65,44 +69,50 @@ any more.
 <Beat n={2} label="Why this is not obvious">
 
 Everyone's instinct is that a queue forms when a system runs out of capacity.
-It does not. A perfectly predictable system running at 99% of capacity has no
-queue at all — you can verify that yourself in the simulation below by dragging
-variability to zero and load to 0.97, and watching the line empty.
+It does not. The clockwork lane above is running at exactly the utilisation the
+jammed one is — at the busiest setting the slider has, both windows are working
+ninety-two per cent of the time — and it never has a queue at all. Not a short
+one. None, at any load you can set.
 
 What creates a queue is <Key>a gap: a moment when work arrives and the server is
 still busy with something that ran long</Key>. Regularity closes those gaps.
 Irregularity opens them, and once open they do not close by themselves, because
 the server can only ever work at one speed.
 
+You can take that as a measurement rather than an argument. Leave the load at
+one car a minute and walk the irregularity slider up from clockwork: the lane
+holds 0.9 cars, then 1.4, then 3.1, then 6.1, then 10.5. Nothing else moved —
+no extra traffic, no slower staff, no lost capacity.
+<Key>The queue was manufactured out of timing alone.</Key>
+
 </Beat>
 
 <Beat n={3} label="The trap in the last few per cent">
 
 Define **ρ** — "rho" — as the fraction of capacity you are using: arrival rate
-divided by service rate.
+divided by service rate. At a car a minute against a fifty-five second order it
+is 55/60, which is 0.92, and that is the figure in the readout.
 
-<Predict question="As ρ goes from 0.7 to 0.9, how much worse does waiting get?">
+<Predict question="Now set it to one car every seventy seconds instead of sixty. That is a seventh less traffic. How much shorter is the wait?">
 
-About **three times** worse. Then from 0.9 to 0.95 it roughly doubles again.
+**Three times** shorter. Eleven minutes becomes four, and the lane goes from ten
+and a half cars to three and a half.
 
-Almost nobody guesses this. The intuition is that going from 70% to 90% busy
-makes things maybe 30% worse, because that is what linear feels like.
+Almost nobody guesses this. The intuition is that a seventh less traffic makes
+things a seventh better, because that is what linear feels like.
 
-Queue length grows roughly with <Key>**ρ/(1−ρ)**</Key>, and that denominator is the whole
-story: as ρ approaches 1 it approaches zero, and the ratio runs away. The last
-few per cent of capacity you squeeze out of a system are paid for with an
+Queue length grows roughly with <Key>**ρ/(1−ρ)**</Key>, and that denominator is the
+whole story: as ρ approaches 1 it approaches zero, and the ratio runs away. The
+last few per cent of capacity you squeeze out of a system are paid for with an
 enormous quantity of somebody else's time.
 
+One honest footnote, since the numbers are right there to check: the formula
+puts eleven cars in that lane and the simulation measures ten and a half. The
+difference is roughly what you pay for measuring a random thing over a long run
+rather than solving it exactly. Both are answers about the average morning, and
+neither is a promise about Tuesday.
+
 </Predict>
-
-Drive the dial yourself. Start at 0.8 and creep upward.
-
-<QueueSim
-  variant="rho"
-  id="sim-rho"
-  alt="A single queue feeding one server. Hollow dots are people waiting, a gold dot is the person being served, and a trace below shows queue length over the run. Raising the load slider lengthens the line sharply; lowering the variability slider empties it at the same load."
-  watch="Two moves. First set variability to zero and push load to 0.97 — the queue empties completely, because a perfectly predictable system has no queue however busy it is. Then put variability back to 1 and drop load to 0.9. Less work arriving, far worse queue. That is the lecture in two slider drags."
-/>
 
 </Beat>
 
@@ -127,9 +137,10 @@ remove it. You can sometimes reshape it, which is week 9's entire subject.
 
 **Service variability** is transactions taking different lengths of time. You
 can often reduce it, and reducing it is frequently cheaper than adding
-capacity. The drive-through that splits ordering from payment from collection
-has not added a server — it has cut the variance each station sees. So has the
-café in week 1's third floor plan.
+capacity. A drive-through that splits ordering from payment from collection has
+not added a server — it has cut the variance each station sees. Neither had the
+café's third arrangement, the one where the person taking your order was not
+the person making the drink.
 
 </Beat>
 

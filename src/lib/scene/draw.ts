@@ -624,11 +624,27 @@ export function screen(
 // --- traffic ---------------------------------------------------------------
 
 /**
- * A car in 3/4, nose pointing along +x. Body, cabin, glass and the two wheels
- * on the visible side.
+ * A car, either side-on or seen from behind.
  *
- * Six world units long by default, which is a car plus the gap a driver leaves,
- * so a queue of these can be laid out by multiplying.
+ * `facing: "x"` gives the side view: nose to the right, side windows and the
+ * two near wheels. `facing: "y"` points the car away from the viewer and up
+ * the road, so what you see is its back -- rear window, two tail lights, and
+ * the wheels down its right-hand side.
+ *
+ * Both views matter, and the second one more than I expected. A drive-through
+ * queue drawn side-on costs a metre of screen width per metre of road, so six
+ * cars need thirty-odd metres of frame and the whole set ends up five times
+ * wider than it is tall -- which at a readable figure height makes every car
+ * about sixty pixels long. The same queue running away from the viewer costs
+ * only 0.62 of that per metre, because depth is foreshortened in this
+ * projection, so the set is squarer, the camera scale is higher, and the cars
+ * are bigger. It is also simply what a drive-through queue looks like: you see
+ * it from the back of it.
+ *
+ * The body is built in (along, across) coordinates -- distance from the rear
+ * bumper, and offset across the car -- and mapped onto world x/y once, at the
+ * bottom. Writing it twice was the alternative and the two copies would have
+ * drifted.
  */
 export function car(
   c: CanvasRenderingContext2D,
@@ -638,63 +654,172 @@ export function car(
   y: number,
   fill: string,
   len = 4.4,
+  facing: "x" | "y" = "x",
 ): void {
   const t = tints(p);
-  const d = len * 0.41;
+  /** Width across the direction of travel. */
+  const across = len * 0.41;
   const sill = len * 0.075;
-  const bodyH = len * 0.16;
-  const cabH = len * 0.13;
-  const cabX = x + len * 0.24;
-  const cabW = len * 0.44;
-  const cabY = y + d * 0.12;
-  const cabD = d * 0.76;
+  const bodyH = len * 0.17;
+  /**
+   * Taller than a real car's glasshouse. Seen from behind at this camera scale
+   * a car is about seventy pixels wide and forty tall, of which a realistic
+   * cabin is seven -- and seven pixels of slightly lighter fill on top of a
+   * box does not read as a roofline, it reads as a plank. The proportions are
+   * wrong on purpose, for the same reason the people are pegs.
+   */
+  const cabH = len * 0.19;
+  /** Faint outline. At this size an unlined box loses its edges to its own fill. */
+  const edge = withAlpha(p.ink, 0.28);
+
+  /** (along, across) -> world box. */
+  const part = (
+    a: number,
+    aSpan: number,
+    cOff: number,
+    cSpan: number,
+    z: number,
+    h: number,
+  ): Box =>
+    facing === "x"
+      ? { x: x + a, y: y + cOff, w: aSpan, d: cSpan, h, z }
+      : { x: x + cOff, y: y + a, w: cSpan, d: aSpan, h, z };
+
+  /**
+   * A quad on the face turned toward the viewer, in (along, across) terms.
+   * Which face that is depends on the heading: side-on it is the car's flank,
+   * from behind it is the tailgate.
+   */
+  const faceQuad = (
+    a0: number,
+    a1: number,
+    c0: number,
+    c1: number,
+    z0: number,
+    z1: number,
+  ): Array<{ x: number; y: number }> => {
+    const corners: Array<[number, number, number]> =
+      facing === "x"
+        ? [
+            [x + a0, y + c0, z0],
+            [x + a1, y + c0, z0],
+            [x + a1, y + c0, z1],
+            [x + a0, y + c0, z1],
+          ]
+        : [
+            [x + c0, y + a0, z0],
+            [x + c1, y + a0, z0],
+            [x + c1, y + a0, z1],
+            [x + c0, y + a0, z1],
+          ];
+    return corners.map(([px, py, pz]) => project(cam, px, py, pz));
+  };
+
+  // Wheels first, and only on the side that is visible: the far pair is hidden
+  // by the body in this projection, and drawing it anyway put two dark smudges
+  // above the roofline. Side-on that is the near flank; from behind it is the
+  // right-hand side.
+  const wheelC = facing === "x" ? across * 0.02 : across * 0.86;
+  [0.12, 0.71].forEach((a) =>
+    box3(c, cam, part(len * a, len * 0.17, wheelC, across * 0.12, 0, sill * 1.25), {
+      fill: darken(t.metal, 0.55),
+      contrast: 0.1,
+    }),
+  );
+
+  box3(c, cam, part(0, len, 0, across, sill, bodyH), { fill, edge, contrast: 0.22 });
   const cabZ = sill + bodyH;
-
-  // Wheels first and only on the near side: the far pair is hidden by the
-  // body in this projection, and drawing it anyway put two dark smudges above
-  // the roofline.
-  const wheel = (wx: number) =>
-    box3(
-      c,
-      cam,
-      { x: wx, y: y + d * 0.06, w: len * 0.17, d: d * 0.1, h: sill * 1.25 },
-      { fill: darken(t.metal, 0.55), contrast: 0.1 },
-    );
-  wheel(x + len * 0.12);
-  wheel(x + len * 0.71);
-
-  box3(c, cam, { x, y, w: len, d, h: bodyH, z: sill }, { fill, contrast: 0.2 });
   box3(
     c,
     cam,
-    { x: cabX, y: cabY, w: cabW, d: cabD, h: cabH, z: cabZ },
-    { fill: lighten(fill, 0.06), contrast: 0.22 },
+    part(len * 0.24, len * 0.44, across * 0.12, across * 0.76, cabZ, cabH),
+    { fill: lighten(fill, 0.05), edge, contrast: 0.24 },
   );
 
-  // Windscreen: the upper part of the cabin's front face, which is the face
-  // turned toward the viewer.
-  const glass = withAlpha(mix(p.bg, p.ink, 0.42), 0.8);
-  const gz0 = cabZ + cabH * 0.28;
-  const gz1 = cabZ + cabH * 0.95;
-  const quad = [
-    project(cam, cabX + cabW * 0.06, cabY, gz0),
-    project(cam, cabX + cabW * 0.94, cabY, gz0),
-    project(cam, cabX + cabW * 0.94, cabY, gz1),
-    project(cam, cabX + cabW * 0.06, cabY, gz1),
-  ];
+  // Glass: the upper part of the cabin's visible face. Side windows side-on,
+  // rear window from behind.
+  const glass = withAlpha(mix(p.bg, p.ink, 0.62), 0.85);
+  const quad = faceQuad(
+    len * 0.27,
+    len * 0.65,
+    across * 0.12,
+    across * 0.88,
+    cabZ + cabH * 0.28,
+    cabZ + cabH * 0.95,
+  );
   c.beginPath();
   quad.forEach((q, i) => (i ? c.lineTo(q.x, q.y) : c.moveTo(q.x, q.y)));
   c.closePath();
   c.fillStyle = glass;
   c.fill();
 
-  // Tail light, so a queue of these has a visible back end -- which is the
-  // thing a driver in the queue is actually looking at.
-  const lamp = project(cam, x + len * 0.02, y + d * 0.2, sill + bodyH * 0.55);
-  c.beginPath();
-  c.arc(lamp.x, lamp.y, Math.max(1, len * 0.012 * cam.s), 0, Math.PI * 2);
-  c.fillStyle = mix(p.gold, "rgb(200, 40, 40)", 0.65);
-  c.fill();
+  // Tail lights, and they matter more than they sound: seen from behind, two
+  // red lamps are most of what makes a small coloured box read as a car rather
+  // than a crate. Drawn as panels on the rear face, not dots -- at this camera
+  // scale a dot of the right physical radius came out at a single pixel.
+  const lampColour = mix(p.gold, "rgb(198, 46, 38)", 0.72);
+  const lampZ = sill + bodyH * 0.42;
+  const lampH = bodyH * 0.34;
+  const lampW = across * 0.2;
+  (facing === "x" ? [0.14] : [0.12, 0.68]).forEach((cf) => {
+    const quad = faceQuad(
+      len * 0.015,
+      len * 0.015,
+      across * cf,
+      across * cf + lampW,
+      lampZ,
+      lampZ + lampH,
+    );
+    c.beginPath();
+    quad.forEach((q, i) => (i ? c.lineTo(q.x, q.y) : c.moveTo(q.x, q.y)));
+    c.closePath();
+    c.fillStyle = lampColour;
+    c.fill();
+  });
+}
+
+/**
+ * A street tree. Trunk and two overlapping crowns, offset so the light reads
+ * from the same direction as everything else in the kit.
+ *
+ * Distinct from plant(): a pot plant is an indoor prop at person scale, and a
+ * tree is four metres of roadside. Both exist so that every set in the course
+ * has one living green thing in it, which is the series' one non-negotiable
+ * piece of colour.
+ */
+export function tree(
+  c: CanvasRenderingContext2D,
+  cam: Camera,
+  p: Palette,
+  x: number,
+  y: number,
+  height = 4,
+  seed = 1,
+): void {
+  const t = tints(p);
+  const jitter = Math.abs(Math.sin(seed * 12.9898) * 43758.5453) % 1;
+  const trunkH = height * 0.42;
+  const crownR = height * 0.3 * (0.86 + jitter * 0.28);
+
+  box3(
+    c,
+    cam,
+    { x: x - height * 0.045, y: y - height * 0.045, w: height * 0.09, d: height * 0.09, h: trunkH },
+    { fill: darken(t.wood, 0.3), contrast: 0.14 },
+  );
+
+  const top = project(cam, x, y, trunkH + crownR * 0.7);
+  const r = crownR * cam.s;
+  if (r < 1.5) return;
+  const crown = (dx: number, dy: number, scale: number, tint: number) => {
+    c.beginPath();
+    c.ellipse(top.x + dx * r, top.y + dy * r, r * scale, r * scale * 0.82, 0, 0, Math.PI * 2);
+    c.fillStyle = mix(p.green, p.bg, tint);
+    c.fill();
+  };
+  crown(0.24, 0.16, 0.82, 0.02);
+  crown(-0.2, -0.06, 0.9, 0.16);
+  crown(0.04, -0.34, 0.6, 0.3);
 }
 
 // --- annotation ------------------------------------------------------------

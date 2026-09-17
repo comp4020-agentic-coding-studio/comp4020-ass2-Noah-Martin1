@@ -53,6 +53,15 @@ src/content/people/marisol-quaye.avif
 # mtimes). Ignored so a git add -A cannot quietly resurrect them in a commit.
 src/components/diagrams/CafeLayouts.astro
 src/pages/simcheck.astro
+src/components/diagrams/FeedbackLoop.astro
+src/components/diagrams/Figure.astro
+src/components/diagrams/GanttCompare.astro
+src/components/diagrams/LittlesLawArea.astro
+src/components/diagrams/Panel.astro
+src/components/diagrams/TriageOrder.astro
+src/components/diagrams/TwoSystems.astro
+src/components/diagrams/WaitBill.astro
+src/components/diagrams/WaitMoved.astro
 
 # Scratch measurement harnesses: run by hand, never shipped.
 spec/tmp-*.test.ts

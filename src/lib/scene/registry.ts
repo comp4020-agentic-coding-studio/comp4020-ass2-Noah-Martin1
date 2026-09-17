@@ -10,6 +10,7 @@
 import type { AnyScene } from "./types";
 import { bank } from "./scenes/bank";
 import { cafe } from "./scenes/cafe";
+import { checkout } from "./scenes/checkout";
 import { drivethru } from "./scenes/drivethru";
 import { office } from "./scenes/office";
 import { security } from "./scenes/security";
@@ -20,6 +21,7 @@ export const SCENES = {
   security,
   office,
   bank,
+  checkout,
 } satisfies Record<string, AnyScene>;
 
 /** The ids a week may ask for. */

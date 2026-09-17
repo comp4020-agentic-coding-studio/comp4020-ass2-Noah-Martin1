@@ -17,9 +17,11 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import GanttCompare from "../../components/diagrams/GanttCompare.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 Five people arrive at a counter at the same moment. Their transactions take 1,
 2, 3, 4 and 10 minutes. There is one server.
@@ -39,9 +41,26 @@ in both, and finishes at exactly the same moment.
 
 </Predict>
 
-<GanttCompare />
+That is a batch of five, which is a puzzle. A shop is not a batch. People keep
+arriving, and the till below is the same rule running all morning.
+
+<Scene
+  scene="checkout"
+  id="checkout"
+  alt="A three-quarter view of a supermarket checkout with one till open. A conveyor belt carries shopping toward a till screen and a bagging shelf, with an operator in a green uniform behind it and a lit lane sign overhead. Shoppers queue toward the viewer and then along the front of the store, each standing beside a trolley loaded to the size of their shop — several with a few items, one piled above the handle. Gondola shelving and a stand of green produce crates fill the back of the room. Whoever the rule has passed over stands in pink, with a tally above their head counting how many people have gone ahead of them."
+  watch="The trolleys are the job lengths, drawn before service starts — which is the one thing this rule needs and arrival order never asks for. Start in arrival order and read the chip at the foot of the frame: nobody has been passed, and under this rule nobody can be. Now switch the till to smallest basket first. The mean on the readout halves, the line visibly shortens, and a pink shopper appears with a counter over their head. It is always the full trolley. Watch the counter climb, and watch what happens to it when you push the load up to twenty-two an hour."
+/>
 
 </Beat>
+
+<Snip
+  scene="bank"
+  region="lobby"
+  height={112}
+  href="/lectures/week-05/#bank"
+  alt="A live crop of week five's bank lobby: customers standing in a single roped line, waiting for whichever window frees first."
+  label="Week 5 — the rule that took no view at all about what was in your basket."
+/>
 
 <Beat n={2} label="The result">
 
@@ -62,22 +81,37 @@ supermarket is the beneficiary.
 
 <Beat n={3} label="Find the person paying">
 
-Look at the diagram again. The averages moved. Where did the improvement
-actually come from?
+The averages moved. Somebody's did not.
 
-It came from the ten-minute job — the pale bar. Under shortest-first it waits
-the full ten minutes before starting; under longest-first it waits none.
+Switch the till above to smallest-basket-first and watch who turns pink. It is
+never a surprise. The counter over their head is the number of people who
+arrived *after* them and have already been served and left, and on a busy
+morning it does not come back down. Eighty items is a hundred ticks of work —
+the lecture's ten-minute job, standing in a supermarket.
+
+The readout prices it. At twenty shoppers an hour the mean visit falls from
+seventeen minutes to eight and a half, and the full trolley's rises from
+twenty-six to sixty.
+
+<Key>The average did not improve. It was redistributed, and the people it was
+taken from are visible from the door.</Key>
 
 <Punch>
   SJF pays for its excellent average with somebody's tail, and it is always the
   same somebody: the one with the biggest job.
 </Punch>
 
-Now make the arrivals continuous rather than a single batch and it stops being a
-transfer and becomes structural. If short jobs keep arriving, the long job is
+The scene above is already the continuous case, which is where the transfer
+stops being a transfer and becomes structural. If short jobs keep arriving, the long job is
 never at the front. It is not delayed — it is **starved**, indefinitely. A print
 queue running strict SJF will hold your 400-page thesis behind an endless
 trickle of one-page boarding passes, for ever, without anything going wrong.
+
+Over a simulated month of trading at that till, the longest anybody waited was
+an hour and three quarters under arrival order. Under smallest-first it was
+<Key>thirteen hours and forty minutes</Key>. No queue collapsed, no staff went
+home, no alarm fired anywhere in the system. That shopper simply never had the
+smallest basket in the line.
 
 </Beat>
 

@@ -25,19 +25,26 @@ const pages = htmlFiles(DIST).map((path) => ({
 
 const withSim = pages.filter((page) => page.html.includes("data-qsim"));
 
+/**
+ * Weeks that carry an interactive scene today.
+ *
+ * The destination is all twelve -- CLAUDE.md asks for a simulation on every
+ * week -- and this list is being walked up one week at a time as each set is
+ * built. It is an exact list rather than a lower bound so that a scene cannot
+ * quietly appear on a week nobody designed one for, and so that forgetting to
+ * extend it is a failing test rather than an unnoticed gap.
+ */
+const WEEKS_WITH_A_SCENE = [1, 2, 3, 5, 8, 10];
+
 describe("every simulation demonstrates something", () => {
   it("renders a simulation on each week that claims one, and nowhere unexpected", () => {
     const lecturePages = withSim
       .map((page) => page.path)
       .filter((path) => path.startsWith("/lectures/"))
       .sort();
-    expect(lecturePages).toEqual([
-      "/lectures/week-01/index.html",
-      "/lectures/week-02/index.html",
-      "/lectures/week-05/index.html",
-      "/lectures/week-08/index.html",
-      "/lectures/week-10/index.html",
-    ]);
+    expect(lecturePages).toEqual(
+      WEEKS_WITH_A_SCENE.map((week) => `/lectures/week-${String(week).padStart(2, "0")}/index.html`),
+    );
   });
 
   it("gives every simulation a 'what to watch' caption with real content", () => {

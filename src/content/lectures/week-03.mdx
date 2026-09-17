@@ -20,12 +20,25 @@ import Beat from "../../components/Beat.astro";
 import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import LittlesLawArea from "../../components/diagrams/LittlesLawArea.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 You are at the back of the airport security line.
 
-You cannot see the front. No sign tells you the wait, and if one did you would
-be right not to believe it. Nobody is going to tell you anything.
+Last week you could see the whole of a queue at once — six cars, one window,
+and the numbers came out of the model rather than out of you:
+
+<Snip
+  scene="drivethru"
+  region="jam"
+  height={104}
+  href="/lectures/week-02/#drivethru"
+  alt="A live crop of week two's drive-through scene: the irregular lane, nose to tail with cars showing their tail lights, running at a car a minute."
+  label="Week 2 — the irregular lane, still at a car a minute."
+/>
+
+This one has no end you can see. No sign tells you the wait, and if one did you
+would be right not to believe it. Nobody is going to tell you anything.
 
 You are about to work it out anyway, in about ninety seconds, using arithmetic
 you did when you were nine.
@@ -80,21 +93,35 @@ This one does.
 <Beat n={3} label="Why it is true">
 
 The proof is a page of accounting, and we will do it properly on the board. But
-the picture below is the whole idea, and once you have seen it you will not need
-the algebra.
+the idea takes one picture, and once you have seen it you will not need the
+algebra.
 
-Draw one horizontal bar per customer: it starts when they arrive and ends when
-they leave. The shaded region is **person-minutes** — the total amount of human
-time the system has absorbed.
+Draw one horizontal bar per traveller: it starts when they join and ends when
+they clear the arch. The shaded region is **person-minutes** — the total amount
+of human time the hall has absorbed.
 
-Now measure that region twice.
+Now measure that region twice. Here is a hall that will let you do it both ways.
 
-<LittlesLawArea />
+<Scene
+  scene="security"
+  id="security"
+  alt="A three-quarter view of an airport security hall. Two metal-detector arches stand at the back beneath a lit SECURITY board, each with a belt table of grey trays in front of it and an officer in a dark uniform beside it. A barriered snake queue of retractable tapes and posts switchbacks twice across the floor, with travellers standing along it; whoever is in an arch is drawn in gold. Two concourse planters stand to the right. In counting mode a pink plane sweeps along the line and the travellers it has passed turn pink; in following mode one traveller is pink and carries a running clock."
+  watch="Two ways to measure the same thing. Counting sweeps a pink plane from the back of the line to the front, and everyone it passes turns pink — that is the vertical cut, and it is the measurement you can make while standing there. Following paints one traveller pink and runs a clock from the moment they join to the moment they clear the arch — that is the horizontal cut. Then read the bottom row: L divided by the observed throughput, and the separately measured W, at every load the slider reaches."
+/>
 
-Cut it into vertical strips and you are asking *how many people are here right
-now* — average that and you get L. Cut it into horizontal strips and you are
-asking *how long did this person stay* — average that and you get W. The strips
-are different shapes. The area is the same.
+**Count across it.** Sweep from the back of the line to the front and tally.
+You are asking *how many people are here right now*, and the average of that
+answer is L. This is the cut into vertical strips, and it is the one you can do
+standing in a queue with no cooperation from anybody.
+
+**Follow one person through it.** Start a clock when somebody joins, stop it
+when they clear the arch. You are asking *how long did this one stay*, and the
+average of that answer is W. This is the cut into horizontal strips.
+
+Two different measurements, of two different things, by two different methods.
+Now read the bottom row of the scene: <Key>L ÷ λ and W agree to two decimal
+places</Key>, at every setting the slider reaches. They are not approximately
+equal. They are the same quantity — person-minutes — sliced two different ways.
 
 That is the whole theorem. <Key>It is not a fact about queues; it is a fact about
 rectangles</Key>, which is exactly why no assumption about arrivals or service or
@@ -133,10 +160,15 @@ came in matched what went out.
 A confident, precise, wrong answer.
 
 Nothing in the arithmetic warns you. You will get a number, it will have
-decimal places, and it will be meaningless — because the shaded region in that
-picture has not closed. People are still inside it when you stop counting, so
-the person-minutes you measured are not the person-minutes they will eventually
+decimal places, and it will be meaningless — because the shaded region has not
+closed. People are still inside it when you stop counting, so the
+person-minutes you measured are not the person-minutes they will eventually
 spend.
+
+The hall above is not lying to you about this, but only because it has been
+left running long enough to have forgotten how it started. Every figure in that
+readout is an average over a long run at one fixed setting. Move the slider and
+the hall takes a couple of minutes of its own time to mean it.
 
 </Predict>
 

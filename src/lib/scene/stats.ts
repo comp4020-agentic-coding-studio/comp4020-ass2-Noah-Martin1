@@ -77,6 +77,16 @@ export interface Converged {
   W: number;
   /** 90th percentile time in the system, in ticks. */
   W90: number;
+  /**
+   * Departures per tick, observed rather than configured.
+   *
+   * Week 3 prints L / lambda beside W so that Little's Law is verified on the
+   * page instead of asserted, and for that the lambda has to be the throughput
+   * the run actually achieved. The configured arrival rate is a few per cent
+   * higher, because the engine schedules arrivals on whole ticks and rounding
+   * an interval up can only ever slow the stream down.
+   */
+  lambda: number;
   /** Offered load, as the engine computes it. */
   rho: number;
   /** True when the configuration has no steady state to report. */
@@ -97,7 +107,14 @@ export function converge(config: Partial<SimConfig>): Converged {
   // it, so an average wait is not a number that exists. Saying so is both the
   // honest readout and, in week 1, the lesson.
   if (rho >= 0.98) {
-    const out: Converged = { L: Infinity, W: Infinity, W90: Infinity, rho, over: true };
+    const out: Converged = {
+      L: Infinity,
+      W: Infinity,
+      W90: Infinity,
+      lambda: probe.config.lambda,
+      rho,
+      over: true,
+    };
     cache.set(key, out);
     return out;
   }
@@ -107,6 +124,7 @@ export function converge(config: Partial<SimConfig>): Converged {
   let L = 0;
   let W = 0;
   let W90 = 0;
+  let lambda = 0;
   for (const seed of STATS_SEEDS) {
     const sim = new QueueSim({ ...config, seed });
     sim.run(ticks);
@@ -114,10 +132,18 @@ export function converge(config: Partial<SimConfig>): Converged {
     L += stats.L;
     W += stats.W;
     W90 += stats.W90;
+    lambda += stats.served / ticks;
   }
 
   const n = STATS_SEEDS.length;
-  const out: Converged = { L: L / n, W: W / n, W90: W90 / n, rho, over: false };
+  const out: Converged = {
+    L: L / n,
+    W: W / n,
+    W90: W90 / n,
+    lambda: lambda / n,
+    rho,
+    over: false,
+  };
   cache.set(key, out);
   return out;
 }

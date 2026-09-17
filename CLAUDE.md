@@ -60,7 +60,7 @@ Before generating large amounts of content, propose a coherent semester structur
 
 The twelve weeks should have a clear narrative arc. The structure is:
 
-Wk: 1
+### Wk: 1
 Topic: The Queue You Didn't Notice
 Argued from: Campus coffee shop
 Visual: CafeLayouts
@@ -69,8 +69,8 @@ What it depicts: The same café three ways — one line along the window, two li
 till drawn dashed and idle beside a full lane. Same room, same staff, different throughput.
 
 Animate the viusal, the diagram needs to be bringing the reader in - drawing curiosity to gather their focus - fuel their learning. Continue with a aesthetic cafe look. accent green plants - neat anmation with shading and smooth animated features.
-────────────────────────────────────────
-Wk: 2
+
+### Wk: 2
 Topic: Variability, Not Busyness
 Argued from: Drive-through window
 Visual: TwoSystems
@@ -80,8 +80,7 @@ clockwork, trace never rises above the one in service. Right: irregular, peaks a
 
 As we progress through the webpage we want to reference this visual - doing so by snippiting animated part of it rather than referring to it as "figure X". Acrtuallt make the visual depict cars on highway to show what its referring to - rather than just plain diagram dots.
 
-────────────────────────────────────────
-Wk: 3
+### Wk: 3
 Topic: Little's Law
 Argued from: Airport security
 Visual: LittlesLawArea
@@ -90,8 +89,8 @@ What it depicts: The area argument. Eight customer bars on a time axis; panel on
 L), panel two cuts horizontally (one 6-minute stay → W). Same 35 person-minutes, two directions.
 
 again make sure the visuals are animated or user controlled sim - use accent green where visually needed - make sure the diagram depicts the real world situation.
-────────────────────────────────────────
-Wk: 4
+
+### Wk: 4
 Topic: The Cost of Waiting
 Argued from: Passport office
 Visual: WaitBill
@@ -103,7 +102,7 @@ Make sure this isnt a static visual - create characters for the visual and link 
 
 Act II — Who goes first
 
-Wk: 5
+### Wk: 5
 Topic: First Come, First Served
 Argued from: Bank branch
 Visual: QueueSim variant="lanes"
@@ -112,8 +111,8 @@ What it depicts: Same arrival stream into two configurations: one line/four serv
 Load slider. Readout shows pooled / separate side by side for L, W, W₉₀.
 
 Dont make the visual too broad - narate the visual with a scene - a common occurance where this happens - common-sense context helps bring the reader up to speed.
-────────────────────────────────────────
-Wk: 6
+
+### Wk: 6
 Topic: Shortest Job First
 Argued from: Express checkout
 Visual: GanttCompare
@@ -122,8 +121,9 @@ What it depicts: Five jobs (1,2,3,4,10 min), one server. Grey = waiting, gold = 
 person-minutes of grey vs 60 — visible at a glance.
 
 Bring context and goodlooking visual direction - simulate with user control.
-────────────────────────────────────────
-Wk: 7
+
+
+### Wk: 7
 Topic: Triage — order by need
 Argued from: Emergency department
 Visual: TriageOrder
@@ -132,8 +132,8 @@ What it depicts: Six patients, one room. Panel one in arrival order (chest pain 
 (minute 0). The critical block outlined gold in both.
 
 Create a situation a script where the queue is important - the delivery of the queue outcome should spark the interest into how it works 
-────────────────────────────────────────
-Wk: 8
+
+### Wk: 8
 Topic: Pay to Skip — order by price
 Argued from: Theme park pass
 Visual: QueueSim variant="express"
@@ -142,8 +142,9 @@ What it depicts: Gold priority queue above, standard below, sharing two servers.
 W reported as priority / standard so the transfer is visible while the mean sits still.
 
 link to real world data - disney fast pass - real world data brings importance and relevance to the topic. create the visuals around the topic to give visual context.
-────────────────────────────────────────
-Wk: 9
+
+
+### Wk: 9
 Topic: Don't Queue At All
 Argued from: Restaurant reservations
 Visual: WaitMoved
@@ -155,7 +156,7 @@ Stoires are the heart of this course - history brings context to why these queue
 
 Act III — Systems that fight back
 
-Wk: 10
+### Wk: 10
 Topic: Queues in Networks
 Argued from: Aircraft boarding
 Visual: QueueSim variant="boarding"
@@ -165,8 +166,9 @@ blocking. Seats fill as people sit. Strategy selector: back-to-front / random / 
 ticks-to-board and % vs baseline.
 
 Provide strong visual queues that the animation / sim isnt just a diagrams of dots - use accent tones and provide neat clear and well shaded animation of the plane - its important that not only inside of the animation is relevant and created with effort but the outside too. Create snippets where possible and when refferring to the animation.
-────────────────────────────────────────
-Wk: 11
+
+
+### Wk: 11
 Topic: Queues That Know You're Waiting
 Argued from: Call centre
 Visual: FeedbackLoop
@@ -175,8 +177,9 @@ What it depicts: A four-node cycle with arrowed arcs: queue grows → sign updat
 is now wrong because it was shown. Numbered key beside it.
 
 To setup the animation provide a short non-replayable intro animation to the scene - almost like a load screen for context - only seen on refresh - gives a interactive story feel to the animation. 
-────────────────────────────────────────
-Wk: 12
+
+
+### Wk: 12
 Topic: There Is No Neutral Queue
 Argued from: Organ transplant list
 Visual: ObjectiveMatrix

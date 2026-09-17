@@ -10,10 +10,12 @@
 import type { AnyScene } from "./types";
 import { cafe } from "./scenes/cafe";
 import { drivethru } from "./scenes/drivethru";
+import { security } from "./scenes/security";
 
 export const SCENES = {
   cafe,
   drivethru,
+  security,
 } satisfies Record<string, AnyScene>;
 
 /** The ids a week may ask for. */

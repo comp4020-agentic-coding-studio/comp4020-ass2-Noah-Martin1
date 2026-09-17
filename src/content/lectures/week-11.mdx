@@ -17,9 +17,11 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import FeedbackLoop from "../../components/diagrams/FeedbackLoop.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 Every model in this course so far has treated the things in the queue as jobs:
 they arrive, they wait however long they are made to, they leave.
@@ -54,17 +56,24 @@ behaviour, which changes its state.
 
 It destroys itself.
 
-Display forty minutes and some people leave who would have stayed. The queue
-shortens. The wait falls. The number you displayed is now wrong — **because you
-displayed it**.
+Announce nine minutes and some people hang up who would have stayed. The queue
+shortens. The wait falls. The number you announced is now wrong — **because you
+announced it**. The floor below promises 4.6 minutes to callers who then wait
+3.6, and the people who heard it and left are the entire reason it was wrong.
 
 This is not a defect to engineer away. It is what it means to publish
-information about a system to that system's own participants. The estimate is
-only ever correct for the counterfactual world in which it was not shown.
+information about a system to that system's own participants. <Key>The estimate
+is only ever correct for the counterfactual world in which it was not
+shown.</Key>
 
 </Predict>
 
-<FeedbackLoop />
+<Scene
+  scene="callcentre"
+  id="callcentre"
+  alt="A call centre floor seen from above and to one side. Two rows of desks with agents in headsets — gold when they are on a call — face a wallboard on the back wall showing how many callers are waiting, what the hold message is saying, and how many have been lost today. Office plants stand at either end. Below the floor, behind a dashed line, is a separate band labelled as being on hold: the callers, each holding a phone to their ear. Anyone who hangs up flashes pink and disappears."
+  watch="Watch the band below the floor rather than the desks. Every figure there is a caller nobody in the building can see, and each one that flashes pink has just given up. Start with the hold message saying nothing, then switch it to announcing the wait. The reported wait drops from nine minutes to under four — and the share who never got help does not move at all. They are hanging up at the start now instead of in the middle, which takes them out of the number that gets reported. Then read the wallboard against the chip: what the floor announces, and what the people who stayed actually waited."
+/>
 
 </Beat>
 
@@ -79,10 +88,25 @@ dissatisfaction with no change whatever to the clock.
 That is genuinely the cheapest thing in this entire course, and it improves not
 one metric from Act I.
 
+The floor above is the harder version of the same trick, because it *does* move
+a metric. At five agents, announcing the wait takes the reported figure from
+nine minutes to three and a half — a 60% improvement that any operations
+dashboard would celebrate. <Key>The number of callers who failed to get help is
+identical: 38%, before and after.</Key> Sixty an hour got through either way.
+
 <Punch note="Week 8's warning again: watch for the operator whose incentive is to manage the perception rather than the wait.">
   Which is exactly why it can be abused. A system that makes waiting feel
   shorter has removed its own pressure to make waiting be shorter.
 </Punch>
+
+<Snip
+  scene="park"
+  region="standby"
+  height={112}
+  href="/lectures/week-08/#park"
+  alt="A live crop of week eight's standby switchback: the party at the front in pink, counting the passes that have boarded ahead of them."
+  label="Week 8 — the operator who was already being paid for the queue being bad."
+/>
 
 Pleasant queues are not automatically good queues.
 

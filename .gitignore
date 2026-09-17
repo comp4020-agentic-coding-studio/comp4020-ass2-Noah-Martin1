@@ -53,3 +53,6 @@ src/content/people/marisol-quaye.avif
 # mtimes). Ignored so a git add -A cannot quietly resurrect them in a commit.
 src/components/diagrams/CafeLayouts.astro
 src/pages/simcheck.astro
+
+# Scratch measurement harnesses: run by hand, never shipped.
+spec/tmp-*.test.ts

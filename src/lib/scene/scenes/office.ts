@@ -646,6 +646,18 @@ export const office: SceneDef<OfficeModel> = {
     seats: { x0: 1.2, x1: 12.0, y0: 2.4, y1: 9.6, z1: 2.0 },
   },
   draw(f) {
+    // A snippet gets the room and nothing else. The bill is drawn in screen
+    // space across the foot of the canvas, so a crop of the seating would
+    // otherwise arrive in week 5 with two bar charts stapled underneath it.
+    if (f.region) {
+      const st = new Stage();
+      shell(f, st);
+      furniture(f, st);
+      people(f, st);
+      st.paint();
+      return;
+    }
+
     // The room is clipped to the space above the bill. Without it the floor
     // runs on underneath the bars, and a viewer reads one picture where the
     // week needs two: a room, and the account of the room that nobody keeps.

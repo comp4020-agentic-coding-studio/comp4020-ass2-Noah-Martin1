@@ -8,6 +8,7 @@
  */
 
 import type { AnyScene } from "./types";
+import { bank } from "./scenes/bank";
 import { cafe } from "./scenes/cafe";
 import { drivethru } from "./scenes/drivethru";
 import { office } from "./scenes/office";
@@ -18,6 +19,7 @@ export const SCENES = {
   drivethru,
   security,
   office,
+  bank,
 } satisfies Record<string, AnyScene>;
 
 /** The ids a week may ask for. */

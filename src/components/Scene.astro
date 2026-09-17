@@ -56,7 +56,15 @@ const shown = (value: number, key: string) => {
     <dl class="qsim__readout" data-qsim-readout>
       {def.readout.map((cell) => (
         <div>
-          <dt>{cell.term}{cell.sub && <span>{cell.sub}</span>}</dt>
+          <dt>
+            {cell.term}
+            {cell.sub &&
+              (/^\d+$/.test(cell.sub) ? (
+                <sub>{cell.sub}</sub>
+              ) : (
+                <span> {cell.sub}</span>
+              ))}
+          </dt>
           <dd data-r={cell.key}>—</dd>
         </div>
       ))}

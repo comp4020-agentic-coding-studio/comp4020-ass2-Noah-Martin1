@@ -303,7 +303,10 @@
 .qsim__readout[hidden] { display: none; }
 .qsim__readout > div { display: flex; gap: 0.35rem; align-items: baseline; }
 .qsim__readout dt { color: var(--q-ink-soft); font-style: italic; }
-.qsim__readout dt span { font-size: 0.75em; font-style: normal; }
+/* A numeric subscript (W90) hangs off the symbol; a qualifier ("one line",
+   "a day") is a separate word and needs the space the markup gives it. */
+.qsim__readout dt sub { font-size: 0.7em; font-style: normal; }
+.qsim__readout dt span { font-size: 0.8em; font-style: normal; white-space: nowrap; }
 .qsim__readout dd { margin: 0; font-weight: 600; }
 
 .qsim__controls {

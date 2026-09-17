@@ -17,17 +17,25 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import TriageOrder from "../../components/diagrams/TriageOrder.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 Six people arrive at an emergency department within a few minutes of each
 other. A sprained wrist, a sore throat, a cut hand, back pain, chest pain, a
-rash. One treatment room.
+rash. Two treatment bays, and a nurse with about ninety seconds to decide the
+order.
 
 <Beat n={1} label="Run it first come, first served">
 
-<TriageOrder />
+<Scene
+  scene="ed"
+  id="ed"
+  alt="A three-quarter view of an emergency department. A triage desk stands at the left with a nurse in green scrubs behind it and a green-topped trolley beside her; an illuminated green cross and a clock hang on the back wall. Two treatment bays are cut into that wall, each with a lit BAY sign that turns gold when somebody is in it, and the patient being treated stands in the doorway in gold. Twelve chairs fill the waiting room in three rows, with patients sitting in the order they arrived, each holding the triage card they were given. A patient who was carded below the category they actually have, and who is now past the target time for it, sits in pink with a tag naming their complaint and how late they are."
+  watch="Set the bays to take whoever came first and watch the last figure in the readout: under arrival order, more than half the people having heart attacks wait over thirty minutes, and nobody in the room looks like they are in trouble. Switch to the card and that falls to under one per cent. Now leave it on the card and drag the accuracy down. Category 3's wait gets shorter, not longer — the mis-sorted are now in front of them — while a pink patient appears in the chairs with a chest pain, a category 3 card, and a wait that was designed for a sprained wrist."
+/>
 
 Nobody argues for arrival order here. The chest pain goes first, and if you
 asked the wrist — who arrived an hour earlier and will now wait a further half
@@ -98,22 +106,41 @@ the participants brought with them.
 
 **The bottom category's wait is unbounded.** Strict priority in a busy
 department means the least urgent patients can be functionally starved — the
-same mathematics as week 6's thesis stuck behind the boarding passes, with much
-worse consequences. Departments handle it with ageing rules, exactly as
-schedulers do, and the rules are largely informal.
+same mathematics as last week's trolley, with much worse consequences.
+Departments handle it with ageing rules, exactly as schedulers do, and the
+rules are largely informal.
+
+<Snip
+  scene="checkout"
+  region="line"
+  height={112}
+  href="/lectures/week-06/#checkout"
+  alt="A live crop of week six's checkout line: shoppers waiting with trolleys, one of them pink because the rule keeps passing them over."
+  label="Week 6 — the same rule, the same person paying, a different building."
+/>
 
 <Predict question="Your classifier is 15% wrong. How much does the queue degrade?">
 
-Nothing like 15%.
+Nothing like 15% — and in the wrong places entirely.
 
-The cost does not spread evenly across everyone. It concentrates, almost
-entirely, on the small group being misclassified *downwards* — who then wait
-under the wrong category's target with the wrong condition, while the
-department's aggregate statistics look fine because the other 85% are being
-sorted correctly.
+Take the department above from a perfect classifier to a 92% one. The mean wait
+for a category 1 patient goes from six minutes to nine. Category 3 gets
+**shorter**, from 98 minutes to 91, because the mis-sorted are now sitting in
+front of them. A monthly report containing those three numbers would not raise
+an eyebrow anywhere.
 
-An average is exactly the wrong instrument for finding this. You will produce
-your own error rate in this week's lab, and then apply it.
+Here is what actually happened. The share of category 1 patients waiting more
+than half an hour goes from 0.7% to 3.0%: <Key>four times as many people having
+heart attacks in the waiting room</Key>. Drop the classifier to 84% and it
+nearly doubles again.
+
+<Punch note="It concentrates on the small group sorted downwards, who then wait under the wrong category's target with the wrong condition.">
+  The cost of a bad classifier does not spread.
+</Punch>
+
+An average is exactly the wrong instrument for finding this, which is why the
+readout above carries a rate over the tail instead. You will produce your own
+error rate in this week's lab, and then apply it.
 
 </Predict>
 
@@ -125,9 +152,22 @@ Adaeze's framing is that the ordering rule is where the distributive work
 happens.
 
 Priya's is that the rule is only ever as good as the measurement feeding it, and
-that a beautifully designed priority queue fed by a biased classifier is a
+that <Key>a beautifully designed priority queue fed by a biased classifier is a
 machine for laundering that bias into something that looks like clinical
-objectivity.
+objectivity</Key>.
+
+The scene refuses to settle it, and the two readings of its readout are why.
+
+Read down the arrival-order row: 53% of category 1 patients wait more than half
+an hour. Under a 92%-accurate triage, 3.0% do. <Key>Triage is not a marginal
+improvement — it is the difference between half of them and one in thirty.</Key>
+Adaeze's framing wins that comparison and it is not close.
+
+Read across the accuracy rows and you get Priya's. Every one of that 3.0% is a
+patient the department looked at, assessed, gave a number to, and sent to a
+chair. Arrival order never claimed to have done any of that. A queue that
+promises nothing cannot mis-sort you; the promise is what creates the failure
+mode, and the promise is still worth making.
 
 We do not resolve this, and you should not expect the course to resolve it for
 you. It is the live question in the field, and the final design brief is marked

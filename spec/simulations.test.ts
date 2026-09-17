@@ -34,7 +34,7 @@ const withSim = pages.filter((page) => page.html.includes("data-qsim"));
  * quietly appear on a week nobody designed one for, and so that forgetting to
  * extend it is a failing test rather than an unnoticed gap.
  */
-const WEEKS_WITH_A_SCENE = [1, 2, 3, 4, 5, 6, 8, 10];
+const WEEKS_WITH_A_SCENE = [1, 2, 3, 4, 5, 6, 7, 8, 10];
 
 describe("every simulation demonstrates something", () => {
   it("renders a simulation on each week that claims one, and nowhere unexpected", () => {

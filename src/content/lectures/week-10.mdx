@@ -16,11 +16,22 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import QueueSim from "../../components/QueueSim.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 In week 2 I left an aircraft at a gate and promised to come back to it.
+
+<Snip
+  scene="drivethru"
+  region="jam"
+  height={112}
+  href="/lectures/week-02/#drivethru"
+  alt="A live crop of week two's drive-through: the irregular lane nose to tail, the window flashing pink each time a car arrives to find it busy."
+  label="Week 2 — the lane that jammed on timing alone. Same lesson, with luggage."
+/>
 
 Here it is. It is the best worked example in the course, because every tool from
 the preceding nine weeks is needed to say anything true about it.
@@ -61,15 +72,16 @@ interference, which is precisely the thing week 2 told you not to do.
 
 Random beats it, which sounds absurd and is well established. Outside-in beats
 random. Steffen roughly halves back-to-front in field trials — and in the
-simulation below it comes in 56% under.
+aircraft below it comes in 55% under: <Key>11.9 minutes becomes 5.4</Key>, with
+the same passengers, the same bags and the same stow times.
 
 </Predict>
 
-<QueueSim
-  variant="boarding"
-  id="sim-boarding"
-  alt="A cabin of twelve rows seen from above with three seats either side of a central aisle. Passengers move down the aisle as hollow dots and turn gold while stowing a bag, blocking everyone behind them. Seats fill as people sit down."
-  watch="Run back-to-front first and watch the gold dots — the people stowing — cluster into the same few metres of aisle, with a solid line of hollow dots stalled behind them. Then run Steffen. Same passengers, same bags, same stow times; the blockages simply never line up."
+<Scene
+  scene="cabin"
+  id="cabin"
+  alt="An aircraft at a gate, seen from above and to one side with the cabin roof cut away. Wings, engines, tailplane and a green-finned tail sit outside; a jet bridge meets the forward door with passengers queued along it. Inside, twelve rows of three-and-three seats fill as people sit down, and passengers walk the aisle one row at a time. Anyone stowing a bag turns gold with the bag lifted to locker height, and everyone behind them stops. Along the near side of the cabin floor, a pink bar at each row grows with the amount of queueing that row's stowing has caused."
+  watch="Run back to front first and watch two things at once. In the aisle, the gold figures — the people stowing — land in the same three metres with a solid line of stalled passengers behind them. Along the floor, the pink bars pile into a heap at the rear while the front half of the aircraft stays blank. Now switch to Steffen. Exactly the same bags go into exactly the same lockers, but the bars come out almost flat, because the blockages never line up. The worst row causes eleven and a half minutes of other people's waiting under back to front, and one minute under Steffen."
 />
 
 </Beat>
@@ -100,6 +112,12 @@ again, in a different building, with luggage.
 </Beat>
 
 <Beat n={4} label="The general result">
+
+Look at the pink bars again rather than the clock. Every strategy loads the
+same bags into the same lockers, so the total stowing is identical — and yet
+the worst row goes from causing eleven and a half minutes of other people's
+waiting to causing one. <Key>Back-to-front does not create interference. It
+arranges for the interference to happen where the queue is standing.</Key>
 
 Boarding is one instance of this week's real subject.
 

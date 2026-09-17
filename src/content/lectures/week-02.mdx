@@ -41,7 +41,7 @@ Same throughput. Same staff. Same average service time. Same utilisation.
   scene="drivethru"
   id="drivethru"
   alt="A three-quarter view of two identical drive-throughs standing side by side. Each is a small kiosk with a lit SLOP BURGER sign, a serving window and someone behind the window, and each has its own lane of asphalt running away from the viewer with a dashed gold line down the middle and a menu board on a post beside it. The left-hand lane, labelled CLOCKWORK, is empty apart from a single gold car at the window. The right-hand lane, labelled REAL TRAFFIC, is nose to tail with cars showing their tail lights, and a pink badge counts the ones still back down the road out of shot. Trees and a planter stand in the verges."
-  watch="Both lanes are fed the same number of cars at the same rate, and both windows take the same fifty-five seconds, so the readout shows one utilisation for both of them. Now look at the lanes. Drag irregularity down to clockwork and the right-hand queue disappears without the load changing at all; drag it back up and the queue rebuilds out of nothing but timing. The left-hand lane never holds more than the car at the window, at any load this slider can reach."
+  watch="Both lanes are fed the same number of cars at the same rate, and both windows take the same fifty-five seconds, so the readout shows one utilisation for both of them. Now look at the lanes. Drag irregularity down to clockwork and the right-hand queue disappears without the load changing at all; drag it back up and the queue rebuilds out of nothing but timing. The left-hand lane never holds more than the car at the window, at any load this slider can reach. The window flashes pink every time a car arrives to find it occupied, and the chip counts how often that has happened in each lane — nought per cent against about eighty-five. That one event is the entire difference between the two pictures."
 />
 
 Last week's café was about *where* the line goes. Same two staff, three ways
@@ -78,6 +78,14 @@ What creates a queue is <Key>a gap: a moment when work arrives and the server is
 still busy with something that ran long</Key>. Regularity closes those gaps.
 Irregularity opens them, and once open they do not close by themselves, because
 the server can only ever work at one speed.
+
+The scene counts that event for you. Each time a car arrives to find the window
+occupied, the window flashes and the tally at the foot of the frame moves. In
+the clockwork lane it is stuck on nought per cent and it always will be:
+fifty-five seconds of order inside a sixty-second gap leaves five seconds of
+empty window, every single time. In the real lane it is around eighty-five.
+<Key>Identical load, identical staff — and only one of the two lanes can
+produce the event at all.</Key>
 
 You can take that as a measurement rather than an argument. Leave the load at
 one car a minute and walk the irregularity slider up from clockwork: the lane

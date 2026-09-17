@@ -96,6 +96,13 @@ interface Layout {
   serviceCv: number;
   tills: Till[];
   note: string;
+  /**
+   * The arrangement's discipline, written as the instruction the lecture asks
+   * the reader to write: "when a server becomes free, serve...". Long form and
+   * a short one, because at a 330 px column the long one is wider than the
+   * canvas.
+   */
+  rule: [long: string, short: string];
 }
 
 /** Counter geometry, shared by every arrangement. */
@@ -126,6 +133,10 @@ const LAYOUTS: Record<LayoutId, Layout> = {
       },
     ],
     note: "one till, both jobs",
+    rule: [
+      "the rule — when the till frees, serve whoever has waited longest",
+      "rule: longest waiting",
+    ],
   },
   two: {
     lanes: 2,
@@ -137,6 +148,10 @@ const LAYOUTS: Record<LayoutId, Layout> = {
       { x: 6.3, name: "till 2", queueHead: [[6.3, 3.7], [6.3, 0.4]] },
     ],
     note: "two tills, two lines",
+    rule: [
+      "the rule — when a till frees, serve the front of its own line",
+      "rule: front of its own line",
+    ],
   },
   pooled: {
     lanes: 1,
@@ -148,6 +163,10 @@ const LAYOUTS: Record<LayoutId, Layout> = {
       { x: 6.3, name: "collect", queueHead: [[6.3, 3.7], [5.2, 3.2]] },
     ],
     note: "two tills, one line",
+    rule: [
+      "the rule — when the order till frees, take the next in the one line",
+      "rule: next in the one line",
+    ],
   },
 };
 
@@ -433,10 +452,17 @@ function drawPeople(f: Frame<CafeModel>, st: Stage): void {
         return;
       }
       const at = pointAt(path, d);
+      // The person at the front of a line is the one the rule has already
+      // chosen, so they wear the concept pink. It is the week's whole exercise
+      // -- state the rule as an instruction and then watch it pick a human --
+      // and in the two-line arrangement it picks two at once, one of them from
+      // a line of six and one from a line of one.
+      const next = i === 0;
       st.add(at.x, at.y, () => {
         softShadow(c, cam, p, at.x, at.y, 0.24);
         person(c, cam, p, at.x, at.y, {
-          coat: coatFor(p, customer.id),
+          coat: next ? p.pinkEdge : coatFor(p, customer.id),
+          edge: next ? darken(p.pinkEdge, 0.3) : undefined,
           skin: mix(t.skin, p.ink, (customer.id % 4) * 0.13),
           hair: (customer.id % 3) === 0 ? undefined : darken(coatFor(p, customer.id + 1), 0.3),
         });
@@ -502,6 +528,20 @@ function annotate(f: Frame<CafeModel>): void {
 
   const at = project(cam, COUNTER.x + 0.1, COUNTER.y + 1.6, WALL - 0.05);
   label(c, shape.note, at.x, at.y, p.soft, note, "left", "600");
+
+  // The rule, in words, at the foot of the frame.
+  //
+  // This week's lab exercise is to state a queue's discipline as an
+  // instruction, and students find it much harder than it sounds -- so the
+  // room states its own, and changes it when the reader changes the rope. Read
+  // it against the people in pink: those are the ones this sentence has
+  // already chosen, and in the two-line arrangement there are two of them,
+  // one at the front of a line of six and one at the front of a line of one.
+  const [long, short] = shape.rule;
+  const size = textSize(cam, 11, 9);
+  c.font = `600 ${size}px ui-sans-serif, system-ui, sans-serif`;
+  const text = c.measureText(long).width + size * 1.1 <= f.w - 20 ? long : short;
+  chip(c, p, text, 10, f.h - size * 1.7 - 8, size, f.w);
 
   // What each station does, printed on the counter top. The week is about
   // naming the rule, and a room whose stations are unlabelled is exactly the

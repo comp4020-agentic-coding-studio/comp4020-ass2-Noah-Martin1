@@ -139,11 +139,72 @@ const TREES: Array<[number, number, number, number]> = [
   [19.5, 35, 3.0, 25],
 ];
 
+/**
+ * What one lane has seen since the doors opened.
+ *
+ * The week's claim is that the two lanes are equally busy and only one of them
+ * has a queue, and the mechanism is a single event: a car arriving to find the
+ * window already occupied. In the clockwork lane that event cannot happen --
+ * fifty-five seconds of service inside a sixty-second gap leaves five seconds
+ * of window with nobody at it. In the real lane it happens to about nine cars
+ * in ten. Nothing else differs. So the scene counts the event and paints the
+ * car it happened to, and the count is the lecture.
+ */
+interface Tally {
+  arrivals: number;
+  /** Arrivals that found the window busy. */
+  blocked: number;
+  /** Cars still worth painting pink, and the tick each was marked. */
+  marked: Map<number, number>;
+  /** When the window was last found busy by an arriving car. */
+  hitAt: number;
+  /** The highest customer id seen in the lane so far. */
+  seen: number;
+}
+
+const freshTally = (): Tally => ({
+  arrivals: 0,
+  blocked: 0,
+  marked: new Map(),
+  hitAt: -999,
+  seen: 0,
+});
+
+/** How long a blocked arrival stays pink. Two seconds at this scene's rate. */
+const MARK_TICKS = 14;
+
+function watch(sim: QueueSim, t: Tally): void {
+  // The newest car always holds the highest id, and a service takes eleven
+  // ticks, so nobody arrives and leaves between two looks. Read off the lane
+  // rather than the engine's private counter: at most one car arrives a tick,
+  // so the id going up by one is an arrival.
+  const held = sim.busy[0]?.[0];
+  let id = held ? held.id : 0;
+  for (const customer of sim.queues[0] ?? []) id = Math.max(id, customer.id);
+  if (id <= t.seen) return;
+  t.seen = id;
+  t.arrivals += 1;
+  // The engine admits an arrival and then runs the window in the same tick, so
+  // a car that found the window free is already being served and a car that
+  // did not is still in the queue. Which of the two lists it landed in is the
+  // measurement.
+  if ((sim.queues[0] ?? []).some((customer) => customer.id === id)) {
+    t.blocked += 1;
+    t.marked.set(id, sim.tick);
+    t.hitAt = sim.tick;
+  }
+  for (const [old, at] of t.marked) {
+    if (sim.tick - at > MARK_TICKS) t.marked.delete(old);
+  }
+}
+
 export interface DriveModel {
   clock: QueueSim;
   real: QueueSim;
   clockStats: Converged;
   realStats: Converged;
+  clockTally: Tally;
+  realTally: Tally;
   /** Ticks between arrivals. Whole, so that rho is exact in both lanes. */
   gapTicks: number;
   /** Utilisation, shared by construction. */
@@ -179,6 +240,8 @@ function build(controls: {
     real: new QueueSim(realConfig),
     clockStats: converge(clockConfig),
     realStats: converge(realConfig),
+    clockTally: freshTally(),
+    realTally: freshTally(),
     gapTicks,
     rho: SERVICE_TICKS / gapTicks,
   };
@@ -412,7 +475,13 @@ function paintFor(p: Palette, id: number): string {
  * queue really does leave the forecourt -- and it stops a car sliced in half by
  * the frame edge reading as a rendering fault.
  */
-function traffic(f: Frame<DriveModel>, st: Stage, lane: Lane, sim: QueueSim): number {
+function traffic(
+  f: Frame<DriveModel>,
+  st: Stage,
+  lane: Lane,
+  sim: QueueSim,
+  tally: Tally,
+): number {
   const { c, cam, p } = f;
   const held = sim.busy[0]?.[0];
   const waiting = sim.queues[0] ?? [];
@@ -424,9 +493,18 @@ function traffic(f: Frame<DriveModel>, st: Stage, lane: Lane, sim: QueueSim): nu
       back += 1;
       return;
     }
+    // Pink is what the course paints a quantity it is reporting, and here the
+    // quantity is one event: this car arrived to a busy window. It holds the
+    // colour for two seconds, which is long enough to see and short enough
+    // that the lane does not simply turn pink.
+    const paint = serving
+      ? p.gold
+      : tally.marked.has(id)
+        ? p.pinkEdge
+        : paintFor(p, id);
     st.add(lane.carX + 0.9, y, () => {
       softShadow(c, cam, p, lane.carX + 0.9, y + CAR_LEN * 0.45, 1.5, 0.75);
-      car(c, cam, p, lane.carX, y, serving ? p.gold : paintFor(p, id), CAR_LEN, "y");
+      car(c, cam, p, lane.carX, y, paint, CAR_LEN, "y");
     });
   };
 
@@ -447,7 +525,7 @@ function traffic(f: Frame<DriveModel>, st: Stage, lane: Lane, sim: QueueSim): nu
  * reader who cannot read it has been shown two pictures of traffic.
  */
 function annotate(f: Frame<DriveModel>, backs: { clock: number; real: number }): void {
-  const { c, cam, p, w } = f;
+  const { c, cam, p, w, model } = f;
   const heading = Math.max(10, Math.min(13, w * 0.017));
 
   // The names have to fit in the gap between the two lanes, and the gap is
@@ -491,6 +569,63 @@ function annotate(f: Frame<DriveModel>, backs: { clock: number; real: number }):
       chip(c, p, `${back} more back down the road`, tag.x, tag.y, textSize(cam, 10, 8), w);
     }
   });
+
+  busyFlash(f, LANES.clock, model.clockTally, model.clock.tick);
+  busyFlash(f, LANES.real, model.realTally, model.real.tick);
+  blocked(f);
+}
+
+/**
+ * The event that is the lecture, marked where it happens and counted at the
+ * foot of the frame.
+ *
+ * The car it happened to would have been the obvious thing to paint, and it is
+ * painted -- but at the load this scene opens on the newest car is ten back,
+ * which is off the bottom of the lot and behind the "more back down the road"
+ * chip. So the window flashes too. The window is where the fact lives anyway:
+ * the car is late because *this* was occupied.
+ *
+ * The count is a share rather than a tally of each lane's own arrivals. Poisson
+ * arrivals do not deliver the same number of cars as clockwork ones over a
+ * finite morning, so "0 of 81" against "65 of 77" invited exactly the question
+ * the week is trying to close down -- whether the two lanes are equally busy.
+ * They are, to two decimal places, and rho is printed underneath.
+ */
+function busyFlash(f: Frame<DriveModel>, lane: Lane, t: Tally, tick: number): void {
+  const { c, cam, p } = f;
+  if (tick - t.hitAt > MARK_TICKS) return;
+  const y0 = lane.windowY - 1.2;
+  const y1 = lane.windowY + 0.9;
+  const quad = [
+    project(cam, lane.kioskX, y0, 1.05),
+    project(cam, lane.kioskX, y1, 1.05),
+    project(cam, lane.kioskX, y1, 2.3),
+    project(cam, lane.kioskX, y0, 2.3),
+  ];
+  c.beginPath();
+  quad.forEach((q, i) => (i ? c.lineTo(q.x, q.y) : c.moveTo(q.x, q.y)));
+  c.closePath();
+  c.fillStyle = withAlpha(p.pink, 0.55);
+  c.fill();
+  c.strokeStyle = p.pinkEdge;
+  c.lineWidth = 2;
+  c.stroke();
+}
+
+function blocked(f: Frame<DriveModel>): void {
+  const { c, p, model, w, h } = f;
+  const size = textSize(f.cam, 11, 9);
+  const share = (t: Tally) =>
+    t.arrivals === 0 ? "—" : `${Math.round((t.blocked / t.arrivals) * 100)}%`;
+  const a = share(model.clockTally);
+  const b = share(model.realTally);
+
+  const long = `arrived to a busy window — clockwork ${a}, real traffic ${b}`;
+  const short = `busy window: ${a} vs ${b}`;
+  c.font = `600 ${size}px ui-sans-serif, system-ui, sans-serif`;
+  const text = c.measureText(long).width + size * 1.1 <= w - 20 ? long : short;
+
+  chip(c, p, text, 10, h - size * 1.7 - 8, size, w);
 }
 
 // --- the scene -------------------------------------------------------------
@@ -542,7 +677,9 @@ export const drivethru: SceneDef<DriveModel> = {
   build,
   step: (m) => {
     m.clock.step();
+    watch(m.clock, m.clockTally);
     m.real.step();
+    watch(m.real, m.realTally);
   },
   // The busy lane is the one that takes time to look like its own average, and
   // it is the one the reader is being asked to believe a number about.
@@ -586,8 +723,8 @@ export const drivethru: SceneDef<DriveModel> = {
     kiosk(f, st, LANES.real, Boolean(f.model.real.busy[0]?.[0]));
 
     const backs = {
-      clock: traffic(f, st, LANES.clock, f.model.clock),
-      real: traffic(f, st, LANES.real, f.model.real),
+      clock: traffic(f, st, LANES.clock, f.model.clock, f.model.clockTally),
+      real: traffic(f, st, LANES.real, f.model.real, f.model.realTally),
     };
 
     st.paint();

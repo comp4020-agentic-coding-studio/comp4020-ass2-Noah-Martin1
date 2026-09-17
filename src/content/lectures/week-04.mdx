@@ -19,7 +19,8 @@ import Beat from "../../components/Beat.astro";
 import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import WaitBill from "../../components/diagrams/WaitBill.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 A passport office processes 800 applications a day. The average in-person wait
 is 90 minutes.
@@ -33,6 +34,18 @@ itself has never done.
 office. Over a working year, about 300,000 hours — roughly a hundred and sixty
 people's entire working lives, spent sitting in a room.
 
+Neither number required anyone's cooperation. Last week's arithmetic produced
+both of them from outside the building:
+
+<Snip
+  scene="security"
+  region="snake"
+  height={108}
+  href="/lectures/week-03/#security"
+  alt="A live crop of week three's airport security hall: the barriered snake queue with travellers along it, and the pink counting sweep running down the line."
+  label="Week 3 — counting the line is still the whole measurement."
+/>
+
 <Predict question="What is that worth, and where does it appear in the office's accounts?">
 
 At $40 an hour it is about **$12 million a year** — roughly twice the office's
@@ -43,7 +56,14 @@ report, any efficiency review. Not anywhere.
 
 </Predict>
 
-<WaitBill />
+So here is the room, with the bill drawn underneath it.
+
+<Scene
+  scene="office"
+  id="office"
+  alt="A three-quarter view of a passport office. A long timber counter runs across the back under a NOW SERVING board, with five numbered windows in a glazed screen; three are open with a clerk behind each and an applicant in gold standing at them, and two are shuttered. Eighteen chairs face the room, scattered with people in different coats, most of them holding a folder. A ticket machine and an unloved pot plant stand by the entrance mat. Across the foot of the picture two bars fill as the working day runs: a solid gold one labelled the office pays, and a longer dashed empty outline labelled the queue pays."
+  watch="Both bars are the same day at the same scale. The solid gold one is what the office spends on counter staff; the dashed empty one is what the people in the room spend on being there, and it is drawn as an outline because it appears in nobody's accounts. Now open the fourth window and watch them swap places. The gold bar gets longer by three hundred dollars and the dashed one gets shorter by two thousand three hundred — and only the first of those two numbers is visible to anyone who works in the building."
+/>
 
 </Beat>
 
@@ -58,9 +78,16 @@ report, any efficiency review. Not anywhere.
 
 When the cost of waiting sits entirely outside its accounts, the rational
 internal decision is nearly always to push the queue rather than the budget:
-run at 97% utilisation, cut the counter from four staff to three, add a
+run at 97% utilisation, cut the counter from four windows to three, add a
 verification step that costs the office thirty seconds and the queue forty
 minutes.
+
+That middle one is the control at the top of this page, and it is worth doing
+by hand. At fourteen applications an hour, going from four open windows to
+three takes the average wait from sixteen minutes to forty-eight and the day's
+waiting from 28 person-hours to 86. <Key>The office saves $304 a day and the
+room loses $2,303</Key> — seven and a half dollars of somebody else's time for
+every dollar saved, and not one line of it in the office's ledger.
 
 None of these are failures of management. Each is a correct decision given the
 information the manager is scored on. The failure is upstream, in what gets

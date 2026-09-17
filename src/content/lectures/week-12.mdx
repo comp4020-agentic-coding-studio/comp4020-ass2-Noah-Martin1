@@ -18,8 +18,11 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 import ObjectiveMatrix from "../../components/diagrams/ObjectiveMatrix.astro";
 
 Almost every queue you have met this semester was optimising something without
@@ -33,10 +36,11 @@ There are more people needing a kidney than there are kidneys.
 
 No amount of process improvement fixes that. It is not a queueing problem in the
 sense of the first nine weeks, because there is no efficiency left to extract —
-every organ gets used. The only question is order, and here order decides who
-lives.
+every organ gets used. <Key>The only question is order, and here order decides
+who lives.</Key>
 
-Every rule you have learned has been seriously proposed for it.
+Every rule you have learned has been seriously proposed for it. So the unit
+below runs all five, on the same list, and you can watch each one pick.
 
 </Beat>
 
@@ -48,20 +52,56 @@ organs: a kidney given to a 70-year-old yields far fewer life-years than the
 same kidney given to a 25-year-old, and under pure FCFS that difference is
 invisible by design.
 
+<Snip
+  scene="bank"
+  region="lobby"
+  height={104}
+  href="/lectures/week-05/#bank"
+  alt="A live crop of week five's bank lobby: one line feeding four windows, in the strict arrival order that nobody in the room has to have an opinion about."
+  label="Week 5 — the rule that needs to know nothing about you."
+/>
+
 **Shortest job first** becomes allocation by expected benefit — most life-years
 per organ. Maximises the good done. It also systematically deprioritises the
 old, the diabetic and the already-sick, which is to say it allocates least to
 those who are worst off.
+
+<Snip
+  scene="checkout"
+  region="line"
+  height={104}
+  href="/lectures/week-06/#checkout"
+  alt="A live crop of week six's supermarket line: the shopper with the full trolley marked in pink, because the rule keeps letting the baskets past them."
+  label="Week 6 — and the person the rule keeps letting past."
+/>
 
 **Triage** — sickest first. Matches the medical instinct and week 7's consent.
 It is also the *least* efficient rule available, because the sickest patients
 have the worst outcomes: it maximises organs used and minimises life-years
 produced.
 
+<Snip
+  scene="ed"
+  region="seats"
+  height={104}
+  href="/lectures/week-07/#ed"
+  alt="A live crop of week seven's emergency waiting room: patients seated in arrival order holding the triage cards that decide what that order is worth."
+  label="Week 7 — where ordering by need is the only rule anyone consents to."
+/>
+
 **Price.** Illegal almost everywhere. Iran is the notable exception and the
 literature is worth reading rather than dismissing. Notice that the objection
 here is not efficiency — a market would clear — but that we have decided this is
 not a thing that should be allocated by ability to pay at all.
+
+<Snip
+  scene="park"
+  region="standby"
+  height={104}
+  href="/lectures/week-08/#park"
+  alt="A live crop of week eight's standby switchback: the party at the front in pink, counting the pass-holders who have boarded ahead of them."
+  label="Week 8 — sorting by what people can pay, where the stakes were a ride."
+/>
 
 <Predict question="So which one did the United States pick?">
 
@@ -74,11 +114,43 @@ That is not a failure to find the right answer. It is what choosing looks like
 when you are forced to do it in the open, with everybody watching, and cannot
 retreat into the pretence that the current rule is just how things are done.
 
+The fifth setting below is that composite: four points of waiting time against
+four of expected benefit against two of urgency. <Key>It is second best at
+everything, and that is not a compromise — it is the design.</Key>
+
 </Predict>
+
+<Scene
+  scene="ward"
+  id="ward"
+  alt="A three-quarter view into a dialysis unit. Ten stations in two offset rows, each a green-vinyl recliner with a drip stand and a machine beside it and a line of tubing running to the chair; five more chairs at the front for the shift that has not started. Everybody sitting there is on the kidney waiting list, and the older half have grey hair. A board on the back wall states the allocation rule in gold and counts the list. At the right, beside the door, a coordinator stands at a desk. When an organ arrives a courier carries a forest-green transport box through the door to that desk, and the candidate the rule picked stands, turns gold and walks out. Anyone who leaves the list the other way flashes pink in their chair. One waiting candidate is outlined in pink, with their age, their years on the list, and the number of organs that have gone to somebody else since they joined."
+  watch="Start on longest-on-the-list and let it run until a few organs have arrived. Then switch to most life-years and watch two things nothing in the readout tells you. The grey heads stop leaving — the rule is choosing, correctly, on a variable that is mostly age. And the pink outline settles on the oldest person in the room, with a count beside them that keeps climbing. Now try sickest first: the pink mark jumps to whoever is coping best, because every rule starves somebody and the rule decides who. Last, ignore the rules entirely and drag the supply. It is the only control here that moves the final number."
+/>
 
 </Beat>
 
 <Beat n={3} label="The four objectives, and why you cannot have them all">
+
+The readout above is the matrix below, live. Life-years an organ is efficiency;
+W is the mean; the slowest tenth is the tail; organs reaching the over-sixties
+is one concrete reading of fairness.
+
+Read across the five settings and the shape is unmistakable. Sorting by benefit
+produces nearly a third more life-years than arrival order — 12.6 against 9.7 —
+and cuts the share of organs reaching the over-sixties from 43% to 24%.
+
+Then look at who is *in* the room. Under arrival order the over-sixties are 42%
+of the list. Under most-life-years they are <Key>83% of it</Key> — because they
+are the people it never picks, so they stay, and they keep getting older while
+they do. The rule does not merely under-serve them. It fills the unit with them
+and then declines them faster.
+
+Sickest-first has the most medical consent of any rule here and is the least
+efficient on offer, at 9.0, with a slowest tenth of 12.0 years against arrival
+order's 4.8. That is week 7's starved bottom category exactly, except that here
+the bottom category is whoever is coping best — which is why, if you leave the
+scene running on that setting, the pink mark lands on somebody in their thirties
+who has been on the list for decades.
 
 <ObjectiveMatrix />
 
@@ -91,7 +163,48 @@ discussed it.
 
 </Beat>
 
-<Beat n={4} label="The thesis, finally">
+<Beat n={4} label="One last trap, and one last conservation law">
+
+Two things in that readout are worth stopping on, because both are traps you
+were taught to spot.
+
+**The wait is measured over everybody who left the list, not everybody who got
+an organ.** Measure only the transplanted and sorting by benefit appears to
+*shorten* the queue: 0.9 years, against the 2.2 the readout reports. It does,
+for the people it picks. The people it never picks sit there until they die and
+leave the statistic without ever having entered it. <Key>That is week 9's
+boundary, drawn one last time around the people a rule excludes.</Key>
+
+Under arrival order the same two figures are 2.9 and 2.7 — no gap worth
+mentioning, because that rule is not selecting on anything. So the gap between
+those two numbers is not noise. It *is* the sorting, measured.
+
+**And the last number barely moves.** Thirty-five to thirty-eight per cent
+leave without an organ under every single rule.
+
+<Predict question="Five rules, five different orderings, and the same share die. Why?">
+
+Because ordering is conservative, and this is week 8's theorem with the stakes
+changed.
+
+More people join than there are organs. Nobody is served faster, no organ goes
+unused, and the surplus has to leave the list some other way — so the share who
+never get one is fixed by arithmetic before any rule is chosen. Reordering can
+only decide *which* people are in it.
+
+<Punch note="Drag it from three to six and the share who die goes from about half to about one in nine, under whichever rule is selected. Nothing else in the scene comes close.">
+  The only control in the room that changes how many people die is the supply.
+</Punch>
+
+Which is the honest end of the course. Every ordering rule is a way of deciding
+who bears a shortage, and none of them is a way of ending one. If your design
+brief can increase capacity, that dominates every clever rule in here.
+
+</Predict>
+
+</Beat>
+
+<Beat n={5} label="The thesis, finally">
 
 <Punch note="It has inherited one, usually from whoever laid out the room, and it is enforcing that choice on everybody who walks in without the courtesy of having said what it is.">
   There is no neutral queue. A system that has not chosen has not escaped the
@@ -103,14 +216,25 @@ ordering rule. You cannot argue about what a queue should optimise until you can
 say what it currently does, in numbers, and name who is paying.
 
 That is the whole method: **observe, model, experiment, cost, decide** — and
-then say out loud what you decided.
+then say out loud what you decided. The board on the wall of that unit is doing
+the only genuinely admirable thing available to it: <Key>it has written the rule
+down where the people it sorts can read it.</Key>
 
 </Beat>
 
-<Beat n={5} label="What you can do now that you could not in February">
+<Beat n={6} label="What you can do now that you could not in February">
 
 You can walk into a building, watch a line for ninety seconds, and state the
 rule it is running.
+
+<Snip
+  scene="cafe"
+  region="counter"
+  height={104}
+  href="/lectures/week-01/#cafe"
+  alt="A live crop of week one's campus café: the counter, the barista, and the line along the window that started this entire course."
+  label="Week 1 — the queue you didn't notice. You would notice it now."
+/>
 
 You can measure it from outside with a stopwatch. You can put a number on what
 it costs and say who is holding the bill. You can propose a different rule and

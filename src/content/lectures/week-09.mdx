@@ -17,9 +17,11 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import WaitMoved from "../../components/diagrams/WaitMoved.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
 A restaurant with no reservations has a queue on the pavement.
 
@@ -38,11 +40,33 @@ never got one, and who therefore appear in no statistic the restaurant keeps.
   The wait did not disappear. It moved somewhere nobody measures.
 </Punch>
 
+<Scene
+  scene="dining"
+  id="dining"
+  alt="A three-quarter view into a small restaurant through its window. Ten tables with candles fill the room — lit when somebody is sitting there — with diners two to a table, a chef at a lit pass along the back wall under shelves of bottles, and a host at a stand by the door with the reservation book open on it. Olive trees stand in the window and a planter runs along the left wall. Outside on the pavement, in front of the glass, a line of people waits — or does not, depending on the policy. Across the foot of the frame two bars at the same scale: a solid sliver for the wait the restaurant publishes, and a long dashed empty outline for the wait people actually did."
+  watch="Start on walk-ins. The line on the pavement is the wait, and it is the wait the restaurant can measure, so the two bars at the foot are the same length. Now switch to bookings. The pavement empties completely, the solid bar collapses to a sliver — and the dashed one grows until it runs off the end of the frame, because the same people are now waiting two nights instead of seventeen minutes. Then look at the last two numbers in the readout, because the book is not a swindle: it turns nobody away and fills 99 per cent of the seats."
+/>
+
 Every system in this lecture is performing that trick.
 
 </Beat>
 
 <Beat n={2} label="Three ways to move a wait">
+
+The book above is doing something specific, and it is week 2's mechanism: it
+is not creating capacity, it is <Key>deleting arrival variability</Key>. A
+walk-in room receives its guests when they feel like arriving. A booked room
+receives them on a schedule the kitchen wrote. That is the whole of the gain in
+seats filled, and it is why the same trick works on a drive-through.
+
+<Snip
+  scene="drivethru"
+  region="jam"
+  height={112}
+  href="/lectures/week-02/#drivethru"
+  alt="A live crop of week two's drive-through: the irregular lane, nose to tail, with the window flashing pink each time a car arrives to find it busy."
+  label="Week 2 — the lane that was only jammed because the arrivals were irregular."
+/>
 
 **Appointments** convert waiting-in-line into waiting-in-calendar. The gain is
 real: you spend the interval living your life rather than standing in a
@@ -79,7 +103,11 @@ measure. That is what makes this so hard to argue with, and so common.
 
 </Predict>
 
-<WaitMoved />
+The scene above draws exactly this, and the pair of bars is deliberately the
+same device as week 4's bill: solid for the figure that reaches the account,
+<Key>a dashed empty outline for the one that does not</Key>. In week 4 the
+invisible bar was twice the visible one. Here it is a hundred and sixty times,
+and the bar the restaurant publishes is a sliver you have to be told is there.
 
 A health service reporting an eight-minute average while people wait five weeks
 for the appointment is not committing fraud. It has drawn a boundary, and the
@@ -96,8 +124,13 @@ is your lab this week, on a real published statistic of your choosing.
 Do not read this as debunking. Moving a wait is often the best available move,
 and the reason is precise:
 
-**waiting is not uniformly costly.** An hour at home is worth far more to you
-than an hour in a corridor. A system that converts the second into the first has
+**It can make the system genuinely better.** Switch the scene above to
+bookings and watch the last two numbers: turned away falls from four a night to
+none, and the share of seats filled rises from 83% to 99%. Nobody is cooking faster. The book took a Saturday's overflow and put
+it on a Tuesday.
+
+**And waiting is not uniformly costly.** An hour at home is worth far more to
+you than an hour in a corridor. A system that converts the second into the first has
 created real value even though the clock says nothing changed — and week 4's
 arithmetic, which priced all hours the same, cannot see that either.
 

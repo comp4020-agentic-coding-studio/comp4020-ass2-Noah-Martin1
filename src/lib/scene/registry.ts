@@ -14,6 +14,7 @@ import { checkout } from "./scenes/checkout";
 import { drivethru } from "./scenes/drivethru";
 import { ed } from "./scenes/ed";
 import { office } from "./scenes/office";
+import { park } from "./scenes/park";
 import { security } from "./scenes/security";
 
 export const SCENES = {
@@ -24,6 +25,7 @@ export const SCENES = {
   bank,
   checkout,
   ed,
+  park,
 } satisfies Record<string, AnyScene>;
 
 /** The ids a week may ask for. */

@@ -17,11 +17,22 @@ related:
 ---
 
 import Beat from "../../components/Beat.astro";
+import Key from "../../components/Key.astro";
 import Predict from "../../components/Predict.astro";
 import Punch from "../../components/Punch.astro";
-import QueueSim from "../../components/QueueSim.astro";
+import Scene from "../../components/Scene.astro";
+import Snip from "../../components/Snip.astro";
 
-A theme park sells a pass that lets you skip the line.
+Disney ran FastPass free for two decades. In 2021 it became Genie+ at $15 a
+day. In October 2022 it gained surge pricing. In July 2024 it became Lightning
+Lane Multi Pass at $20–$45 a person a day, and that autumn Disney added Premier
+Pass — every Lightning Lane in the park, once each — at
+<Key>$329 to $449 a person a day at Magic Kingdom</Key>, several times the price
+of getting in.
+
+Hold on to the surge pricing, because it is the tell. The pass costs most on
+the days the standby line is worst. <Key>The thing being sold is the length of
+somebody else's queue.</Key>
 
 People find this objectionable in a way they do not find the admission charge
 objectionable. It is worth working out exactly what the objection is, because
@@ -39,6 +50,15 @@ You already paid to be at the front. You paid in minutes.
 
 Not that it is equally distributed — week 4 established that it is not, and that
 who is standing in the room at 10am on a Tuesday is not a random sample.
+
+<Snip
+  scene="office"
+  region="seats"
+  height={112}
+  href="/lectures/week-04/#office"
+  alt="A live crop of week four's passport office waiting room, the chairs filling and emptying through the day."
+  label="Week 4 — the people who could spend a Tuesday morning on it."
+/>
 
 And here is the part that should genuinely bother you: **the time spent in a
 queue is burned.** When you pay ninety minutes, nobody receives ninety minutes.
@@ -90,22 +110,32 @@ somebody else's delay.
 
 <Predict question="Ten per cent buy priority, sharing the same servers. What happens to the population's average wait?">
 
-Almost nothing. It barely moves.
+Nothing. Not "almost nothing" — nothing.
 
-Which is exactly why an operator can say, with a straight face and without
-lying, that the fast lane did not make things worse.
+Drag the slider below from 0 to 80 per cent and watch the fourth number in the
+readout. It reads 23.3 minutes at every single setting. That is not the
+simulation being insensitive; it is a conservation law. <Key>Priority is
+work-conserving: nobody serves faster and nobody goes home, so the mean wait
+across everybody cannot change. Reordering can only move it between
+people.</Key>
 
-Look at the unpaid group's ninetieth percentile instead. That is where the cost
-went, and an average is structurally incapable of showing it to you — the same
-trap as week 7's classifier, in a different building.
+Which means an operator who reports that the fast lane did not raise the
+average wait is stating a theorem, not presenting evidence. It would have been
+true before they built it.
+
+Look at the standby group's ninetieth percentile instead. It goes from 54
+minutes to 75 when three in ten buy a pass, and to nearly four hours at eighty
+per cent. That is where the transfer went, and an average is structurally
+incapable of showing it to you — the same trap as last week's classifier, in a
+park instead of a hospital.
 
 </Predict>
 
-<QueueSim
-  variant="express"
-  id="sim-express"
-  alt="One pair of servers taking from two queues: a gold priority queue above and a standard queue below. As the share buying priority rises, the standard queue lengthens while the priority queue stays short until it too fills up."
-  watch="W is shown as priority / standard. Drag from 0 to 80 per cent and watch three numbers at once: the standard wait climbs steeply, the priority wait creeps up as the fast lane fills with other people who paid, and the overall mean barely moves at all. Past roughly half, nobody is getting much for their money and the operator is collecting it anyway."
+<Scene
+  scene="park"
+  id="park"
+  alt="A three-quarter view of a roller-coaster station. Track arcs away behind a canopy on timber posts; under it a train waits at two loading positions, with an illuminated LIGHTNING LANE sign over the left gate and a STANDBY sign over the right showing the current posted wait. A short straight paid lane runs to the left gate; a long switchback of handrails, planted with clipped hedges, runs to the right one. Parties queue in both — adults with a child beside them, and pass-holders holding a small gold pass. The party at the front of standby stands in pink, with a tag counting the minutes they have been there and the passes that have boarded ahead of them."
+  watch="Start at nought per cent, where the two lines are one line. Now drag the share upwards. The fourth number in the readout — the mean wait across everybody — does not move at any setting, because it cannot. Watch instead what happens to the pink party at the front of standby: the count beside them is the number of pass-holders who have walked past and boarded since they joined, and it climbs faster at every step of the slider. Past about half, look at the paid lane too. It is a queue now, and nobody in it is getting much for their money."
 />
 
 </Beat>
@@ -115,6 +145,8 @@ trap as week 7's classifier, in a different building.
 Push the slider past 50%.
 
 The advantage of the fast lane collapses, because the fast lane is now a queue.
+At 80% uptake a pass buys you a 5.6 minute wait instead of a 3.0 minute one,
+and it costs the same.
 At high uptake you have a pure transfer from customers to operator with almost
 no change in service — everybody has paid, and nobody is faster.
 

@@ -159,6 +159,48 @@ been drifting between 24 and 29 depending on which scratch files happened to
 exist, which is worse than either number. The real suite is 24. The pattern is
 now excluded in config rather than deleted by hand.
 
+## Depth, and the decks
+
+The first version of the twelve lectures read in about seven minutes each. That
+is a reading, not a lecture, and the fix was depth rather than more topics —
+each week roughly doubled, to two to three thousand words, by going further into
+the system it already had.
+
+The clearest case is week 2, which spent a whole lecture arguing that
+variability rather than load makes queues and never wrote down the equation that
+says so. It now carries Kingman's, as W ≈ V × U × T, and the payoff is that the
+formula reproduces the numbers the lecture had already quoted from one line of
+arithmetic: V = 1, U = 11.5, τ = 55 seconds, eleven minutes. Set V to zero and
+the whole product collapses, which is why the clockwork lane in that scene
+cannot be made to queue at any setting. That is a better argument for learning
+an equation than any amount of saying it is important.
+
+Several of the additions are the course finding its own earlier lessons in new
+places: week 5's square-root staffing, which explains why pooling four
+single-server lines is transformative and pooling four teams of ten is not;
+week 6's multi-level feedback queue, which runs shortest-job-first without being
+told the job lengths because it infers them from behaviour; week 9's Bailey rule
+and why delay accumulates monotonically through a clinic session; week 12's
+account of what the real kidney system does, where every component turns out to
+be a correction to a failure the course has already covered.
+
+Eleven of the twelve weeks had no slide deck, and CLAUDE.md asks for one per
+week with a simulation on it. They exist now, and getting a live scene onto a
+slide surfaced a real defect rather than a cosmetic one: a deck is an injected
+route that loads only the brand CSS and the deck stylesheet, so every `--at-*`
+token the course palette derives from was simply absent there, and the first
+deck with a scene rendered a pale cream drive-through on a black slide. Each
+token now carries the theme's own derivation as a fallback, reached only where
+the site stylesheet is not.
+
+Both of those promises were invisible to every check I had
+([`7c0d3bd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/7c0d3bd)).
+A missing deck is not a broken link unless something links to it, and an
+unlinked deck is not a missing page. So there is now a test asserting twelve
+decks, each linked from its lecture and each carrying a simulation — and a floor
+under lecture length, which is a poor proxy for depth and the only mechanical
+one available. It catches the failure that actually happened.
+
 ## What I deliberately did not encode
 
 Prose quality. I considered a check on reading level or repeated phrasing and
@@ -173,4 +215,4 @@ call centre, which it did until every station got a drip stand. That was a
 screenshot and an opinion, twelve times over.
 
 Full history:
-[`ab8a430...eb9c0f4`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/compare/ab8a430...eb9c0f4).
+[`ab8a430...7c0d3bd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/compare/ab8a430...7c0d3bd).

@@ -11,6 +11,7 @@ system: Aircraft boarding
 buildsOn: 2
 teachers:
   - tomas-rehak
+slides: /decks/week-10/
 related:
   - sessions/week-10
 ---
@@ -42,11 +43,27 @@ the preceding nine weeks is needed to say anything true about it.
   The server and the queue occupy the same space.
 </Punch>
 
+Everything in Act I assumed a separation that does not hold here. A bank has a
+counter and a lobby; the tellers work while the lobby waits, and the lobby's
+length does not slow the tellers down. An aisle has no such division. The person
+being served *is* standing in the queue, and the queue cannot flow around them.
+
 So boarding time is not governed by average passenger speed. It is governed by
 how often a stow blocks the aisle and for how long — which is week 2's lesson,
 variance rather than load, in its purest available form. An aircraft where every
 passenger had identical bags and identical seats would board in a fraction of
 the time with no change whatever to the mean.
+
+There are exactly two blocking events, and it is worth naming them separately
+because the four strategies attack them differently.
+
+**The stow.** Somebody stops at their row, lifts a bag, and everybody behind
+them stops. Duration: highly variable, and the variance is what costs you.
+
+**The seat shuffle.** Somebody in an aisle seat has to stand up and step out so
+that the window passenger behind them can get in. This one is pure
+self-inflicted damage: it happens only because of the *order* people were let
+on, and there is a strategy below that eliminates it entirely.
 
 </Beat>
 
@@ -76,6 +93,13 @@ aircraft below it comes in 55% under: <Key>11.9 minutes becomes 5.4</Key>, with
 the same passengers, the same bags and the same stow times.
 
 </Predict>
+
+The Steffen result is not only a simulation finding. It was proposed in 2008 and
+then **tested with real people** — a mock cabin, volunteers, luggage, timed runs
+— and the field experiment broadly confirmed the ordering, with the interleaved
+method coming in at around half the time of back-to-front. So the effect
+survives contact with actual humans who do not read instructions carefully,
+which is more than most operational research manages.
 
 <Scene
   scene="cabin"
@@ -109,28 +133,117 @@ A strategy that is optimal only when everyone obeys is not optimal in an
 airport — which is week 6's warning about self-reported job lengths arriving
 again, in a different building, with luggage.
 
+Notice the shape of the comparison, because you will need it in your brief.
+Steffen is the best strategy **under compliance** and degrades fast without it.
+Random is mediocre under compliance and <Key>degrades not at all, because it has
+nothing to degrade from</Key>. Outside-in sits between the two and is what most
+airlines that have improved anything have actually adopted, precisely because it
+survives families, late arrivals and people who did not hear the announcement.
+
+That is a general design principle and it is worth more than the boarding
+result: **rank your options by how they perform when half-followed, not by how
+they perform when obeyed.**
+
 </Beat>
 
-<Beat n={4} label="The general result">
+<Beat n={4} label="The gate is not one queue, it is a network">
 
-Look at the pink bars again rather than the clock. Every strategy loads the
-same bags into the same lockers, so the total stowing is identical — and yet
-the worst row goes from causing eleven and a half minutes of other people's
-waiting to causing one. <Key>Back-to-front does not create interference. It
-arranges for the interference to happen where the queue is standing.</Key>
+Boarding is the visible queue. It is one node in a small network that has to
+complete before the aircraft can move, and the reason the airline cares about
+boarding at all is what that network does.
 
-Boarding is one instance of this week's real subject.
+Deplane. Clean. Cater. Fuel. Load the hold. Board. Some of those can run at the
+same time; several cannot. Cleaning cannot start until deplaning finishes.
+Boarding cannot start until cleaning finishes. Fuelling may or may not overlap
+with boarding depending on the operator's rules.
+
+Which produces the first result of network thinking, and it is brutal:
+<Key>the turnaround takes as long as the longest chain of things that must
+happen in order.</Key> Everything not on that chain has slack, and improving
+anything with slack changes nothing at all.
+
+<Predict question="You speed up boarding by four minutes. How much shorter is the turnaround?">
+
+Somewhere between four minutes and nothing, and you cannot tell which without
+looking at the rest of the gate.
+
+If boarding is on the critical path, you gained four minutes. If the aircraft
+was waiting on a fuel truck that arrives when it arrives, you gained nothing,
+and you have spent a change-management budget moving passengers into their seats
+earlier so they can sit there longer.
+
+This is why operations people are so unimpressed by improvements to single
+steps, and it is the practical content of the **theory of constraints**:
+improving a non-bottleneck is not a small win, it is *zero* win. Find the
+constraint first, and be prepared for the answer to be something unglamorous
+that nobody has a project about.
+
+</Predict>
+
+</Beat>
+
+<Beat n={5} label="Bottlenecks move, they do not disappear">
+
+Now the result that makes networks genuinely dangerous rather than merely
+complicated.
 
 <Punch>
   Once queues are connected, improving one of them can make the whole system
   worse.
 </Punch>
 
-Speed up check-in and you deliver a denser stream to security, which is now the
+The mild version first, because it is the one you will actually meet. Speed up
+check-in and you deliver a denser stream to security, which is now the
 bottleneck. Total journey time is unchanged and you have moved the crowd into a
-smaller room. Open a new motorway lane and the merge point shifts downstream,
-where it may be worse. Braess's paradox is the formal version, and it has been
-observed in real road networks.
+smaller room with fewer seats and worse air. Somebody will report this as a
+success, because check-in's numbers improved and security's numbers belong to a
+different manager.
+
+The strong version is **Braess's paradox**, from 1968, and it is worth seeing
+once because it is genuinely counter-intuitive: in a road network where drivers
+each choose their own fastest route, *adding* a new road can make everybody's
+journey longer. Not "can fail to help" — can actively worsen, at equilibrium,
+for every single driver. The new road is individually attractive and collectively
+destructive, and each driver taking it is behaving perfectly rationally.
+
+The reverse has been observed too. Closing a major road has, in several widely
+cited cases, left city-centre traffic no worse and sometimes better, which is
+the same mathematics run backwards and is much harder to get funded.
+
+The same structure, in three more buildings:
+
+**Emergency departments.** A department can be working perfectly and still have
+a twelve-hour queue, because the wards upstairs are full and patients cannot
+leave. The ED is not the bottleneck; **discharge** is. Every intervention aimed
+at the visible queue — more triage nurses, a faster front door — pushes harder
+against a closed exit. This is well documented and it is the clearest real-world
+lesson in the lecture: <Key>the queue you can see is often the symptom of a
+constraint somewhere you cannot.</Key>
+
+**Networks.** Adding buffer memory to routers to stop packets being dropped
+produced *bufferbloat*: enormous queues, enormous latency, and no more
+throughput, because the signal that told senders to slow down was the dropped
+packet. The fix for congestion turned out to require keeping the queue short on
+purpose.
+
+**Any pipeline of teams.** A development team that doubles its output delivers
+twice as much work to a review queue that did not change, and the lead time gets
+worse. Week 3's arithmetic predicts it exactly.
+
+</Beat>
+
+<Beat n={6} label="The general result">
+
+Look at the pink bars in the cabin again rather than the clock. Every strategy
+loads the same bags into the same lockers, so the total stowing is identical —
+and yet the worst row goes from causing eleven and a half minutes of other
+people's waiting to causing one. <Key>Back-to-front does not create interference.
+It arranges for the interference to happen where the queue is standing.</Key>
+
+That sentence is the whole of Act III's first half, and it generalises past
+aircraft: in a connected system, **where** a delay lands matters as much as how
+big it is, because a delay that lands on a bottleneck propagates and a delay
+that lands on slack evaporates.
 
 <Predict question="Your bottleneck is gone. Where is it?">
 
@@ -139,6 +252,13 @@ Downstream, and probably somewhere with less floor space.
 **A bottleneck that is removed has not disappeared — it has moved.** Before you
 optimise a stage, find out what is after it, or you will spend a budget
 relocating a queue and report it as an improvement.
+
+And the second-order version, which is the one that catches experienced people:
+the new bottleneck may be somewhere with *worse* properties than the old one —
+less buffer, less staff flexibility, higher variance, or a different department's
+budget. Moving a queue from a place designed to hold a queue to a place that was
+not is a real way to make a system worse while improving every number you were
+watching.
 
 </Predict>
 

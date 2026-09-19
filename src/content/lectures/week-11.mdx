@@ -11,6 +11,7 @@ system: Call centre
 buildsOn: 10
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-11/
 related:
   - sessions/week-11
   - assessments/04-design-brief
@@ -34,16 +35,28 @@ Print jobs behave like this. People do not.
 measured demand is not its actual demand, and why a system under strain can look
 like it is coping — it is turning people away before they enter the statistics.
 
+Balking has a property that makes it uniquely dangerous to measure: it is
+**invisible from inside the system**. A queue with heavy balking looks exactly
+like a queue with low demand. Both show short lines, low utilisation and happy
+numbers, and only one of them has a problem. The only way to tell them apart is
+to count from outside — the footfall past the door against the transactions at
+the till — which almost nobody does.
+
 **Reneging.** Joining and then leaving. In a call centre, abandonment is the
 single most informative metric and the one most often reported as a cost rather
 than read as a signal.
 
+Reneging is also the thing that **stabilises** an overloaded queue, and this is
+worth sitting with because it is deeply counter-intuitive. A system with λ above
+its capacity should grow without limit; week 2's table has no row for ρ > 1
+because there is no steady state there. Real overloaded systems do not grow
+without limit. They reach an equilibrium — and the equilibrium is set by how
+long people will tolerate before they give up. <Key>The length of an overloaded
+queue is a measurement of its customers' patience, not of its capacity.</Key>
+
 **Gaming.** Finding the rule and optimising against it. Week 6 warned about
 this: any rule sorting on self-reported information creates an incentive to
-misreport. Ticket scalping is a queueing attack — bots defeat a
-first-come-first-served allocation by being better at coming first, and the
-resale price measures exactly how much value the original rule was leaving on
-the table.
+misreport.
 
 </Beat>
 
@@ -77,9 +90,51 @@ shown.</Key>
 
 </Beat>
 
-<Beat n={3} label="The cheapest intervention in the course">
+<Beat n={3} label="Counting the people who left">
 
-Perceived waiting is not measured waiting.
+The band below the floor in that scene is drawn separately for a reason. Those
+callers are not in the building, nobody in it can see them, and in most
+organisations nobody measures them either.
+
+This is the point in the course where the standard toolkit runs out. Erlang's
+formulas from week 1 assume callers wait as long as it takes. The extension that
+does not — usually called **Erlang A**, for *abandonment* — adds one parameter:
+a patience distribution. And adding that one parameter changes what every other
+number means.
+
+Three consequences, and they are the whole reason a call centre is a different
+animal from a bank.
+
+**Abandonment is a better health metric than wait time.** The wait of the people
+who were answered is a statistic about survivors. Where patience is short it can
+look excellent in a system that is failing, because everybody who would have
+produced a long wait has already gone.
+
+**The two obvious levers move different things.** More agents cuts both the wait
+and the abandonment. A longer hold message, a better queue position
+announcement, music people do not hate — these move *patience*, which cuts
+abandonment while making the measured wait **longer**, because more of the
+people who would have hung up are now still there to be counted.
+
+<Punch note="Which is why a service-level report should always carry the abandonment rate next to the wait, and why a report carrying only one of them is not interpretable.">
+  Improve patience and your waiting-time statistic gets worse.
+</Punch>
+
+**The people who left are the most informative population in the system, and
+the least likely to be in the data.** Every organisation knows what its served
+customers experienced. Almost none knows what the balked ones would have wanted,
+because they never became a record.
+
+Which is week 3's boundary argument arriving for the last time. The box was
+drawn around the people who were served, and the people who matter most are
+outside it.
+
+</Beat>
+
+<Beat n={4} label="The cheapest intervention in the course">
+
+Perceived waiting is not measured waiting — week 4 established the propositions,
+and this is where they get used.
 
 An unexplained ten-minute wait is worse than an explained twenty. Progress
 information, a position in the queue, and a visible reason all reduce
@@ -112,7 +167,99 @@ Pleasant queues are not automatically good queues.
 
 </Beat>
 
-<Beat n={4} label="What this does to design">
+<Beat n={5} label="What to announce, and what not to">
+
+Given that the announcement changes the queue, what should it say? This is a
+real design decision with a real literature, and three options behave
+differently.
+
+**Say nothing.** The default, and the worst of the three for everything except
+the reported wait. Uncertainty is the most expensive feature of a wait, and
+saying nothing maximises it.
+
+**Announce a position.** "You are ninth in the queue." Honest, verifiable, and it
+degrades gracefully — a position is a fact, and it cannot be wrong in the way a
+time can. Its weakness is that it is uninterpretable: ninth means nothing unless
+you know how fast the queue moves.
+
+**Announce a time.** Most useful, most informative, and the one that eats itself.
+It is also the one that can be *wrong*, and being wrong here is expensive: a
+caller told four minutes who waits nine is angrier than a caller told nothing
+who waits nine. The whole benefit of certainty is lost the moment the number
+stops being credible.
+
+Which produces the standard practical advice, and it is worth knowing why it
+works: <Key>announce conservatively.</Key> Quote a number at the upper end of
+what you expect, and most people beat it. The cost is that a few more people
+balk at the higher figure. The benefit is that the announcement stays credible,
+and credibility is the asset that makes every future announcement work.
+
+<Predict question="Why can a queue not simply announce its true expected wait?">
+
+Because there is no such thing to announce, once you are announcing.
+
+The true expected wait *given that you announce nine minutes* is not nine
+minutes — it is whatever results after the people who hear nine minutes leave.
+Which is four. But if you announce four, fewer leave, and the real wait rises
+above four. The honest number is a **fixed point** of a loop, not a measurement,
+and it depends on how your own customers react to being told.
+
+You can in principle solve for it. Almost nobody does, and the ones who do
+discover that the fixed point moves when the population changes, which it does
+constantly.
+
+<Key>A published estimate is not a description of the system. It is an
+intervention in it.</Key>
+
+</Predict>
+
+</Beat>
+
+<Beat n={6} label="Gaming, properly">
+
+The third behaviour deserves its own beat, because it is the one that turns a
+queue from a system into a contest.
+
+**Ticket scalping is a queueing attack.** A first-come-first-served allocation
+can be defeated by being better at coming first, and software is better at
+coming first than people are. Automated purchasing against a major onsale is a
+straightforward engineering problem, and the resale price that follows is a
+precise measurement of <Key>how much value the original rule was leaving on the
+table</Key>. The queue was an auction all along — week 8 — and the bots simply
+turned up with better bidding equipment.
+
+Legislation has been tried: the United States banned the circumvention of
+ticket-purchase controls in 2016. Enforcement is the difficulty, as it always is
+when the attack is indistinguishable from an enthusiastic customer.
+
+**And the same structure, everywhere else.** Sneaker drops answered with raffles,
+because a raffle is un-gameable in a way a queue is not. University enrolment
+systems at 9am on registration day. Restaurant booking platforms scraped by
+resellers. Vaccine appointment scripts in 2021, written by people helping their
+parents, which is gaming with entirely sympathetic motives and identical
+distributional effects.
+
+Three responses exist, and the choice between them is a design decision you may
+have to make.
+
+**Harden the rule.** Rate limits, verification, waiting rooms. An arms race, and
+the defender pays more than the attacker.
+
+**Randomise.** A lottery cannot be won by arriving faster. It gives up the
+fairness claim of arrival order and buys immunity to speed, which is often a
+good trade when the good is scarce and the demand is a spike.
+
+**Price it.** Week 8. Let the willingness to pay be expressed in money rather
+than in bot infrastructure, and capture the value instead of burning it.
+
+<Punch>
+  Prefer rules that are robust when gamed over rules that are optimal when
+  obeyed.
+</Punch>
+
+</Beat>
+
+<Beat n={7} label="What this does to design">
 
 Once you accept feedback, a queue stops being something you specify and becomes
 something you steer.
@@ -120,15 +267,17 @@ something you steer.
 A rule that is optimal against a fixed population will be met by a population
 that adapts to it, and the second-round behaviour is frequently the whole story:
 the express lane fills with people splitting their baskets, the priority
-category fills with people who learned the magic words.
-
-<Punch>
-  Prefer rules that are robust when gamed over rules that are optimal when
-  obeyed.
-</Punch>
+category fills with people who learned the magic words, the fast lane fills up
+and stops being fast.
 
 You cannot design this out. You can only design knowing it happens — and your
 brief needs a paragraph on what your design does when people lie to it.
+
+Three questions to put to your own design before Friday:
+
+1. **What does somebody gain by misreporting, and how would you know?**
+2. **Who can see your queue, and what do they do when they see it?**
+3. **Who leaves, and would you find out?**
 
 One week left. Everything so far has been about how queues behave. The last
 lecture asks what a queue should be *for*.

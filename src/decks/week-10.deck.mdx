@@ -1,0 +1,193 @@
+---
+title: "Week 10 — Queues in Networks"
+description: Lecture 10 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# The aircraft
+
+# I left at a gate in week 2
+
+SLOP2710 · Week 10 · Tomas Rehak
+
+```notes
+I ran turnarounds for fifteen years. Say that early — it buys you the third
+beat, which is the one students remember.
+```
+
+---
+
+{/* _class: quote */}
+
+The server and the queue
+
+occupy the same space.
+
+```notes
+Everything in Act I assumed a separation that does not hold here. A bank has a
+counter and a lobby. An aisle has neither.
+```
+
+---
+
+## Two blocking events
+
+**The stow** — variable duration, and the variance is the cost
+
+**The seat shuffle** — pure self-inflicted damage, caused entirely by the order
+people were let on
+
+---
+
+## Four strategies
+
+**Back to front** — what many airlines use
+
+**Random** — scatters people along the aisle
+
+**Outside-in (WILMA)** — kills the seat shuffle
+
+**Steffen** — alternating rows, outside-in. Consecutive boarders two rows apart
+
+---
+
+{/* _class: centered */}
+
+## Rank them.
+
+## Where does back-to-front land?
+
+```notes
+Take a vote by show of hands before revealing. Back-to-front usually wins the
+vote. It comes last.
+```
+
+---
+
+<Scene
+  scene="cabin"
+  id="deck-cabin"
+  alt="An aircraft at a gate seen from above and to one side with the cabin roof cut away. Wings, engines and a green-finned tail sit outside and a jet bridge meets the forward door with passengers queued along it. Inside, twelve rows of three-and-three seats fill as people sit down. Anyone stowing a bag turns gold with the bag at locker height and everyone behind them stops. Along the near side of the floor a pink bar at each row grows with the queueing that row's stowing has caused."
+  watch="Under back to front the gold figures land in the same three metres with a solid line of stalled passengers behind them, and the pink bars pile into a heap at the rear while the front half stays blank. Switch to Steffen: the same bags go into the same lockers and the bars come out almost flat, because the blockages never line up."
+/>
+
+```notes
+Run back-to-front to completion. Then Steffen. Then run back-to-front AGAIN and
+point at the bars rather than the clock — that is the slide's actual argument.
+
+11.9 minutes becomes 5.4. Worst row: 11.5 minutes of other people's waiting,
+against one.
+```
+
+---
+
+## Calling rows 30 to 36
+
+puts every bag-stowing passenger into the same five metres of aisle at the same
+moment.
+
+You have carefully **concentrated** the interference.
+
+```notes
+Which is exactly what week 2 told them not to do. Say it in those words.
+```
+
+---
+
+## And it was tested with real people
+
+Proposed 2008. Field experiment with a mock cabin, volunteers and luggage
+broadly confirmed it.
+
+Roughly half the time of back-to-front.
+
+---
+
+{/* _class: impact */}
+
+# So why does nobody use it?
+
+---
+
+## Three reasons, none of them technical
+
+**It fights the revenue model.** Zone 1 is a product.
+
+**It separates people travelling together.**
+
+**It is hard to explain** at a gate, in a second language, over a poor PA.
+
+---
+
+{/* _class: quote */}
+
+Rank your options by how they perform
+
+when **half-followed**,
+
+not by how they perform when obeyed.
+
+```notes
+Steffen is best under compliance and degrades fast. Random degrades not at all
+because it has nothing to degrade from. Outside-in survives families, and is
+what the airlines that improved anything actually adopted.
+```
+
+---
+
+## The gate is a network
+
+deplane → clean → **board**
+
+fuel · cater · load, partly in parallel
+
+```notes
+The turnaround takes as long as the longest chain of things that must happen in
+order. Everything off that chain has slack.
+```
+
+---
+
+{/* _class: centered */}
+
+## You speed up boarding by four minutes.
+
+## How much shorter is the turnaround?
+
+```notes
+Between four minutes and nothing, and you cannot tell which without looking at
+the rest of the gate. Improving a non-bottleneck is not a small win. It is zero.
+```
+
+---
+
+## Bottlenecks move
+
+**Check-in → security.** Same journey time, smaller room.
+
+**Braess, 1968.** Adding a road can make every journey longer.
+
+**Emergency departments.** The bottleneck is discharge, upstairs.
+
+**Bufferbloat.** More buffer, more latency, no more throughput.
+
+---
+
+{/* _class: quote */}
+
+Back-to-front does not create interference.
+
+It arranges for the interference to happen
+
+where the queue is standing.
+
+---
+
+{/* _class: impact */}
+
+# Next: when the queue
+
+# can see itself

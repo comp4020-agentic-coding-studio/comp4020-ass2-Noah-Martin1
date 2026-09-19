@@ -1,0 +1,197 @@
+---
+title: "Week 11 — Queues That Know You're Waiting"
+description: Lecture 11 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# People are not jobs
+
+SLOP2710 · Week 11
+
+```notes
+Print jobs arrive, wait however long they are made to, and leave. Every model
+in this course so far has assumed people do the same. They do not.
+```
+
+---
+
+## Three things jobs never do
+
+**Balk** — see the queue, don't join
+
+**Renege** — join, then leave
+
+**Game** — find the rule, optimise against it
+
+---
+
+{/* _class: quote */}
+
+A queue with heavy balking
+
+looks exactly like a queue with low demand.
+
+```notes
+Short lines, low utilisation, happy numbers. Only one of them has a problem,
+and the only way to tell is to count from outside: footfall past the door
+against transactions at the till. Almost nobody does this.
+```
+
+---
+
+## And reneging is what stabilises an overloaded queue
+
+Week 2's table has no row for ρ > 1. Real overloaded systems still reach an
+equilibrium.
+
+**The length of an overloaded queue measures its customers' patience, not its
+capacity.**
+
+---
+
+{/* _class: centered */}
+
+## You install an accurate live wait estimate.
+
+## What happens to its accuracy?
+
+```notes
+It destroys itself. Announce nine minutes, some people hang up who would have
+stayed, the queue shortens, the wait falls — and the number you announced is
+now wrong because you announced it.
+```
+
+---
+
+<Scene
+  scene="callcentre"
+  id="deck-callcentre"
+  alt="A call centre floor seen from above and to one side. Two rows of desks with agents in headsets, gold when they are on a call, face a wallboard showing how many callers are waiting and what the hold message says. Below the floor, behind a dashed line, a separate band of callers holds phones to their ears; anyone who hangs up flashes pink and disappears."
+  watch="Watch the band below the floor rather than the desks — every figure there is a caller nobody in the building can see. Switch the hold message from saying nothing to announcing the wait: the reported figure drops from nine minutes to under four, and the share who never got help does not move at all."
+/>
+
+```notes
+Refresh the page before this slide if you want the opening sequence — the board
+comes up a line at a time and the shift arrives a desk at a time, and it only
+plays once per load.
+
+Then: nothing announced, nine minutes. Announced, 3.6. Hung up: 38% either way.
+```
+
+---
+
+{/* _class: centered */}
+
+## 60% improvement on the dashboard
+
+## 38% failed to get help, before and after
+
+```notes
+They are hanging up at the start now instead of in the middle, which moves them
+out of the statistic that gets reported and into the one that does not.
+```
+
+---
+
+## Counting the people who left
+
+Erlang's formulas assume callers wait as long as it takes.
+
+**Erlang A** adds one parameter — patience — and changes what every other number
+means.
+
+---
+
+## Which gives you a trap
+
+More agents → wait down, abandonment down
+
+Better hold experience → abandonment down, **measured wait up**
+
+```notes
+Because more of the people who would have hung up are still there to be counted.
+A service-level report carrying only one of these numbers is not interpretable.
+```
+
+---
+
+{/* _class: quote */}
+
+A system that makes waiting **feel** shorter
+
+has removed its own pressure
+
+to make waiting **be** shorter.
+
+---
+
+## What should the announcement say?
+
+**Nothing** — maximises the most expensive feature of a wait
+
+**A position** — honest, verifiable, uninterpretable
+
+**A time** — most useful, and it eats itself
+
+---
+
+{/* _class: centered */}
+
+## So announce conservatively.
+
+## Credibility is the asset.
+
+```notes
+Quote the upper end and most people beat it. You lose a few more to balking and
+you keep the announcement believable, which is what makes every future
+announcement work.
+```
+
+---
+
+## Gaming, properly
+
+**Scalping is a queueing attack** — FCFS defeated by being better at coming
+first
+
+The resale price measures what the original rule left on the table
+
+```notes
+US banned circumvention of purchase controls in 2016. Enforcement is the
+problem, as always, when the attack is indistinguishable from an enthusiastic
+customer.
+```
+
+---
+
+## Three responses
+
+**Harden** — an arms race the defender loses on cost
+
+**Randomise** — gives up arrival-order fairness, buys immunity to speed
+
+**Price it** — week 8; capture the value instead of burning it
+
+---
+
+{/* _class: impact */}
+
+# Prefer rules robust when gamed
+
+# over rules optimal when obeyed
+
+---
+
+## Three questions for your brief
+
+1. What does somebody gain by misreporting, and how would you know?
+2. Who can see your queue, and what do they do when they see it?
+3. **Who leaves, and would you find out?**
+
+```notes
+Brief is due at the end of week 12. The third question is the one most drafts
+have no answer to.
+```

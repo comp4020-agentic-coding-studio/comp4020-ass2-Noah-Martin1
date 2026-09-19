@@ -15,6 +15,7 @@ type Week = {
   system: string;
   act: string;
   buildsOn?: number;
+  slides?: string;
 };
 
 const lectures = await getPublishedCollection("lectures");
@@ -28,9 +29,29 @@ const weeks: Week[] = lectures
       system: String(data.system ?? ""),
       act: String(data.act ?? ""),
       buildsOn: data.buildsOn === undefined ? undefined : Number(data.buildsOn),
+      slides: data.slides === undefined ? undefined : String(data.slides),
     };
   })
   .sort((a, b) => a.week - b.week);
+
+// The four pieces of work, placed against the week they fall due. They are the
+// other half of the arc: a chain of ideas nobody is assessed on is a reading
+// list, and the weights are deliberately loaded onto the two that ask the
+// student to choose something and defend it.
+type Task = { week: number; title: string; weight: number; href: string };
+const assessments = await getPublishedCollection("assessments");
+const tasks: Task[] = assessments
+  .map((entry) => {
+    const data = entry.data as unknown as Record<string, unknown>;
+    return {
+      week: Number(data.week),
+      title: String(data.title),
+      weight: Number(data.weight ?? 0),
+      href: withBase(`/assessments/${entry.id}/`),
+    };
+  })
+  .sort((a, b) => a.week - b.week);
+const taskAt = (week: number) => tasks.find((t) => t.week === week);
 
 const ACTS = [
   { id: "I", name: "Why waiting happens", gloss: "The physics. Learn to see a queue, explain why it forms, measure it from outside, and price what it costs." },
@@ -46,7 +67,7 @@ const PAD = 40;
 const BASE = 132;
 const R = 15;
 const W = PAD * 2 + STEP * (weeks.length - 1);
-const H = BASE + 62;
+const H = BASE + 96;
 const x = (week: number) => PAD + (week - 1) * STEP;
 
 const edges = weeks
@@ -69,6 +90,9 @@ const longEdges = edges.filter((e) => e.span > 1);
 const chainSummary = weeks
   .filter((w) => w.buildsOn !== undefined)
   .map((w) => `week ${w.week} builds on week ${w.buildsOn}`)
+  .join("; ");
+const taskSummary = tasks
+  .map((t) => `${t.title}, ${t.weight}%, due in week ${t.week}`)
   .join("; ");
 ---
 
@@ -100,7 +124,7 @@ const chainSummary = weeks
         height={H}
         class="arc-svg"
         role="img"
-        aria-label={`The dependency chain of the twelve teaching weeks. ${chainSummary}.`}
+        aria-label={`The dependency chain of the twelve teaching weeks. ${chainSummary}. Assessment falls due as follows: ${taskSummary}.`}
       >
         {actRuns.map((act) => (
           <g>
@@ -133,6 +157,14 @@ const chainSummary = weeks
             <text x={x(w.week)} y={BASE + 5} class="arc-node-label">{w.week}</text>
           </g>
         ))}
+
+        {tasks.map((t) => (
+          <g>
+            <line x1={x(t.week)} y1={BASE + R + 4} x2={x(t.week)} y2={BASE + 46} class="arc-task-stem" />
+            <rect x={x(t.week) - 17} y={BASE + 46} width="34" height="18" rx="9" class="arc-task-chip" />
+            <text x={x(t.week)} y={BASE + 59} class="arc-task-label">{t.weight}%</text>
+          </g>
+        ))}
       </svg>
     </div>
     <figcaption class="q-figure__caption">
@@ -141,7 +173,9 @@ const chainSummary = weeks
         <>{i > 0 ? " and " : ""}week {e.week} onto week {e.buildsOn}</>
       ))}. Those are the course's two callbacks: price can only sort a queue once
       time has been given a price, and a network of queues is variability from
-      week 2 propagating.
+      week 2 propagating. The gold chips below the line are the four pieces of
+      assessment, at the week they fall due — measure one, change one, test one,
+      design one.
     </figcaption>
   </figure>
 
@@ -159,8 +193,18 @@ const chainSummary = weeks
             <div class="arc-week-head">
               <span class="arc-week-no">Week {w.week}</span>
               <a href={withBase(`/lectures/week-${String(w.week).padStart(2, "0")}/`)}>{w.title}</a>
+              {w.slides && (
+                <a class="arc-week-slides" href={withBase(w.slides)}>Slides</a>
+              )}
             </div>
             <p class="arc-week-idea">{w.idea}</p>
+            {taskAt(w.week) && (
+              <p class="arc-week-task">
+                <b>Due this week:</b>{" "}
+                <a href={taskAt(w.week)!.href}>{taskAt(w.week)!.title}</a>{" "}
+                <span class="arc-week-dim">({taskAt(w.week)!.weight}%)</span>
+              </p>
+            )}
             <p class="arc-week-meta">
               <span><b>Argued from:</b> {w.system}</span>
               {w.buildsOn === undefined ? (
@@ -196,6 +240,13 @@ const chainSummary = weeks
     fill: var(--q-ink); font-variant-numeric: tabular-nums;
   }
 
+  .arc-task-stem { stroke: var(--q-gold); stroke-width: 1.5; stroke-dasharray: 3 3; opacity: 0.8; }
+  .arc-task-chip { fill: var(--q-gold); }
+  .arc-task-label {
+    text-anchor: middle; font-size: 11px; font-weight: 700;
+    fill: var(--q-bg); font-variant-numeric: tabular-nums;
+  }
+
   .arc-act { margin-block: 2.5rem 0; }
   .arc-act h2 { display: flex; flex-direction: column; gap: 0.15rem; margin-bottom: 0.25rem; }
   .arc-act-name { font-size: 1.5rem; }
@@ -218,7 +269,18 @@ const chainSummary = weeks
   }
   .arc-week-head a { font-weight: 600; }
 
+  .arc-week-slides {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; white-space: nowrap;
+  }
+
   .arc-week-idea { margin: 0.35rem 0 0.4rem; }
+  .arc-week-task {
+    margin: 0 0 0.4rem;
+    font-size: 0.875rem;
+    color: var(--q-ink-soft);
+  }
+  .arc-week-task b { color: var(--q-gold); font-weight: 700; }
   .arc-week-meta {
     display: flex; flex-wrap: wrap; gap: 0.2rem 1.5rem;
     margin: 0; font-size: 0.875rem; color: var(--q-ink-soft);

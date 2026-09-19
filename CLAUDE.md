@@ -192,43 +192,6 @@ This is where the aniamtions need to come together - this can be a longer page w
 Improve it by connecting themes together to form a fluid course. Prioritise viusal explanation over textbook style learning.
 
 
-
----
-
-## Examples to explore
-
-Use concrete systems throughout the course.
-
-Potential examples include:
-
-- Airplane boarding
-- Airport security
-- Elevators
-- Supermarket checkout lines
-- Restaurants and reservation systems
-- Theme park queues
-- Hospitals and emergency departments
-- Traffic intersections and highways
-- Toll roads
-- Coffee shops
-- Call centres
-- Banks
-- Post offices
-- Public transport
-- Server request queues
-- Internet traffic
-- Computer CPU scheduling
-- Printers
-- Cloud computing
-- Customer support ticket systems
-- Online waiting rooms
-- Concert/event entry
-- Ambulance dispatch
-- Manufacturing lines
-- Drive-through restaurants
-
-Do not use examples simply because they are familiar. Each example should introduce a meaningful queueing problem, trade-off, algorithm or economic question.
-
 ---
 
 ## Interactive and visual teaching
@@ -236,27 +199,6 @@ Do not use examples simply because they are familiar. Each example should introd
 The website and lecture decks should make queueing behaviour visible.
 
 Prefer simulations, animations and interactive explanations where they genuinely improve understanding.
-
-Potential visualisations include:
-
-- People joining and leaving queues
-- Different arrival rates
-- Different service rates
-- One queue versus multiple queues
-- First-come-first-served
-- Priority queues
-- Shortest-job-first
-- Batching
-- Randomised ordering
-- Appointment systems
-- Virtual queues
-- Express lanes
-- Queue jumping and its economic consequences
-- Congestion increasing non-linearly
-- Different airplane boarding strategies
-- Different elevator scheduling strategies
-- Traffic merging and bottlenecks
-- Computer/server request queues
 
 Animations should demonstrate an idea rather than simply decorate the page.
 
@@ -266,9 +208,31 @@ For example, an airplane boarding animation could show:
 
 The same system can then be revisited later when discussing efficiency, fairness and optimisation.
 
----
+# Course Breakdown
 
-## Lecture decks
+## The arc
+
+the arc webpage is to provide the timeline and overall bounds of the course. within the arc webpage include:
+- Assessment (assignments) deadlines (on the timeline viusally) 
+- Labs 
+- Week by week topic
+- How lecture quizes work :
+
+I want the course to promote in person attendance for the lectures and labs. I want the course to be engaging and interesting enough that its not a burden to look into the next weeks content in advance. The week by week topics are good for this. There will be quizzes each week (only 1 lecture a week). these will be held during the lecture through QR code and will ask questions about that lectures content. The timing / quesitions for the quizzes will be different depending if youre attending in person or not. 
+
+If youre in person - students will have 2mins to answer the quiz - talk amongst themselves (its ok if you didnt do that weeks pre reading).
+
+If doing quiz online you will have a shorter time to respond ~30secs (to avoid looking up answers). To do well in the online quiz you would need to study the weeks content well - before warching lecture online and doing the quiz.
+
+7/12 best quiz scores count toward grade ~ 20% of the course mark.
+
+6/12 Labs need to have participation to pass. not marked.
+  
+## Lectures
+
+Each Week has a lecture webpage - content revolving around the weeks topic. A repeated structure that students can expect each week. The content involves a topic mentioned eariler in the week by week breakdown, a simulation with references to other weeks if necessary. All up the content should be 15 - 20min of reading time - this includes time to play with the simulator. - content webpages should encourage curious students by including optional reading. 
+
+The lecture decks are separate from the content pages - same topic separate purpose. The decks are for the lectuer to bounce off during the presentation. Create lecture decks similar to week 1. a basis for the weeks topic. link the decks to the top of content pages.
 
 Lecture slides are part of the course website, not separate documents.
 
@@ -287,25 +251,19 @@ Slides should be visually driven where appropriate.
 
 Avoid turning decks into walls of explanatory text.
 
----
+## Labs
 
-## Course coherence
+Labs follow that weeks content - doing practical exercises and engaging learning activities. The Lab content on the course site is solid - no need for update.
 
-Every major page should contribute to the same course idea.
+## Assessment
 
-When creating a new week, check:
+Course mark breakdown follows:
 
-- What new idea does this week introduce?
-- What previous idea does it build upon?
-- What real-world system demonstrates it?
-- What economic trade-off does it expose?
-- What should students now be able to reason about that they could not before?
-
-Avoid repeating the same generic explanation of queues across multiple weeks.
-
----
-
-## Assessments
+20% quizzes
+10% Queue census
+15% the ordering rule
+15% simulatoin report
+40% Final design brief
 
 Assessments should test the central ideas of the course rather than simply recall terminology.
 
@@ -321,6 +279,22 @@ Potential assessment formats include:
 - defending a queue design against an alternative
 
 Assessment tasks should connect to the progression of the semester.
+
+
+## Course coherence
+
+Every major page should contribute to the same course idea.
+
+When creating a new week, check:
+
+- What new idea does this week introduce?
+- What previous idea does it build upon?
+- What real-world system demonstrates it?
+- What economic trade-off does it expose?
+- What should students now be able to reason about that they could not before?
+
+Avoid repeating the same generic explanation of queues across multiple weeks.
+
 
 ---
 

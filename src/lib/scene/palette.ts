@@ -33,7 +33,7 @@ const TOKENS: Record<keyof Palette, [string, string]> = {
   soft: ["var(--q-ink-soft)", "rgb(119, 119, 119)"],
   gold: ["var(--q-gold)", "rgb(185, 125, 28)"],
   rule: ["var(--q-rule)", "rgb(204, 204, 204)"],
-  bg: ["var(--at-bg)", "rgb(255, 255, 255)"],
+  bg: ["var(--q-bg)", "rgb(255, 255, 255)"],
   ground: ["var(--q-ground)", "rgb(246, 243, 238)"],
   pink: ["var(--q-pink)", "rgb(247, 217, 227)"],
   pinkEdge: ["var(--q-pink-edge)", "rgb(233, 168, 191)"],

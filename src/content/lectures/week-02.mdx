@@ -11,6 +11,7 @@ system: Drive-through window
 buildsOn: 1
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-02/
 related:
   - sessions/week-02
 ---
@@ -79,6 +80,13 @@ still busy with something that ran long</Key>. Regularity closes those gaps.
 Irregularity opens them, and once open they do not close by themselves, because
 the server can only ever work at one speed.
 
+That last clause is the whole asymmetry, and it is worth saying slowly. A server
+that falls behind cannot catch up by going faster; it can only catch up during a
+gap in arrivals. But the gap that would let it catch up is exactly what
+irregularity has already spent. **Bad luck accumulates and good luck does not.**
+Ten seconds lost to a long order is gone permanently; ten seconds of empty
+window is not banked anywhere.
+
 The scene counts that event for you. Each time a car arrives to find the window
 occupied, the window flashes and the tally at the foot of the frame moves. In
 the clockwork lane it is stuck on nought per cent and it always will be:
@@ -95,7 +103,40 @@ no extra traffic, no slower staff, no lost capacity.
 
 </Beat>
 
-<Beat n={3} label="The trap in the last few per cent">
+<Beat n={3} label="Putting a number on raggedness">
+
+"Irregular" is not a measurement, and the slider needs to mean something, so
+here is the one statistic this course uses for it.
+
+Take the gaps between arrivals. Compute their mean and their standard
+deviation. Divide the second by the first. That ratio is the **coefficient of
+variation**, written *c*, and it is the right measure precisely because it has
+no units — a lane with gaps averaging 60 seconds and a lane with gaps averaging
+six hours can be compared directly.
+
+Three values are worth memorising, because you will recognise systems by them:
+
+- **c = 0** — perfectly regular. A conveyor. A metronome. The clockwork lane.
+- **c = 1** — completely memoryless: arrivals independent of each other, with no
+  pattern at all. This is the **Poisson** case, and it is the standard
+  assumption for people arriving at something without coordinating. Customers
+  walking into a shop, calls reaching a switchboard, requests hitting a server.
+- **c > 1** — burstier than random. Lumpy. A lecture ending. A coach pulling in.
+  A cron job. A Black Friday sale.
+
+The slider above walks from 0 toward roughly 1.6, and the important thing about
+that journey is that it is *not* a journey from "fine" to "slightly worse". It
+is the journey from no queue to eleven cars, with nothing else changing.
+
+Service times get exactly the same treatment. A cash machine has a service *c*
+near 0.3; a supermarket till is somewhere near 0.6 because basket sizes cluster;
+a GP appointment is near 1 because a consultation is a genuinely open-ended
+thing. <Key>Two systems with the same average service time and different
+coefficients of variation are not the same system.</Key>
+
+</Beat>
+
+<Beat n={4} label="The trap in the last few per cent">
 
 Define **ρ** — "rho" — as the fraction of capacity you are using: arrival rate
 divided by service rate. At a car a minute against a fifty-five second order it
@@ -114,50 +155,197 @@ whole story: as ρ approaches 1 it approaches zero, and the ratio runs away. The
 last few per cent of capacity you squeeze out of a system are paid for with an
 enormous quantity of somebody else's time.
 
+</Predict>
+
+Write that factor out and the shape stops being an abstraction. This is the
+multiplier on your wait, for the same work, at different loads:
+
+| Utilisation ρ | ρ/(1−ρ) | What it means |
+| --- | --- | --- |
+| 50% | 1 | Half your time is queueing |
+| 70% | 2.3 | Comfortable |
+| 80% | 4 | Noticeable |
+| 85% | 5.7 | The usual design target |
+| 90% | 9 | Fragile |
+| 95% | 19 | One absence from collapse |
+| 99% | 99 | Not a functioning system |
+
+Read the gap between the last two rows. Going from 95% to 99% utilisation —
+four percentage points, a rounding error on any dashboard — multiplies the wait
+by five. There is no warning in the utilisation figure itself, because
+utilisation is a number that improves right up until the moment the system stops
+working.
+
 One honest footnote, since the numbers are right there to check: the formula
 puts eleven cars in that lane and the simulation measures ten and a half. The
 difference is roughly what you pay for measuring a random thing over a long run
 rather than solving it exactly. Both are answers about the average morning, and
 neither is a promise about Tuesday.
 
-</Predict>
+</Beat>
+
+<Beat n={5} label="One equation with the whole week in it">
+
+Everything above is three separate observations — variability matters, load
+matters non-linearly, service time matters — and they are not separate. They
+multiply.
+
+<Punch note="Kingman's formula, 1961. In operations it is often called the VUT equation: Variability × Utilisation × Time.">
+  Wait ≈ V × U × T
+</Punch>
+
+Written out:
+
+**W<sub>q</sub> ≈ ( (c<sub>a</sub>² + c<sub>s</sub>²) / 2 ) × ( ρ / (1−ρ) ) × τ**
+
+Three factors, and you have already met all of them.
+
+**V — variability.** The average of the squared coefficients of variation, for
+arrivals and for service. Both lanes above have τ and ρ identical; the clockwork
+lane has V = 0 and the real one has V = 1. That single factor is the entire
+difference between the two pictures.
+
+**U — utilisation.** The runaway term from the table above.
+
+**T — time.** The mean service time itself. Halve how long each transaction
+takes and you halve the wait twice over, because τ appears here *and* ρ depends
+on it.
+
+Put the drive-through's numbers in. Real traffic, one car a minute: V = 1,
+U = 0.92/0.08 = 11.5, τ = 55 seconds. That is 633 seconds, or **about eleven
+minutes** — which is the number you read three paragraphs ago, and it came out
+of one line of arithmetic rather than a simulation.
+
+Now the clockwork lane, identical in every way except regularity: V = 0, so the
+product is zero, so the queue is zero. Not small. Zero, exactly, and that is why
+the left-hand lane in the scene cannot be made to queue at any setting the
+slider reaches.
+
+<Key>This is the most useful formula in the course.</Key> It is an approximation —
+exact only in a single-server queue under heavy load — and it is close enough to
+argue with, which is all you need. Memorise the *shape* rather than the
+coefficients: three things multiply, and the middle one explodes.
 
 </Beat>
 
-<Beat n={4} label="What this means for anyone running anything">
+<Beat n={6} label="What this means for anyone running anything">
 
 A system deliberately run at 85% capacity is not a wasteful system. <Key>It has
-bought predictability with slack</Key>, and the slack is doing real work.
+bought predictability with slack</Key>, and the slack is doing real work: it is
+the gap the server needs in order to catch up after a long job.
 
 When a hospital ward, a motorway or a support desk is pushed to 97%
 "efficiency", the efficiency is real — and so is the collapse in service. The
 second is rarely attributed to the first, because the utilisation figure went
 in the right direction and utilisation is what gets reported.
 
+This is the single most common failure of management-by-dashboard, and it has a
+tidy statement: **utilisation and responsiveness are different objectives, and
+past about 85% they are opposed.** Any organisation that measures only the first
+will keep destroying the second and be unable to explain why.
+
 </Beat>
 
-<Beat n={5} label="Where variability comes from">
+<Beat n={7} label="Three systems where this is the whole story">
+
+The drive-through is a toy. These are not.
+
+**Motorway traffic.** A lane of motorway has a maximum flow, and the ugly part
+is what happens when you exceed it. Flow does not simply cap out — it *breaks
+down*, and once broken the bottleneck discharges vehicles at a rate measurably
+lower than the capacity it had before it jammed. This capacity drop is the
+reason a jam persists long after the incident that caused it is cleared, and it
+is why ramp metering exists: a traffic light on a slip road, deliberately
+throttling the arrival rate, is a device for keeping *c* down and ρ below the
+cliff. It looks like it is making your journey worse. It is holding the
+motorway on the right-hand side of the table above.
+
+**Hospital beds.** UK health policy has for many years worked to a target
+occupancy of around 85%, a figure that traces back to modelling published in the
+BMJ in the late 1990s: above roughly that level, the risk of being unable to
+admit an emergency patient rises very steeply. Nothing about that number is
+medical. It is the table above, with a bed as the server, emergency admissions
+as an arrival process with *c* near 1, and length of stay as a service time with
+*c* well above 1. A ward at 99% occupancy is not an efficient ward. It is a ward
+with no gap.
+
+**Servers.** Every engineer who has watched a service's tail latency has watched
+this curve. Median response time stays flat and boring while utilisation climbs,
+and the ninety-ninth percentile takes off long before the average does — because
+the tail is made of the unlucky requests that arrived during a gap that was not
+there. This is why autoscaling triggers sit at 60 or 70% CPU rather than 95%, a
+setting that looks wasteful on a cost report and is buying exactly the slack the
+hospital ward is buying.
+
+<Key>Three fields, three vocabularies, one equation.</Key> That is the argument
+for learning it in the abstract: you will not have to learn it again.
+
+</Beat>
+
+<Beat n={8} label="Where variability comes from, and which kind you can attack">
 
 Two sources, worth keeping apart because you can do different things about them.
 
 **Arrival variability** is people turning up when they want. You mostly cannot
-remove it. You can sometimes reshape it, which is week 9's entire subject.
+remove it. You can sometimes *reshape* it — appointments, reservations, ramp
+metering, off-peak pricing — and that is week 9's entire subject.
 
 **Service variability** is transactions taking different lengths of time. You
 can often reduce it, and reducing it is frequently cheaper than adding
 capacity. A drive-through that splits ordering from payment from collection has
 not added a server — it has cut the variance each station sees. Neither had the
 café's third arrangement, the one where the person taking your order was not
-the person making the drink.
+the person making the drink. That is also why fast-food menus are short, why
+self-checkouts refuse alcohol, and why a bank has a separate desk for opening an
+account: every one of those is a variance-reduction device wearing an
+operational disguise.
+
+And then there is the third source, which is the one worth being angry about.
+
+**Batching is variability you manufacture yourself.** A lecture theatre
+releasing two hundred people at ten to the hour turns a smooth demand curve into
+a spike, and the café downstairs absorbs it. A ward round that reviews every
+patient between 8 and 11 turns a day's discharges into a single lump that
+arrives after the morning's admissions have already filled the beds. A team that
+deploys once a week has converted five days of small independent changes into
+one large correlated one.
+
+Batching is usually adopted to reduce a *setup* cost — it is cheaper to make
+twenty coffees in one go, to gown up once, to run one release process. That is a
+real saving, and the bill for it is paid in the queue, by people who are not in
+the meeting where the batch size was chosen.
+
+<Predict question="Your team ships weekly and wants to ship daily. What does the queueing argument predict?">
+
+Shorter waits, and a temporarily worse-looking process.
+
+Five small batches instead of one large one cuts *c* on the arrival stream into
+the review-and-deploy queue, so lead time falls by more than the size reduction
+alone would suggest — the V term and the U term both improve.
+
+What gets worse is the *per-batch overhead*, which is exactly the number your
+release process reports. You will be running the setup five times instead of
+once, and a dashboard measuring cost-per-deploy will show the change as a
+regression. That is the same trap as week 1's coffee shop and the same trap as
+the 97% ward: the cost that moved is visible, and the benefit landed on people
+the report does not cover.
+
+Which is week 4, arriving two weeks early.
+
+</Predict>
 
 </Beat>
 
-<Beat n={6} label="Hold on to this aircraft">
+<Beat n={9} label="Hold on to this aircraft">
 
 An aircraft boarding through a single door is a queue with brutal service
 variability. Every passenger who stops to lift a bag into an overhead locker
 blocks everyone behind them, for an unpredictable interval, in a corridor
 nobody can overtake in.
+
+Its V is enormous, its U is pinned at 1 by an airline that is paying for the
+gate by the minute, and its T is whatever the slowest person in the aisle
+decides. Every term in this week's equation is against it.
 
 We come back to that aircraft in week 10, with three more tools than we have
 today. It turns out to be the best worked example in the course.

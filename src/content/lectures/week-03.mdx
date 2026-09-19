@@ -11,6 +11,7 @@ system: Airport security screening
 buildsOn: 2
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-03/
 related:
   - sessions/week-03
   - assessments/01-queue-census
@@ -76,7 +77,28 @@ the rest of the lecture and most of your first assignment.
   L = λW
 </Punch>
 
-What makes this remarkable is not the algebra. It is the range of things it
+Three quantities, and it is worth being pedantic about each, because almost
+every misuse of this law is a misuse of a definition rather than of the algebra.
+
+**L** is a *number of things*, averaged over time. Not the number now — the
+number you would get by sampling the population of the system at random moments
+and taking the mean. People, cars, jobs, orders, dollars of inventory: the law
+does not care what they are, only that they are countable and they go in and
+come out.
+
+**λ** — "lambda" — is a *rate*: things per unit time, measured as a long-run
+average. Crucially it is the **throughput**, the rate at which things actually
+flow through, which equals the arrival rate only when nothing is being turned
+away and nothing is piling up for ever.
+
+**W** is a *duration*: the average time one thing spends inside, from the moment
+it crosses the boundary going in to the moment it crosses going out.
+
+The units do the sanity-checking for you. People = (people per minute) ×
+minutes. If your three numbers do not cancel like that, you have measured the
+wrong things.
+
+What makes the law remarkable is not the algebra. It is the range of things it
 does not care about.
 
 It holds for <Key>**any** arrival pattern, **any** service time distribution, **any**
@@ -86,7 +108,9 @@ priority, outright corrupt: Little's Law does not notice. Everything Act II is
 about, the entire question of who goes first, is invisible to it.
 
 Very few results in this field survive contact with a real system unmodified.
-This one does.
+This one does. It was in use as a rule of thumb for years before John Little
+published a general proof of it in 1961, and the proof turned out to require
+almost nothing: a boundary, a long enough run, and finite averages.
 
 </Beat>
 
@@ -123,17 +147,79 @@ Now read the bottom row of the scene: <Key>L ÷ λ and W agree to two decimal
 places</Key>, at every setting the slider reaches. They are not approximately
 equal. They are the same quantity — person-minutes — sliced two different ways.
 
+Here is the accounting version, in four lines, so you can reconstruct it in an
+exam or an argument.
+
+1. Over a long window of length *T*, let *N* travellers pass all the way through.
+2. Add up how long each one stayed. Call the total *A* person-minutes. Then by
+   definition the average stay is **W = A / N**.
+3. Now compute the same *A* the other way: at every instant, count the people
+   present and integrate over the window. Averaged over *T*, that gives
+   **L = A / T**.
+4. And the throughput is **λ = N / T**.
+
+Divide the second by the third: L / λ = (A/T) ÷ (N/T) = A / N = W. The *T*
+cancels, the areas were always the same area, and the result falls out with no
+assumption anywhere about how anybody was ordered.
+
 That is the whole theorem. <Key>It is not a fact about queues; it is a fact about
 rectangles</Key>, which is exactly why no assumption about arrivals or service or
 priority can break it.
 
 </Beat>
 
-<Beat n={4} label="What it is good for">
+<Beat n={4} label="Choosing the box is the whole game">
 
-Three uses, in rising order of how much they matter.
+Notice what step 1 quietly required: a **boundary**. Somewhere you can stand and
+say *in* and *out*. The law is silent about where you draw it, and that silence
+is where almost all of the interesting arguments live.
 
-**Estimating a wait from outside.** As above. Useful, slightly parlour-trick.
+Draw three different boxes around the same airport and you get three different,
+equally correct answers.
+
+**Box A — the arch.** In when you step onto the belt, out when you collect your
+tray. Two arches, thirty seconds each, so λ is about 4 a minute and L is about
+2. W = 0.5 minutes. Security is extremely fast.
+
+**Box B — the hall.** In when you join the tape, out when you collect your tray.
+λ is the same 4 a minute, L is the 240 you counted plus the 2 being screened.
+W = 60 minutes. Security is a disaster.
+
+**Box C — the journey.** In when you leave the kerb, out when you sit down at
+the gate. Now λ is the same again, and L includes everyone walking the
+concourse, so W might be 85 minutes.
+
+Nothing was measured wrongly. Three boxes, three numbers, all true, differing by
+a factor of 170 — and every one of them can be published as "the average wait"
+by somebody with a straight face.
+
+<Punch note="The airport will quote you Box A. You are standing in Box B. Your flight cares about Box C.">
+  The boundary is not a detail of the measurement. It is the claim.
+</Punch>
+
+So the discipline is simple and almost never practised: <Key>state the box before
+you state the number</Key>. When you read somebody else's waiting-time figure,
+your first question is not "is it accurate" but "what did they put inside the
+box, and what did they leave out". Week 9 is an entire lecture on organisations
+that answered that question in their own favour and were not, technically,
+lying.
+
+</Beat>
+
+<Beat n={5} label="What it is good for">
+
+Four uses, in rising order of how much they matter.
+
+**Estimating a wait from outside.** As above. Useful, slightly parlour-trick,
+and the fastest way to convince somebody that this field is worth an hour of
+their attention.
+
+**Sizing something you have not built.** Rearranged, **W = L/λ** tells you how
+long people will wait given a capacity, before you commit to the capacity. Or,
+rearranged the other way, **L = λW** tells you how much floor space, how many
+chairs, how big a buffer. A call centre that will hold 40 calls at once and
+answers 3 a minute is committing to a 13-minute wait whether anyone has said so
+or not.
 
 **Catching a lie.** This is the real one. If a service claims an average wait of
 10 minutes, and you can see 500 people in the system and count 20 arrivals a
@@ -145,15 +231,71 @@ Nearly every published waiting-time statistic hides a definitional choice like
 that, and L = λW is the cheapest tool ever invented for finding it. We will use
 it as a lie detector properly in week 9.
 
-**Sizing something you have not built.** Rearranged, W = L/λ tells you how long
-people will wait given a capacity, before you commit to the capacity.
+**Sanity-checking a promise.** The strongest version: somebody tells you their
+plan will halve the wait without adding capacity and without turning anyone
+away. Then λ is unchanged, so L must halve. Ask them which half of the people
+currently in the system will not be there. If they cannot answer, the plan is
+arithmetic-free.
 
 </Beat>
 
-<Beat n={5} label="The trap">
+<Beat n={6} label="It is not really about queues">
+
+The law says nothing about lines, servers or people. It says: *for any box with
+a boundary, in steady state, the amount of stuff inside equals how fast stuff
+flows through times how long stuff stays.* Which means it applies to a startling
+range of things that nobody thinks of as queues.
+
+**A factory.** Work-in-progress = throughput × cycle time. Everything on the
+floor, half-finished, is L. This version is old, it is the foundation of lean
+manufacturing, and it produces the counter-intuitive result that
+<Key>cutting the amount of unfinished work on the floor shortens how long each
+item takes</Key>, without anybody working faster.
+
+**A software team.** Lead time = work in progress ÷ throughput. Same equation,
+same conclusion, and it is the entire mathematical content of a work-in-progress
+limit on a kanban board. A team with 40 open items completing 8 a week has a
+five-week lead time and cannot talk its way out of it.
+
+**A warehouse.** Inventory turns are L and λ in a hat. Average stock ÷ annual
+sales = how long a unit sits on the shelf.
+
+**A support desk.** 300 open tickets, closing 60 a day, means the average ticket
+lives five days. If the team promises 48-hour resolution while carrying 300 open
+tickets, the promise and the backlog are in direct contradiction, and no amount
+of effort reconciles them — one of the two numbers has to move.
+
+**A hospital.** Beds occupied = admissions per day × average length of stay.
+This is why "reduce length of stay" and "increase bed numbers" are
+interchangeable at the level of arithmetic, and radically different at the level
+of cost.
+
+<Predict question="Your support desk cuts average resolution time from 5 days to 2, and closes the same 60 tickets a day. What happened to the backlog?">
+
+It fell from 300 to 120, necessarily, and not as a side effect — as the same
+fact stated differently.
+
+Which is why the two levers people argue about are one lever. A manager saying
+"we need to clear the backlog" and an engineer saying "we need to fix the slow
+cases" are, arithmetically, saying the same sentence to each other with
+different emphasis.
+
+The useful follow-up: throughput did not change. So nobody worked harder, and
+the improvement came from the *shape* of the work — which is week 2 again, and
+you now have two weeks of reasons to look at variability before you look at
+capacity.
+
+</Predict>
+
+</Beat>
+
+<Beat n={7} label="Three ways to get it wrong">
 
 Everything above assumed <Key>**steady state**</Key>: over your measurement window, what
-came in matched what went out.
+came in matched what went out. That assumption has three separate ways of
+failing, and all three will be waiting for you in the assignment.
+
+**The system was filling or emptying.**
 
 <Predict question="You watch a lunch rush from an empty room to a queue of forty. What does L = λW give you?">
 
@@ -172,6 +314,20 @@ the hall takes a couple of minutes of its own time to mean it.
 
 </Predict>
 
+**You measured the two numbers over different windows.** L counted at 12:15 and
+λ averaged across 11:00–14:00 are facts about two different systems. The fix is
+dull and non-negotiable: one window, both quantities, stated on the page.
+
+**People left without being served.** This one is subtle and it is everywhere.
+If a tenth of the queue gives up and walks out, they still occupied the system
+for a while, so they belong in L — but they never crossed the exit boundary, so
+whether they belong in λ depends on which box you drew. Count departures at the
+counter and you will under-count λ, and therefore over-estimate W, for the
+people who did stay. Count everyone who left by any means and you get a
+different, also-correct number that answers a different question. Week 11 is
+built on exactly this population, and the fact that they are the most
+informative people in the system and the least likely to be in anyone's data.
+
 This is not a footnote. It is most of the difficulty in your first assignment,
 due at the end of this week. Measuring a real queue turns out to be mostly the
 discipline of noticing when an assumption you were relying on quietly stopped
@@ -179,7 +335,7 @@ being true — and the queue never tells you.
 
 </Beat>
 
-<Beat n={6} label="Where this goes">
+<Beat n={8} label="Where this goes">
 
 You can now measure any queue in the world from the outside.
 

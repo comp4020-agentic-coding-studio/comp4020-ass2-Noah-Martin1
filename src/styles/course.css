@@ -25,11 +25,26 @@
  */
 
 :root {
-  --q-ink: var(--at-text);
-  --q-ink-soft: var(--at-text-muted);
+  /* Derived from the theme's tokens, with the theme's own derivation as the
+     fallback.
+     *
+     * The fallbacks are not decoration. A slide deck is an injected route: it
+     * loads the brand CSS and src/decks/theme.css and nothing else, so on a
+     * deck page --at-text and friends simply do not exist and every one of
+     * these resolved to empty. The first deck with a live scene on it rendered
+     * a pale cream drive-through on a black slide, because the scene's palette
+     * reader fell through to its light-mode defaults.
+     *
+     * So each one restates the theme's expression as a fallback rather than a
+     * colour: --at-primary is present everywhere the brand CSS is, the
+     * arithmetic on it is the theme's, and on the site the fallback is never
+     * reached. */
+  --q-ink: var(--at-text, light-dark(oklch(from var(--at-primary) 20% 0.01 h), oklch(from var(--at-primary) 95% 0.005 h)));
+  --q-ink-soft: var(--at-text-muted, light-dark(oklch(from var(--at-primary) 20% 0.01 h / 62%), oklch(from var(--at-primary) 95% 0.005 h / 56%)));
   --q-gold: var(--at-primary);
-  --q-rule: var(--at-border);
-  --q-ground: var(--at-bg-alt);
+  --q-rule: var(--at-border, light-dark(rgb(from var(--at-primary) r g b / 30%), rgb(from var(--at-primary) r g b / 40%)));
+  --q-ground: var(--at-bg-alt, light-dark(oklch(from var(--at-primary) 96.5% 0.006 h), oklch(from var(--at-primary) 15% 0.01 h)));
+  --q-bg: var(--at-bg, light-dark(oklch(from var(--at-primary) 99.4% 0.004 h), oklch(from var(--at-primary) 12% 0.008 h)));
 
   /* Concept highlight. Light wash in light mode, deep rose in dark, so body
      ink stays the text colour in both and never needs overriding -- a light

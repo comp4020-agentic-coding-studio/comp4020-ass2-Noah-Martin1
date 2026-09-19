@@ -1,0 +1,211 @@
+---
+title: "Week 2 — Variability, Not Busyness"
+description: Lecture 2 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# Two lanes
+
+# One has a queue
+
+SLOP2710 · Week 2
+
+```notes
+Do not say which is which yet. Ask them to guess what the difference is before
+the next slide, and take three answers. Somebody will say "one is busier". Write
+it up. It is wrong and it is the whole lecture.
+```
+
+---
+
+## Both drive-throughs
+
+- serve **60 cars an hour**
+- have **one window**, **one person**
+- average **55 seconds** an order
+- run at **92% utilisation**
+
+One never has a queue. The other has eleven cars in it.
+
+---
+
+{/* _class: centered */}
+
+## Nothing a manager measures
+
+## can tell these two apart
+
+```notes
+Utilisation, throughput, staffing, average handling time. All identical. This
+is the slide to leave up while they argue.
+```
+
+---
+
+## The only difference
+
+**Lane A** — cars arrive on the minute, every order takes 55 seconds.
+
+**Lane B** — cars arrive whenever. Some are ordering for the office.
+
+---
+
+<Scene
+  scene="drivethru"
+  id="deck-drivethru"
+  alt="Two identical drive-throughs side by side, each a kiosk with a lit sign and a serving window on its own lane of asphalt. The left lane, labelled clockwork, holds a single gold car at the window. The right lane, labelled real traffic, is nose to tail with cars showing tail lights, and a pink badge counts the ones still out of shot down the road."
+  watch="Drag irregularity down to clockwork and the right-hand queue disappears with the load unchanged. Drag it back up and the queue rebuilds out of nothing but timing. The window flashes pink each time a car arrives to find it occupied — nought per cent in one lane, about eighty-five in the other."
+/>
+
+```notes
+Run it live. Put the load at one car a minute and walk the irregularity slider
+from 0 upward, calling out the queue length as it goes: 0.9, 1.4, 3.1, 6.1,
+10.5. Say "nothing else moved" each time. Then slam it back to clockwork.
+```
+
+---
+
+{/* _class: quote */}
+
+Queues are made of variability,
+
+not of load.
+
+---
+
+## What actually makes a queue
+
+A **gap** — work arrives while the server is still busy with something that ran
+long.
+
+Bad luck accumulates. Good luck does not.
+
+```notes
+Ten seconds lost to a long order is gone for ever. Ten seconds of empty window
+is not banked anywhere. This asymmetry is the entire mechanism and it is worth
+saying twice.
+```
+
+---
+
+## Measuring raggedness
+
+**c** = standard deviation ÷ mean, on the gaps between arrivals
+
+- **c = 0** — a metronome
+- **c = 1** — memoryless. People arriving without coordinating
+- **c > 1** — bursty. A lecture ending
+
+---
+
+## The last few per cent
+
+| ρ | ρ/(1−ρ) |
+| --- | --- |
+| 50% | 1 |
+| 80% | 4 |
+| 90% | 9 |
+| 95% | 19 |
+| 99% | 99 |
+
+```notes
+Cover the right column with your hand and ask them to guess the 99% row. Nobody
+says 99. Most say something in the twenties.
+```
+
+---
+
+{/* _class: centered */}
+
+## 95% → 99%
+
+## is four points on a dashboard
+
+## and five times the wait
+
+---
+
+## One equation
+
+# W ≈ V × U × T
+
+**V** — variability · **U** — ρ/(1−ρ) · **T** — service time
+
+```notes
+Kingman, 1961. Called the VUT equation in operations. Do the drive-through on
+the board: V=1, U=11.5, T=55s → 633 seconds → eleven minutes. Then set V=0 and
+watch the whole thing collapse to zero. That is lane A.
+```
+
+---
+
+## Three systems, one equation
+
+**Motorways** — flow breaks down and the bottleneck then discharges *slower*
+than before it jammed. Ramp metering is a V-and-U device.
+
+**Hospital beds** — the 85% occupancy target is this table, with a bed as the
+server.
+
+**Servers** — p99 latency takes off long before the mean. Autoscaling at 70%
+CPU is buying the gap.
+
+---
+
+## Two sources — and one you make yourself
+
+**Arrivals** — mostly cannot remove. Can reshape *(week 9)*.
+
+**Service** — often can reduce. Short menus, split stations, separate desks.
+
+**Batching** — variability you manufacture, to save a setup cost, and bill to
+the queue.
+
+```notes
+Ask for batches in their own life. Weekly deploys, the ward round, the 10-to-the
+-hour lecture release, the coffee order for the office. Every one is a setup
+cost saved by somebody who is not in the queue.
+```
+
+---
+
+## Hold on to this aircraft
+
+Boarding through one door.
+
+Every bag stowed blocks everyone behind it, for an unpredictable interval, in a
+corridor nobody can overtake in.
+
+V enormous. U pinned at 1. T set by the slowest person in the aisle.
+
+```notes
+One sentence only. It comes back in week 10 and the promise is worth more than
+the detail.
+```
+
+---
+
+{/* _class: impact */}
+
+# Next: measuring a queue
+
+# you have no access to
+
+```notes
+Tease it as a party trick — ninety seconds, no cooperation from anybody, one
+multiplication — because the assignment that follows it is the hardest thing in
+Act I.
+```
+
+---
+
+## Before the lab
+
+Find a queue with an obvious **batch** in it.
+
+Write down what setup cost the batch is saving, and who pays for it.
+
+One paragraph. Bring it.

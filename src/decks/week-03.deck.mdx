@@ -1,0 +1,200 @@
+---
+title: "Week 3 — Little's Law"
+description: Lecture 3 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# How long is this line?
+
+SLOP2710 · Week 3
+
+```notes
+Open standing still, looking at the back of the room, saying nothing for five
+seconds. Then: "you are at the back of airport security, there is no sign, and
+nobody is going to tell you anything."
+```
+
+---
+
+## What you can see from where you stand
+
+**Ahead of you** — count one switchback, multiply. Say **240**.
+
+**Speed** — pick a fixed point, count crossings for two minutes. Say **80**, so
+**40 a minute**.
+
+No access. No data request. Nobody to ask.
+
+---
+
+{/* _class: centered */}
+
+## 240 ÷ 40
+
+## = 6 minutes
+
+```notes
+Let it be anticlimactic. The arithmetic is meant to feel like a let-down. The
+lecture is about when you are *allowed* to do it.
+```
+
+---
+
+{/* _class: quote */}
+
+# L = λW
+
+average number in · arrival rate · average time each stays
+
+---
+
+## What it does not care about
+
+- any arrival pattern
+- any service time distribution
+- any number of servers
+- **any discipline whatsoever**
+
+```notes
+Push on the last one. Everything Act II is about — the entire question of who
+goes first — is invisible to this law. Corrupt, random, priority, bribed: L =
+λW does not notice.
+```
+
+---
+
+<Scene
+  scene="security"
+  id="deck-security"
+  alt="An airport security hall seen from above and to one side. Two metal-detector arches stand at the back under a lit security board, each with a belt of grey trays in front of it and an officer beside it. A barriered snake queue switchbacks twice across the floor with travellers along it, and whoever is in an arch is gold."
+  watch="Two ways to measure one thing. Counting sweeps a pink plane up the line and everyone it passes turns pink — the vertical cut, and the one you can do standing there. Following paints one traveller pink and runs a clock from joining to clearing the arch — the horizontal cut. Then read L ÷ λ against the separately measured W."
+/>
+
+```notes
+Switch between counting and following twice, slowly. Then point at the bottom
+row and say nothing until somebody notices the two numbers are the same.
+```
+
+---
+
+## Same area, two cuts
+
+**Count across** — how many are here right now? Average it. That is **L**.
+
+**Follow one through** — how long did this one stay? Average it. That is **W**.
+
+Both are measuring **person-minutes**.
+
+---
+
+## The proof, in four lines
+
+1. Window of length *T*. *N* people pass through.
+2. Total time inside = *A*. So **W = A/N**.
+3. Same *A*, integrated over the window: **L = A/T**.
+4. And **λ = N/T**.
+
+L/λ = (A/T)÷(N/T) = A/N = **W**
+
+```notes
+Do this on the board, not on the slide. The T cancelling is the moment. It is a
+fact about rectangles, not about queues.
+```
+
+---
+
+## Now the dangerous part
+
+# Where is the box?
+
+```notes
+This is the actual content of the lecture. Everything before it is setup.
+```
+
+---
+
+## Three boxes, one airport
+
+| Box | W |
+| --- | --- |
+| The arch | 0.5 min |
+| The hall | 60 min |
+| Kerb to gate | 85 min |
+
+All correct. All publishable as "the average wait".
+
+---
+
+{/* _class: centered */}
+
+## State the box
+
+## before you state the number
+
+---
+
+## What it is for
+
+**Estimate** a wait from outside.
+
+**Size** something you have not built.
+
+**Catch a lie** — 500 people, 20 a minute, and they claim 10 minutes.
+
+**Sanity-check a promise** — halve W with λ fixed, and L must halve. Which half
+of these people is leaving?
+
+---
+
+## It is not really about queues
+
+- Factory: **WIP = throughput × cycle time**
+- Kanban: **lead time = WIP ÷ throughput**
+- Warehouse: inventory turns
+- Support desk: 300 open ÷ 60 a day = **5 days**
+- Hospital: beds = admissions × length of stay
+
+```notes
+The support desk one lands hardest. A team promising 48-hour resolution while
+carrying 300 open tickets is in arithmetic contradiction with itself, and no
+amount of effort fixes it.
+```
+
+---
+
+## Three ways to get it wrong
+
+**It was filling or emptying.** Steady state, or nothing.
+
+**Different windows.** L at 12:15 and λ across three hours are two systems.
+
+**People left without being served.** They were in L. Were they in λ?
+
+```notes
+The third is week 11's entire population, and the most informative people in
+any system are the ones who are not in its data.
+```
+
+---
+
+{/* _class: impact */}
+
+# You can now measure
+
+# any queue in the world
+
+---
+
+{/* _class: centered */}
+
+## So: what did that wait cost?
+
+## And who paid it?
+
+```notes
+Straight into week 4. The assignment is due at the end of this week — remind
+them that steady state is most of the difficulty, not the arithmetic.
+```

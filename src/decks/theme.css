@@ -11,3 +11,35 @@
  * slide class you reach for (`_class: quote`), a code-heavy layout, a
  * background. */
 @import url("astro-theme-university/styles/deck.css");
+
+/* A deck page is a dark surface, and it has to say so.
+ *
+ * The course's colour tokens in src/styles/course.css are light-dark() pairs,
+ * and a scene resolves them by rasterising a probe element. Without a declared
+ * colour scheme the probe reads the light branch, so the first deck with a
+ * simulation on it rendered a pale cream drive-through on a black slide.
+ * One declaration fixes every scene on every deck. */
+:root {
+  color-scheme: dark;
+}
+
+/* Scene chrome, resized for a slide.
+ *
+ * The figure is sized for a column of prose. On a 1280-wide slide the canvas
+ * should carry the slide and everything around it should get out of the way --
+ * CLAUDE.md asks for decks that are visually driven, and the caption is in the
+ * speaker notes anyway. */
+.reveal .qscene {
+  margin: 0 auto;
+  max-width: 94%;
+}
+.reveal .qscene .qsim__readout {
+  font-size: 0.5em;
+}
+.reveal .qscene .qsim__controls {
+  font-size: 0.55em;
+}
+.reveal .qscene .q-figure__caption {
+  font-size: 0.42em;
+  line-height: 1.45;
+}

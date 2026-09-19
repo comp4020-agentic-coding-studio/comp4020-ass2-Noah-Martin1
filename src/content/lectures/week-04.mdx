@@ -11,6 +11,7 @@ system: Passport office
 buildsOn: 3
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-04/
 related:
   - sessions/week-04
 ---
@@ -89,15 +90,61 @@ waiting from 28 person-hours to 86. <Key>The office saves $304 a day and the
 room loses $2,303</Key> — seven and a half dollars of somebody else's time for
 every dollar saved, and not one line of it in the office's ledger.
 
+Watch the mechanism rather than the numbers, because it generalises past
+passport offices. Three windows instead of four is a small change in ρ and a
+large change in ρ/(1−ρ) — week 2's table, with a public counter on it. The
+manager did not make a large decision. **The curve made it large for them**, and
+the curve was not on the report.
+
 None of these are failures of management. Each is a correct decision given the
 information the manager is scored on. The failure is upstream, in what gets
 measured — which is why *"the staff are lazy"* is almost always the wrong
 diagnosis of a long queue, and why week 1's instinctive answer, *not enough
 staff*, is the wrong one too.
 
+The general form is worth naming, because you will meet it in every remaining
+week of this course. **An externality is a cost borne by somebody outside the
+transaction that produced it.** Pollution is the textbook case. Waiting is the
+same structure, paid in hours instead of particulates, and with one extra
+feature that makes it worse: the people paying it are assembled, in a room, in
+front of the organisation, and it still does not appear.
+
 </Beat>
 
-<Beat n={3} label="Now the uncomfortable arithmetic">
+<Beat n={3} label="How an hour gets priced, when anybody bothers">
+
+It would be reasonable to think that $40 figure is made up. It is not arbitrary,
+and the way it is arrived at in practice is worth knowing, because
+<Key>your hour is already being priced — just not by the people making you
+wait</Key>.
+
+Transport economics does this routinely and at enormous scale. Every national
+appraisal guidance for road and rail publishes standard **values of travel time
+savings**: a schedule of what an hour saved is worth, per person, by journey
+purpose. Those numbers decide which motorways get built. A scheme that shaves
+four minutes off two hundred thousand daily journeys is justified, or not, on
+exactly the arithmetic you did at the top of this page.
+
+Two features of that practice matter here.
+
+**The value depends on the purpose, not the person.** Business travel is
+typically valued at or near what the employer is paying for that hour, on the
+argument that the time is genuinely lost output. Commuting and leisure travel
+are valued lower, and derived from what people actually do — how much extra they
+pay for a faster route, how far they will drive for cheaper fuel — rather than
+from their wage.
+
+**The numbers are published and argued about.** Not perfect, not uncontested,
+but *on the page*, where somebody can object to them.
+
+Set that against the passport office, which has implicitly priced its queue at
+zero and published nothing. The contrast is the lecture: this is not a hard
+problem that nobody has solved. It is a solved problem that this particular
+organisation has no reason to apply, because the hours are not its hours.
+
+</Beat>
+
+<Beat n={4} label="Now the uncomfortable arithmetic">
 
 Say we accept that waiting should be costed. At what rate?
 
@@ -128,30 +175,146 @@ argument. It has taken the third position, and declined to look at it.
 
 </Predict>
 
+There is a fourth answer, and it is the one worth carrying into Act II: **price
+it differently depending on what the queue is for.** An hour lost at a passport
+office and an hour lost in an emergency department are not the same object, and
+a single exchange rate for time cannot express the difference. Week 7 is about a
+queue where the thing being traded is not hours at all, and where that is
+precisely why everybody consents to a rule they would resist anywhere else.
+
 </Beat>
 
-<Beat n={4} label="Who is actually in the room">
+<Beat n={5} label="The part that is not hours">
 
-One more thing, before Act II starts turning the discipline knob.
+Everything so far has treated a wait as a quantity of time and nothing else.
+That is a useful simplification and it is badly incomplete, because the
+experience of waiting is not proportional to the clock.
+
+The classic statement of this is David Maister's, from the mid-1980s, and it is
+a short list of propositions that anyone who has run a service will recognise
+immediately:
+
+- **Unoccupied time feels longer than occupied time.** Hence magazines, mirrors
+  by the lifts, and the menu board positioned where the queue can read it.
+- **Waiting before a process starts feels longer than waiting during it.** Being
+  seated and ignored beats standing at the door, even for the same total wait.
+- **Anxiety makes waits feel longer.** *Did my form go through? Is this the
+  right line?*
+- **Uncertain waits feel longer than known, finite waits.** Ten minutes you were
+  told about beats five minutes you were not.
+- **Unexplained waits feel longer than explained ones.** "We are one staff member
+  down today" is worth several minutes of actual time.
+- **Unfair waits feel longer than equitable ones.** One person served out of
+  turn poisons the entire line, and everybody in it can tell you exactly how
+  many minutes it cost them, which is never the true figure.
+
+<Punch note="Which is why the cheapest intervention available to almost any service is information, and why week 11 is about what happens when you give it.">
+  Perceived waiting and measured waiting are different quantities, and only one
+  of them is on the dashboard.
+</Punch>
+
+Take this the right way round. It is **not** a licence to leave the wait alone
+and manage the feeling instead — that is a real and common abuse, and week 11
+takes it apart. It is a warning that the 300,000 hours is a *lower bound* on the
+damage, and that two systems with identical L, λ and W can be experienced as
+completely different places.
+
+</Beat>
+
+<Beat n={6} label="Who is actually in the room">
 
 Look at who is standing in that passport queue at 10am on a Tuesday. It is
 disproportionately people who cannot pay to avoid it, cannot send somebody
-else, and cannot do it online.
+else, cannot take the appointment at 2pm on a Wednesday, and cannot do it
+online.
 
 <Key>The queue is not a random sample of the population.</Key> Any rule you apply to it
 lands on *that* population, not on an average one — and the rules that look
 most neutral in the abstract are often the ones that land hardest, because
 neutrality is exactly what stops them noticing who is there.
 
+There is a sharper version of this, and it changes what the 300,000 hours means.
+An hour is not equally available to everybody. A salaried worker with flexible
+hours spends an hour. A shift worker on an hourly contract spends an hour *and*
+the wages for it, plus possibly the shift. A single parent spends an hour and a
+childcare problem. Researchers on **administrative burden** separate out three
+costs that a citizen pays to obtain something they are entitled to: the
+*learning* cost of finding out how, the *compliance* cost of doing it — of which
+queueing is the purest form — and the *psychological* cost of being processed.
+
+All three fall hardest on exactly the people most likely to need the service.
+Which produces the result that should end any argument that a queue is
+politically neutral: <Key>raising the hassle of a service reduces its take-up,
+and reduces it most among the people it was designed for</Key>.
+
 </Beat>
 
-<Beat n={5} label="What Act I gave you">
+<Beat n={7} label="When the wait is the point">
 
-You can now see a queue as a designed object, explain why it forms, measure it
-from the outside, and say what it costs and to whom.
+Now the uncomfortable extension, and it is not hypothetical.
 
-That is the toolkit. From next week we start turning the knob that actually
-decides the outcome — and we begin by taking apart the rule you have believed
-in since you were four years old.
+Economists have a name for a barrier deliberately placed in front of a benefit
+so that only those who really need it will bother: an **ordeal mechanism**. The
+argument is genuinely clever. If you cannot observe who is truly in need, make
+the benefit costly to obtain in a currency the needy are more willing to spend
+than the non-needy — and time is the obvious candidate, because it cannot be
+borrowed, transferred or counterfeited. A queue, on this reading, is a
+means-test that requires no paperwork and cannot be lied to.
+
+It sometimes works. It is also, quite often, exactly backwards.
+
+<Predict question="A benefit office adds a two-hour in-person queue to screen out people who do not really need the payment. Who does it screen out?">
+
+Disproportionately, the people who need it most.
+
+The mechanism assumes the poor are time-rich and the comfortable are time-poor.
+For a pensioner and a consultant that may hold. For a parent working two hourly
+shifts with no leave and no childcare, it is straightforwardly false: they are
+the most time-poor person in the building, and the two-hour ordeal is the
+barrier most likely to defeat them.
+
+So the screen selects on *flexibility of schedule*, which correlates with income
+in a direction nobody intended. The office will report a fall in claims and,
+depending on what it was measuring, may record that as a success.
+
+<Key>An ordeal targets whoever can most afford the currency it charges, and time
+is not the currency people think it is.</Key>
+
+</Predict>
+
+You should not leave this beat thinking every queue is a conspiracy. Most are
+not. But when you find a wait that nobody has tried to shorten despite it being
+cheap to shorten, the possibility that **the wait is doing a job for somebody**
+belongs on your list of hypotheses. It comes back in week 8, where the job it is
+doing is making a fast lane worth paying for.
+
+</Beat>
+
+<Beat n={8} label="What Act I gave you">
+
+Four weeks, four tools, and they compose.
+
+**Week 1.** A queue is a designed object with four parts, and the fourth one —
+who goes next — is a rule somebody chose. *Name the rule before you judge it.*
+
+**Week 2.** Queues are made of variability, not load, and the cost of load is
+non-linear: W ≈ V × U × T. *Look at the spread before you look at the average.*
+
+**Week 3.** L = λW lets you measure any queue from outside, and the boundary you
+draw around it is the claim you are making. *State the box before you state the
+number.*
+
+**Week 4.** The wait has a price, the organisation causing it cannot see that
+price, and the people paying it are not a random sample. *Find out who is
+holding the bill.*
+
+Put them together and you can walk into a building, watch a line for ninety
+seconds, say why it is there, estimate what it costs, and name who is paying.
+That is the toolkit, and it is entirely diagnostic: not one of those four weeks
+told you what the system *should* do.
+
+From next week we start turning the knob that actually decides the outcome —
+and we begin by taking apart the rule you have believed in since you were four
+years old.
 
 </Beat>

@@ -45,6 +45,11 @@ back. Why there is one queue and not two. Why the person taking your order is
 also the person making the drink. Why somebody who wants a filter coffee waits
 behind somebody ordering four oat lattes.
 
+Each of those is a decision. Not one of them was made by the people standing in
+the line, and most of them were not made by the people behind the counter
+either. They arrived with the fit-out, or with a franchise manual, or with a
+staff rota written to cover lunch.
+
 </Beat>
 
 <Beat n={2} label="Look at what the room is actually doing">
@@ -92,18 +97,28 @@ you which morning they chose, or when, or why.
 
 </Predict>
 
-<Beat n={3} label="The claim this course makes">
+<Beat n={3} label="Four parts, and only four">
 
-> A queue is not a thing that happens to people. It is
-> <Key>a rule, applied to people, by someone, usually invisibly</Key>.
+Strip any queue anywhere down and you find the same four parts. Almost
+everything in the next twelve weeks is a consequence of turning one of them.
 
-Every queue has four parts, and almost everything in the next twelve weeks is a
-consequence of turning one of them.
+**Arrivals — when people turn up.** In the café this is about ninety people an
+hour at peak, and the important thing about that number is not its size but its
+*raggedness*: a tutorial ends and eleven people arrive in forty seconds. Week 2
+is about nothing else.
 
-- **Arrivals** — when people turn up
-- **Service** — how long each one takes
-- **Servers** — how many at once
-- **Discipline** — *who goes next*
+**Service — how long each one takes.** Ten seconds to take the order,
+twenty-five to make the drink, and a flat white is not a round of four. The
+spread matters more than the average, which is the other half of week 2.
+
+**Servers — how many at once.** Two. It is the knob everyone reaches for first,
+it is the only one that costs money, and week 5 shows that *how you arrange* two
+servers changes the wait more than going from two to three does.
+
+**Discipline — who goes next.** The café's answer is "whoever has been in the
+line longest", except when it is "whoever is holding the right card", or
+"whoever the barista makes eye contact with", or "whoever ordered something the
+machine is already making".
 
 The fourth one is the one nobody notices and everybody has opinions about. No
 one has ever been angry about inter-arrival variance. Everyone has been angry
@@ -111,7 +126,76 @@ about queue-jumping.
 
 </Beat>
 
-<Beat n={4} label="Why the fourth knob is the political one">
+<Beat n={4} label="Queues you would not call queues">
+
+Before we go further, widen the word, because the habit this course is trying
+to build is worth very little if it only fires in a coffee shop.
+
+A queue is any place where **work arrives faster than it can be done, and
+something has to decide the order**. That is the whole definition. It does not
+require a floor, a rope, or a person standing on their feet.
+
+- The **lift lobby** at 8:55. Nobody thinks of it as a line, everybody behaves
+  exactly as if it were one, and the lift's scheduling algorithm is making a
+  who-goes-first decision several times a second.
+- The **print spooler**, which is a queue with a discipline you could look up in
+  a manual and almost certainly never have.
+- **Hold music.** Week 11 is about what happens when that queue can talk back to
+  the people in it.
+- A **housing waiting list**, which is a queue measured in years and sorted by a
+  points system somebody wrote down and published.
+- The **organ transplant list**, where the ordering rule was argued about in
+  public for two decades because everyone understood what it decided. That is
+  week 12, and it is where the course ends.
+- The **retry** your browser just did, silently, against a server that was busy.
+
+Each of those has arrivals, service, servers and a discipline. Several of them
+have a discipline that has never been written down. <Key>The invisible ones are
+where the interesting failures live</Key>, because a rule nobody has stated is a
+rule nobody has argued with.
+
+</Beat>
+
+<Beat n={5} label="Where the mathematics came from, and who it was for">
+
+Worth knowing, because it explains the shape of the whole field.
+
+In 1909, a Danish mathematician called **Agner Krarup Erlang**, working for the
+Copenhagen Telephone Company, published a paper on the theory of probabilities
+applied to telephone conversations. The company had a practical problem: how
+many lines does an exchange need so that callers are not turned away, given that
+callers arrive at random and talk for random lengths of time?
+
+That is the founding question of queueing theory, and notice what it is *not*
+about. It is not about fairness, or whose call matters more, or who is standing
+in the rain. It is a capacity-planning question asked by an operator about a
+machine. The unit of offered traffic is still called the **erlang**, and the
+formulas he derived for how often a caller finds every line busy are still
+called Erlang B and Erlang C, and are still in use in every call centre in the
+world.
+
+<Punch note="Which is why the standard toolkit is superb at how long and nearly silent about who — it was built by operators, for operators, about equipment.">
+  The mathematics of waiting was invented to size telephone exchanges, not to
+  arbitrate between people.
+</Punch>
+
+The orderly single-file line is younger than you would guess, and it is a social
+technology rather than a natural one. Crowds at markets and ticket windows for
+most of recorded history were a press, not a line. Queueing as a *norm* — the
+idea that the correct way to distribute a scarce thing is to stand behind the
+person who arrived before you, and that jumping is a moral offence — is
+generally traced to the industrial era, and in Britain it hardened into a
+national self-image during wartime rationing.
+
+Which is to say: the rule you are about to spend four weeks taking apart was
+itself invented, quite recently, by people who had to be persuaded of it.
+
+</Beat>
+
+<Beat n={6} label="The claim this course makes">
+
+> A queue is not a thing that happens to people. It is
+> <Key>a rule, applied to people, by someone, usually invisibly</Key>.
 
 Deciding <Key>who goes first is deciding whose time gets spent</Key>. Time is what
 everybody in that line is paying with, whether they agreed to or not.
@@ -129,7 +213,7 @@ mathematics by week 3 and it takes about forty minutes. The mathematics answers
 
 </Beat>
 
-<Beat n={5} label="The habit to build">
+<Beat n={7} label="The habit to build">
 
 <Key>**Name the rule before you judge it.**</Key>
 
@@ -141,16 +225,60 @@ can ask the question that actually goes somewhere: what would it cost to change?
 The café above states its own. The sentence along the bottom of the frame is
 that arrangement's rule written out as an instruction, and the figure in pink
 is the person the instruction has already picked; switch the room and watch
-both of them change. Yours will be harder than that, because the queue you
-choose will not come with a selector, and in all likelihood nobody in the
-building will be able to tell you which rule they are running.
+both of them change.
 
-That instruction is your lab exercise this week, and you will find it harder to
-write than it looks.
+Yours will be harder than that, because the queue you choose will not come with
+a selector. Three things go wrong, and all three are the point of this week's
+lab:
+
+**You will write "first come, first served" and be wrong.** Look again for
+thirty seconds and you will usually find a second rule running underneath: an
+app order that skips the line, a regular who gets served out of turn, a till
+that only takes cards, a member of staff who serves whoever is closest.
+
+**You will describe the intention, not the behaviour.** The instruction has to
+be one a new starter could follow on their first shift without asking anybody
+what it means.
+
+**You will find nobody in the building knows.** This is normal and it is the
+most interesting result you can get. A rule that has never been stated has never
+been defended, which means it has never been compared with the alternative.
 
 </Beat>
 
-<Beat n={6} label="Where this goes">
+<Beat n={8} label="How the next twelve weeks go">
+
+Every week runs the same shape, and it is deliberately not
+definition-then-explanation:
+
+**observation → model → experiment → consequence → design decision.**
+
+You will be shown a real place first, given the smallest model that explains it,
+handed the controls, and then asked what the result costs and who it lands on.
+
+The semester is in three acts.
+
+**Act I — why waiting happens** (weeks 1–4). The physics. You will learn to see
+a queue, explain why it forms when nobody is overloaded, measure one from
+outside with no cooperation from anybody, and put a price on the result.
+
+**Act II — who goes first** (weeks 5–9). The rules. Five different ways to order
+the same people — arrival, length, need, price, appointment — and for each one,
+what it buys, and who pays for it.
+
+**Act III — systems that fight back** (weeks 10–12). The complications. Queues
+joined to other queues, queues full of people who have worked out what you are
+doing, and finally a queue where the ordering rule had to be argued about in
+public because everyone could see what it decided.
+
+Four pieces of assessment sit along that spine. You will measure a real queue
+(week 3), change a real rule and name the loser (week 6), run an experiment
+properly (week 9), and redesign something end to end (week 12). None of them
+asks you to recall a definition.
+
+</Beat>
+
+<Beat n={9} label="Where this goes">
 
 Next week, two systems. Both serve exactly sixty customers an hour. Both have
 one server working at exactly the same average speed.

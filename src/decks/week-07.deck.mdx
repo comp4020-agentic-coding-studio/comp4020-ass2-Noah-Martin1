@@ -1,0 +1,197 @@
+---
+title: "Week 7 — Triage: Order by Need"
+description: Lecture 7 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# The one rule
+
+# nobody argues with
+
+SLOP2710 · Week 7 · Adaeze and Priya
+
+```notes
+Flag at the top that this lecture has two halves and they disagree. Do not
+resolve it. The final brief is marked partly on whether they noticed their own
+design has a classifier in it.
+```
+
+---
+
+## Six people, a few minutes apart
+
+sprained wrist · sore throat · cut hand
+
+back pain · **chest pain** · a rash
+
+Two bays. Ninety seconds to decide the order.
+
+---
+
+<Scene
+  scene="ed"
+  id="deck-ed"
+  alt="An emergency department seen from above and to one side. A triage desk stands at the left with a nurse in green scrubs and a green-topped trolley; a lit green cross and a clock hang on the back wall. Two treatment bays are cut into that wall with lit signs that turn gold when occupied. Twelve chairs fill the waiting room with patients sitting in arrival order, each holding a triage card."
+  watch="Under arrival order, more than half the people having heart attacks wait over thirty minutes, and nobody in the room looks like they are in trouble. Switch to the card and that falls below one per cent. Then leave it on the card and drag the accuracy down: category 3's wait gets shorter, not longer, while a pink patient appears with a chest pain, a category 3 card, and a wait designed for a sprained wrist."
+/>
+
+```notes
+Run arrival order first and let the last number in the readout sit there: 53%.
+Then switch. Then — and this is the part that matters — drag accuracy down and
+watch category 3 IMPROVE. That is the slide that teaches the lecture.
+```
+
+---
+
+{/* _class: centered */}
+
+## Every other priority rule gets resisted.
+
+## Why does this one get consent?
+
+```notes
+Because the outcomes are not commensurable. The wrist gives up thirty minutes
+of discomfort; the chest pain keeps their life. Nobody is tempted to compare
+them.
+
+General rule, slightly cynical: resistance depends less on the logic of the
+rule than on how unlike each other the consequences are.
+```
+
+---
+
+## Five classes, and a target each
+
+| Cat | Meaning | Target |
+| --- | --- | --- |
+| 1 | immediately life-threatening | immediate |
+| 2 | imminently life-threatening | 10 min |
+| 3 | potentially life-threatening | 30 min |
+| 4 | potentially serious | 60 min |
+| 5 | less urgent | 120 min |
+
+---
+
+{/* _class: quote */}
+
+The target is what turns a wait
+
+into a **failure**.
+
+---
+
+## Where it came from
+
+*trier* — to sort
+
+**Larrey**, Napoleon's surgeon: treat by severity of wound, disregard rank.
+
+```notes
+The rule triage replaced was not first-come-first-served. It was sort by social
+position. The innovation was "stop using something else", and it had to be
+imposed against the interests of the people it demoted.
+```
+
+---
+
+## And the part nobody discusses
+
+Mass-casualty tags: immediate · delayed · minor · **expectant**
+
+Sickest-first and most-lives-saved are **different rules**.
+
+In a disaster they disagree.
+
+```notes
+In a normally resourced department they mostly agree, which is why everybody
+can support triage without ever being asked which of the two they support.
+Week 12 is where that finally has to be answered.
+```
+
+---
+
+## The same machine, elsewhere
+
+- **ambulance dispatch** — a category assigned over the phone, before anyone has seen the patient
+- **P1 to P4** — the same scale with servers instead of patients
+- **maintenance contracts** — line down is a category 1
+- **safety queues** — classified on arrival, at a scale nobody can audit
+
+---
+
+{/* _class: impact */}
+
+# Priya's half
+
+# The category is not given. It is produced.
+
+---
+
+## Three documented failure modes
+
+**Atypical presentation** sorted down — women having heart attacks is the canonical study
+
+**Pain under-read** in people accustomed to not being believed
+
+**The bottom category is unbounded** — last week's trolley, worse consequences
+
+---
+
+## And a fourth, belonging to the institution
+
+The classifier is an **input to the performance report**.
+
+A borderline case carded down is a borderline case that cannot breach.
+
+```notes
+Nobody has to be dishonest for this to bend. There is always a defensible
+clinical story for either choice.
+```
+
+---
+
+## 15% wrong. How much does it degrade?
+
+Category 1 mean: **6 → 9 minutes**
+
+Category 3 mean: **98 → 91 minutes** *(better!)*
+
+Category 1 waiting over 30 min: **0.7% → 3.0%**
+
+```notes
+A monthly report with the first two numbers in it would not raise an eyebrow
+anywhere. The third is four times as many people having heart attacks in the
+waiting room.
+```
+
+---
+
+{/* _class: centered */}
+
+## The cost of a bad classifier
+
+## does not spread
+
+---
+
+## Two things to take with you
+
+**"92% accurate" tells you nothing.** Ask for the confusion matrix. Ask which
+cell is the one that kills.
+
+**A cleverer rule or a better measurement?** A department choosing between them
+is usually looking at a false choice.
+
+---
+
+{/* _class: impact */}
+
+# Next: sorting by what you can pay
+
+```notes
+End on the disagreement unresolved, deliberately. Adaeze wins the comparison
+down the column; Priya wins it across the rows.
+```

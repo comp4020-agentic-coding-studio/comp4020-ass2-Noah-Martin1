@@ -11,6 +11,7 @@ system: Express checkout lane
 buildsOn: 5
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-06/
 related:
   - sessions/week-06
   - assessments/02-ordering-rule
@@ -68,9 +69,19 @@ arriving, and the till below is the same rule running all morning.
   Shortest job first minimises mean waiting time.
 </Punch>
 
-The proof is two lines. If a longer job is ever ahead of a shorter one, swapping
-them reduces total waiting — the short job saves a lot, the long job loses only
-a little. So the optimal order contains no such pair. So it is sorted by length.
+The proof is two lines, and it is worth being able to reproduce it, because it
+is the only unarguable thing in Act II.
+
+Take any order at all. If a longer job sits anywhere ahead of a shorter one,
+swap that adjacent pair. The short job now finishes earlier by the length of the
+long one; the long job finishes later by the length of the short one. Since the
+long one is longer, the saving beats the loss, and the total waiting has gone
+*down*. So an optimal order contains no adjacent out-of-order pair — which means
+it is sorted, shortest first.
+
+That is an **exchange argument**, and it is the standard tool for this whole
+family of results. Notice what it does not need: no probability, no assumption
+about arrivals, no simulation. It is a statement about arithmetic.
 
 This is the closest thing to a free lunch in the course, and it explains a
 supermarket feature you have walked past ten thousand times. The express lane is
@@ -113,29 +124,119 @@ an hour and three quarters under arrival order. Under smallest-first it was
 home, no alarm fired anywhere in the system. That shopper simply never had the
 smallest basket in the line.
 
-</Beat>
-
-<Beat n={4} label="The fix, and what the fix costs">
-
-Every real scheduler that uses SJF also uses something else: **ageing**, where a
-job's priority rises the longer it has waited. Or a reserved lane for long jobs.
-Or a hard cap.
-
-Each of those gives back some of the average you gained. How much mean wait to
-return in exchange for a bounded worst case is a genuine design dial, there is
-no correct setting for it, and you will plot that exact trade-off curve for
-yourself in this week's lab.
+Notice the shape of that failure, because it is the shape of most of them.
+Nothing broke. Every individual decision the till made was locally correct and
+defensible, the average improved, the throughput was unchanged, and the harm
+landed entirely in a percentile nobody was looking at.
 
 </Beat>
 
-<Beat n={5} label="The prerequisite nobody mentions">
+<Beat n={4} label="The whole family, and where it was worked out">
+
+Ordering by length is one member of a family, and the place the family was
+worked out properly is not a supermarket. It is the inside of an operating
+system, where the queue is processes, the server is a CPU core, and the
+scheduler makes this decision thousands of times a second with nobody to
+complain to.
+
+Five rules, in the order they were invented, each fixing the previous one's
+worst failure:
+
+**First come, first served.** Last week. Simple, fair, and vulnerable to one
+long job at the front stalling everything behind it. Operating-system people
+call that **convoy effect**, which is a good name for something you have also
+experienced behind a trolley.
+
+**Shortest job first.** This week. Best possible mean. Starves the long jobs.
+
+**Shortest remaining processing time.** SJF, but allowed to interrupt: if a
+shorter job arrives while a longer one is running, switch. It is provably the
+best possible policy for mean response time, and it makes the starvation
+*worse*, because now the long job can be pushed back off the server it had
+already reached. There is no free improvement here — the better the average, the
+harder the tail.
+
+**Round robin.** Give everybody a slice in turn. Nobody is optimal, nobody
+starves, and the mean is worse than SJF by a wide margin. In the limit of tiny
+slices it becomes **processor sharing**, where every job progresses at a rate
+proportional to how many are present — which is, incidentally, roughly what a
+motorway does, and roughly what a broadband link does, and exactly why both feel
+fair and slow.
+
+**Multi-level feedback queues.** The clever one, and the reason your laptop
+feels responsive. New jobs start in a high-priority queue with a short slice. A
+job that uses its whole slice gets demoted to a lower-priority queue with a
+longer one. A job that gives the CPU back early stays high.
+
+<Predict question="What is that last rule actually doing?">
+
+It is running shortest-job-first **without being told the job lengths**.
+
+It does not ask. It *observes*: a job that keeps finishing its slice early is
+behaving like a short job, so it keeps its priority. A job that burns every
+slice it is given is behaving like a long job, and gets demoted.
+
+Which is a completely general design move, and the most useful thing in this
+lecture. <Key>When you need information the queue does not have, you can
+sometimes infer it from behaviour instead of demanding it.</Key> Behaviour
+cannot be misreported as easily as a form can.
+
+And the same scheduler solves the starvation, with the second general move:
+periodically it promotes everything back to the top. That is **ageing**, and it
+is the next beat.
+
+</Predict>
+
+</Beat>
+
+<Beat n={5} label="The fix, and what the fix costs">
+
+Every real system that uses SJF also uses something else, because unbounded
+starvation is not shippable.
+
+**Ageing.** A job's priority rises the longer it has waited, so the full trolley
+eventually beats the basket. This is what an OS scheduler does, what a hospital
+does informally to its lowest triage category, and what any support-ticket
+system with an "escalates after 5 days" rule is doing.
+
+**A reserved lane.** Un-pool a server and dedicate it to long jobs. This is
+week 5's pooling gain, spent deliberately. The express lane is this trick
+pointed the other way.
+
+**A hard cap.** Nobody waits more than N. Simple, auditable, and it converts an
+unbounded tail into a bounded one at a known price.
+
+Each gives back some of the average you gained, and the trade is a genuine dial
+rather than a bug to be fixed. Turn ageing up and you approach FCFS: fair,
+bounded, slower on average. Turn it down and you approach pure SJF: fast on
+average, with somebody in the corner who will be there at closing time.
+
+<Key>There is no correct setting, only a defensible one</Key> — and "defensible"
+means you can say which percentile you chose to protect and what the mean cost
+you paid for it. You will plot that exact curve for yourself in this week's lab,
+and the shape of it is the answer to the assignment's hardest question.
+
+</Beat>
+
+<Beat n={6} label="The prerequisite nobody mentions">
 
 SJF needs something FCFS never asks for: **you must know how long each job will
 take, before you run it.**
 
-Sometimes you can. A supermarket approximates it with basket size, which is
-observable and roughly honest. A CPU cannot, so real operating systems predict
-from recent history and are frequently wrong.
+That requirement is doing far more work than it looks, and there are only three
+ways to satisfy it.
+
+**Observe a proxy.** Basket size. Page count. File size. Number of line items on
+the form. Cheap, roughly honest, and the reason the express lane is defined by
+*items* rather than by *minutes* — items are countable from two metres away by
+a person who is not paying attention, which is a real engineering constraint.
+
+**Predict from history.** This job looks like jobs that took four minutes.
+Operating systems do this; so does every call centre that routes on the caller's
+account type. It works while the future resembles the past, and it fails
+silently the moment somebody new arrives.
+
+**Ask.** And here the trouble starts.
 
 <Predict question="What happens when the estimate is self-reported?">
 
@@ -146,15 +247,32 @@ as short. The rule has created a strategic environment where none existed, and
 the people best at exploiting it are rarely the people the system most wanted to
 help.
 
+The supermarket's version is beautifully mundane: the *ten items or fewer* sign
+is gamed by splitting a shop into two baskets and a partner, and by the
+long-running argument about whether six yoghurts are one item. That is a
+priority system being negotiated in a car park.
+
 This is week 11's subject, and it is the reason a rule that is optimal on paper
 can be a disaster in a building. Hold the thought: a rule that is optimal when
 obeyed is often worse than a rule that is merely decent when gamed.
 
 </Predict>
 
+One more thing about estimates, which is the bridge to next week. A proxy is not
+the truth — basket size is *correlated* with service time, not equal to it, and
+a trolley of fifteen awkward items can beat a basket of nine. So every real SJF
+system is running on a **classifier**, and its performance is bounded by how
+good that classifier is.
+
+<Punch note="Next week runs exactly this experiment in a place where a mis-sorted job is a person having a heart attack.">
+  Every rule that beats first-come-first-served does so by using information
+  first-come-first-served ignores — which means every one of them can be wrong
+  about that information.
+</Punch>
+
 </Beat>
 
-<Beat n={6} label="Where this goes">
+<Beat n={7} label="Where this goes">
 
 You now have two rules — arrival order and job length — and a clear statement of
 what each buys and charges. Your assignment is due at the end of this week, and

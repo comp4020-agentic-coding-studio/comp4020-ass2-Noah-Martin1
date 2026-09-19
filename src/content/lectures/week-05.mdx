@@ -11,6 +11,7 @@ system: Bank branch
 buildsOn: 4
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-05/
 related:
   - sessions/week-05
   - assessments/02-ordering-rule
@@ -103,7 +104,108 @@ eating a salary.
 
 </Beat>
 
-<Beat n={4} label="The fairness claim, stated properly">
+<Beat n={4} label="Why the gain shrinks as the system grows">
+
+Before you go and pool everything you own, the size effect, because it decides
+whether this is a good idea or a rounding error.
+
+Think of the branch as needing two separate things. It needs enough tellers to
+do the *work* — that quantity is fixed by arithmetic, it is arrivals times
+service time, and no arrangement can change it. And on top of that it needs
+some **safety capacity**: spare teller-time to absorb the moments when several
+people happen to arrive together.
+
+The useful result is about how much safety you need. A standard rule of thumb in
+this field sizes a counter as *work, plus something proportional to the square
+root of the work*. Which means the safety margin grows much more slowly than the
+system does.
+
+Put numbers on it. A branch with 4 tellers' worth of work needs roughly 2
+tellers of safety on top — a 50% overhead. A branch with 100 tellers' worth
+needs roughly 10 — a 10% overhead. <Key>Big pooled systems are intrinsically
+more efficient than small ones, and the gain is not linear.</Key>
+
+Now read that backwards, because that is where it bites.
+
+<Predict question="A bank has 40 tellers across 4 branches. Head office proposes one giant pooled call centre instead. How much is there to gain?">
+
+Much less than the branch above suggested, and possibly nothing.
+
+The four-into-one gain was enormous because four is a *small* number: each
+separate line was a tiny system with a crushing safety overhead, and pooling
+them was the difference between four bad systems and one decent one.
+
+Ten tellers is already a reasonably large system. Pooling four of those buys the
+difference between 10% and 3% safety overhead — real, worth having, and nowhere
+near the factor of three you get from merging four single-server lines.
+
+<Key>Pooling pays most exactly where the pools are smallest.</Key> Which means
+the question is never "should we pool" but "how small are the pieces we
+currently have" — and the answer for most organisations is that the damage is
+concentrated in the places where one person is the whole queue.
+
+</Predict>
+
+</Beat>
+
+<Beat n={5} label="When pooling is the wrong answer">
+
+So why does your supermarket still have one line per till?
+
+Because a pooled queue is not free, and four of its costs are real.
+
+**It can make the service itself slower.** Pooling usually means generalists.
+If a specialist teller handles a mortgage in twelve minutes and a generalist
+takes twenty, you have improved the queueing term and damaged the service term
+— and week 2's equation says T appears twice. The gain has to beat that.
+
+**It can cost travel.** Pooling makes sense when any server can reach any
+customer instantly. A supermarket single line means a trolley crossing the shop
+front; a pooled hospital ward means nurses walking further; a warehouse without
+zones means longer picks. The handoff is not free and is often the whole
+budget.
+
+**It couples things that were independent.** One line into four tellers means
+one stuck transaction can now stall everybody. Four lines contain their own
+disasters. This is the same argument a systems engineer makes for bulkheads, and
+it is why pooling is a *reliability* decision as well as an efficiency one.
+
+**It hides the deliberate partitions.** The express lane is un-pooling *on
+purpose*, and next week is about why that is often right. Skill-based routing in
+a call centre is partial pooling. A hospital's resuscitation bay is capacity
+deliberately withheld from the pool so that it is free when it is needed. Each
+of those is somebody choosing to pay the pooling gain for something they want
+more.
+
+<Punch note="Every one of those four costs is a service-side cost, and the pooling gain is a queueing-side gain. You are trading between the two halves of week 2's equation.">
+  Pooling is not a free lunch. It is a good trade that is usually worth making.
+</Punch>
+
+</Beat>
+
+<Beat n={6} label="Why people hate parallel queues anyway">
+
+There is one more reason single queues won, and it is not efficiency.
+
+In four lines you can be overtaken. And here is the arithmetic that makes it
+feel so much worse than it is: with four lanes, the chance that yours is the
+fastest is one in four. Which means <Key>three-quarters of the time, somebody
+who arrived after you will finish before you</Key> — and you will watch them do
+it.
+
+The single line removes that experience entirely, and removes it *completely*
+rather than on average: not one person who arrived after you can leave before
+you. That is worth more to the people in the line than the thirteen minutes,
+and it is measurable in complaint volumes long before it is measurable in waits.
+
+Which is week 4's last beat arriving in a bank: perceived waiting and measured
+waiting are different quantities, and the single queue happens to improve both.
+It is the rare case where the fair thing and the fast thing are the same thing,
+and you should enjoy it, because it does not happen again in this course.
+
+</Beat>
+
+<Beat n={7} label="The fairness claim, stated properly">
 
 <Punch note="Transparent, auditable by anyone standing in it, and impossible to game except by arriving earlier.">
   Order of service equals order of arrival, and nothing else is considered.
@@ -113,6 +215,22 @@ That is a genuine commitment, and for a public system dealing with strangers
 the properties are not small. <Key>It requires no information about the people
 in it, which means it cannot discriminate on information it does not have.</Key>
 
+It has three more properties worth naming, because you will want them in your
+assignment:
+
+**It is verifiable from inside the queue.** Anyone standing in it can audit it,
+in real time, with no access to anything. Almost no other rule in this course
+has that property — you cannot see somebody's urgency, their job length or what
+they paid.
+
+**It is strategy-proof, almost.** There is exactly one way to do better under
+FCFS, and it is to arrive earlier. Compare that with every rule in weeks 6
+through 8, each of which creates a reason to misrepresent something.
+
+**It requires no justification at the point of service.** Nobody at the counter
+has to defend the order to the person in front of them, which is worth more in
+an angry room than any amount of throughput.
+
 Notice what just happened, though. The single line is faster *and* it is the
 one that keeps the promise: in four lines the order you leave in is decided by
 which rope you guessed at. FCFS is not what four separate queues implement. It
@@ -120,7 +238,7 @@ is what one queue implements.
 
 </Beat>
 
-<Beat n={5} label="What it costs">
+<Beat n={8} label="What it costs">
 
 Three things, and Act II is going to spend a week on each of the first two.
 
@@ -159,12 +277,24 @@ condition is almost never checked.
 
 </Predict>
 
+There is a sharper way to put it that will be useful to you all semester.
+Arrival order is not a neutral fact that the queue discovers. **It is an
+allocation that has already happened, somewhere else, before anybody reached the
+door** — decided by who lives near the branch, who has a car, who knew it opened
+at nine, who could be free at nine. FCFS then faithfully preserves that
+allocation and calls the preservation fairness.
+
 </Beat>
 
-<Beat n={6} label="Why defaults matter most">
+<Beat n={9} label="Why defaults matter most">
 
 FCFS is the default. Defaults are the most powerful design decisions there are,
 because they get chosen by nobody deciding.
+
+And notice how much work the last two weeks have already done to it. It is not
+one rule — it is a rule *plus a queue geometry*, and the geometry turned out to
+matter more than the rule. Four lines and one line make the same promise and
+deliver waits that differ by a factor of three.
 
 For the next four weeks we replace it — with job length, with need, with price,
 and finally with not queueing at all. Each replacement buys something real. Each

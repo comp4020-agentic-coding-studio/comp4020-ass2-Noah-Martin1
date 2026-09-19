@@ -1,0 +1,171 @@
+---
+title: "Week 5 — First Come, First Served"
+description: Lecture 5 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# The rule you have believed
+
+# since you were four
+
+SLOP2710 · Week 5 · Act II begins
+
+---
+
+## Around 1970
+
+Banks replaced **one queue per teller** with **one queue for all tellers**.
+
+Customers hated it.
+
+It looked longer. It *was* longer.
+
+```notes
+Thirty in one line instead of six lines of five — and the thirty are the same
+thirty. They needed posters to explain it.
+```
+
+---
+
+{/* _class: centered */}
+
+## Four tellers. Same customers.
+
+## What does merging the lines buy?
+
+```notes
+Take guesses and write them up. Nearly everyone says "fairness, and a bit of
+speed". I did too, in the first draft of this lecture. Wrong by a factor of
+three.
+```
+
+---
+
+## Nineteen minutes → six
+
+And the unluckiest tenth: **43 minutes → 13**
+
+Nobody is working faster. There are still four tellers.
+
+---
+
+<Scene
+  scene="bank"
+  id="deck-bank"
+  alt="A bank branch seen from above and to one side. A counter runs across the back under a lit sign with four numbered windows and a teller behind each. The lobby is roped off with brass posts, either as four short lanes or as one switchback line, with customers standing in the ropes and whoever is at a window drawn in gold."
+  watch="In four lines, look for a pink window: that teller is free, somebody is waiting, and the dashed line shows who. The chip counts what it costs in teller-minutes an hour. Switch the rope to one line and the count goes to zero — not by luck, but because a free window and a waiting customer can no longer coexist."
+/>
+
+```notes
+Leave it in four lines and say nothing until somebody spots a pink window. Then
+switch the rope and watch the room empty.
+
+Then the counter-intuitive bit: turn the load DOWN and watch the stranding go
+UP. Thirty-seven teller-minutes an hour at seventy customers; sixty-nine at
+fifty-two. A quiet branch has more idle time to waste.
+```
+
+---
+
+{/* _class: quote */}
+
+If anyone is waiting,
+
+no window is free.
+
+That is the entire mechanism.
+
+---
+
+## But the gain shrinks with size
+
+Staffing ≈ **work + √work**
+
+- 4 tellers' work → ~2 of safety → **50% overhead**
+- 100 tellers' work → ~10 of safety → **10% overhead**
+
+```notes
+So pooling pays most where the pools are smallest. Merging four single-server
+lines is transformative. Merging four teams of ten is worth having and is not
+the same animal. Ask them where the single-server queues are in their own
+organisation — that is where the damage is.
+```
+
+---
+
+## Four reasons not to pool
+
+- generalists may be **slower** than specialists
+- pooling costs **travel**
+- it **couples** things that were independent
+- some partitions are **deliberate** (the express lane, the resus bay)
+
+---
+
+## And the real reason people hated four lines
+
+With four lanes, yours is fastest **one time in four**.
+
+So three-quarters of the time, somebody who arrived after you leaves before you.
+
+And you watch them do it.
+
+```notes
+The single line does not reduce that on average — it makes it impossible. That
+is worth more than the thirteen minutes, and it shows up in complaint volumes
+long before it shows up in waits.
+```
+
+---
+
+## The fairness claim, properly
+
+- needs **no information** about you
+- **verifiable from inside** the queue
+- **strategy-proof**, except by arriving earlier
+- needs **no justification** at the counter
+
+---
+
+{/* _class: centered */}
+
+## FCFS is not what four queues implement.
+
+## It is what one queue implements.
+
+---
+
+## What it costs
+
+**Ignores job length** → week 6
+
+**Ignores urgency** → week 7
+
+**Tests free time** → who could be here at 9am?
+
+---
+
+{/* _class: quote */}
+
+Arrival order is not a fact the queue discovers.
+
+It is an allocation that already happened, somewhere else,
+
+before anybody reached the door.
+
+---
+
+{/* _class: impact */}
+
+# Next: the free lunch
+
+# and who pays for it
+
+```notes
+Assignment 2 is due at the end of next week. Forty per cent of it is on naming
+who is worse off. Say that now, because next week's mathematics makes it very
+easy to forget that anybody is.
+```

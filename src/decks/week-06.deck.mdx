@@ -1,0 +1,184 @@
+---
+title: "Week 6 — Shortest Job First"
+description: Lecture 6 for SLOP2710, The Economics of Waiting
+---
+
+import Scene from "../components/Scene.astro";
+
+{/* _class: impact */}
+
+# A free lunch
+
+# and the person who pays for it
+
+SLOP2710 · Week 6
+
+---
+
+## Five people. One server.
+
+Transactions of **1, 2, 3, 4 and 10** minutes.
+
+You cannot make anyone faster. You cannot add staff.
+
+You can only decide the order.
+
+---
+
+{/* _class: centered */}
+
+## How much difference
+
+## can the order possibly make?
+
+```notes
+Take guesses before revealing. Most people say ten or twenty per cent.
+```
+
+---
+
+## Three times the waiting
+
+**Shortest first** — 20 person-minutes
+
+**Longest first** — 60 person-minutes
+
+Same twenty minutes of work. Server finishes at the same moment either way.
+
+---
+
+<Scene
+  scene="checkout"
+  id="deck-checkout"
+  alt="A supermarket checkout seen from above and to one side, with one till open. A conveyor carries shopping toward a screen and a bagging shelf with an operator behind it under a lit lane sign. Shoppers queue toward the viewer, each beside a trolley loaded to the size of their shop, one piled above the handle. Whoever the rule has passed over stands in pink with a tally above their head."
+  watch="The trolleys are the job lengths, visible before service starts — the one thing this rule needs and arrival order never asks for. In arrival order nobody has been passed and nobody can be. Switch to smallest basket first: the mean halves, the line shortens, and a pink shopper appears with a counter over their head. It is always the full trolley."
+/>
+
+```notes
+Run arrival order for twenty seconds. Switch to smallest-first. Wait for
+somebody to point at the pink shopper before you say anything.
+
+Then push the load to twenty-two an hour and let the counter over their head
+keep climbing while you talk.
+```
+
+---
+
+## The proof is two lines
+
+Longer job ahead of a shorter one? **Swap them.**
+
+Short job saves a lot. Long job loses a little. Total falls.
+
+So the optimal order has no such pair. So it is sorted.
+
+```notes
+An exchange argument. No probability, no simulation, no assumptions about
+arrivals. It is the only unarguable thing in Act II.
+```
+
+---
+
+{/* _class: quote */}
+
+The express lane is not a courtesy
+
+to people buying milk.
+
+---
+
+## Find the person paying
+
+Mean visit **17 → 8.5 minutes**
+
+Full trolley **26 → 60 minutes**
+
+Longest wait in a simulated month: **1h45 → 13h40**
+
+```notes
+Nothing broke. No alarm fired. Every decision the till made was locally correct
+and defensible. The harm landed entirely in a percentile nobody was watching.
+```
+
+---
+
+{/* _class: centered */}
+
+## Not delayed.
+
+## **Starved.**
+
+---
+
+## The family, as worked out in an OS
+
+| Rule | Failure it fixes |
+| --- | --- |
+| FCFS | — (convoy effect) |
+| SJF | long job at the front |
+| SRPT | SJF, preemptive. Best mean, worst tail |
+| Round robin | starvation. Mean much worse |
+| Multi-level feedback | needing to know the length |
+
+---
+
+{/* _class: centered */}
+
+## What is that last one doing?
+
+```notes
+Let them work it out. It is running shortest-job-first without being told the
+job lengths — a job that keeps finishing its slice early is *behaving* like a
+short job. It infers from behaviour instead of demanding a declaration. That is
+the most transferable idea in the lecture.
+```
+
+---
+
+## Two general moves
+
+**Infer, don't ask.** Behaviour cannot be misreported as easily as a form.
+
+**Age the queue.** Priority rises with waiting. Bounds the tail, costs the mean.
+
+---
+
+## The dial
+
+Ageing up → **FCFS**: fair, bounded, slower
+
+Ageing down → **SJF**: fast, with somebody there at closing time
+
+No correct setting. Only a defensible one.
+
+```notes
+Defensible means: you can say which percentile you chose to protect and what
+the mean cost you paid. They plot this curve in the lab.
+```
+
+---
+
+## The prerequisite nobody mentions
+
+You must know the job length **before you run it**.
+
+- **observe a proxy** — basket size, page count
+- **predict from history** — fails silently on anyone new
+- **ask** — and now you have built an incentive
+
+```notes
+Ten items or fewer, gamed by a split basket and a partner. Six yoghurts: one
+item or six? That is a priority system being negotiated in a car park.
+```
+
+---
+
+{/* _class: impact */}
+
+# Next: the same rule
+
+# where a mis-sort is a heart attack
+
+```notes
+Assignment 2 due Friday. The forty per cent on "who pays" is not decoration.
+```

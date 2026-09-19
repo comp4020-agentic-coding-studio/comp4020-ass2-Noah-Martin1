@@ -12,6 +12,7 @@ buildsOn: 6
 teachers:
   - adaeze-nkemelu
   - priya-raghunathan
+slides: /decks/week-07/
 related:
   - sessions/week-07
 ---
@@ -65,27 +66,115 @@ the queue is merely waiting, priority feels like queue-jumping and gets fought.
 
 <Beat n={2} label="What triage actually is">
 
-A priority queue with a fixed number of classes. The Australasian Triage Scale
-uses five, from *immediately life-threatening* to *less urgent*, each with a
-target time to treatment. Within a class, arrival order. Between classes,
-strict priority.
+A priority queue with a fixed number of classes. Within a class, arrival order.
+Between classes, strict priority.
 
-Two properties do the work.
+The Australasian Triage Scale uses five, and the thing that makes it a real
+instrument rather than a vibe is that each category comes with a **target time
+to treatment**:
+
+| Category | Meaning | Target |
+| --- | --- | --- |
+| 1 | Immediately life-threatening | Immediate |
+| 2 | Imminently life-threatening | 10 minutes |
+| 3 | Potentially life-threatening | 30 minutes |
+| 4 | Potentially serious | 60 minutes |
+| 5 | Less urgent | 120 minutes |
+
+Other countries run near-identical instruments under different names — the
+Manchester Triage System, the Emergency Severity Index — and the convergence is
+itself informative. Several health systems, working separately, arrived at
+roughly five classes with roughly these targets.
+
+The target is what turns a wait into a **failure**. A category 2 patient at
+twelve minutes is a department having a bad afternoon. A category 1 patient at
+twelve minutes is the thing the entire apparatus exists to prevent. Notice that
+this is a completely different way of reporting a queue from anything in Act I:
+not a mean, not a percentile, but <Key>a rate of breaching a promise that was
+made per person</Key>.
+
+The scene above collapses five categories into three, so that the room stays
+readable. Everything that follows is true of five.
+
+Two properties do the real work.
 
 **It is preemptive at the front.** A category 1 arriving at minute 59 of your
-wait goes ahead of you, and there is no cap on how often that can happen.
+wait goes ahead of you, and there is no cap on how often that can happen. Your
+wait is not a queue position; it is a queue position that can be invalidated at
+any moment by an ambulance.
 
 **It sorts on information FCFS throws away.** Arrival order is a fact about the
-queue. Urgency is a fact about the person.
-
-<Punch note="The whole question is whether you can get that information cheaply, accurately, and without creating an incentive to fake it.">
-  Every rule that beats first-come-first-served does so by using information
-  first-come-first-served ignores.
-</Punch>
+queue. Urgency is a fact about the person. That is the whole of the gain, and it
+is week 6's lesson again: the rules that beat first-come-first-served all do it
+by using information first-come-first-served ignores.
 
 </Beat>
 
-<Beat n={3} label="Priya's half of the lecture">
+<Beat n={3} label="Where the idea came from">
+
+Worth two minutes, because the origin explains the shape.
+
+The word is French — *trier*, to sort — and the practice is usually traced to
+**Dominique Jean Larrey**, Napoleon's surgeon-in-chief, who organised battlefield
+care around a principle that was genuinely radical at the time: treat by
+severity of wound, and disregard rank.
+
+Sit with that for a second. The rule triage replaced was not first-come-first-
+served. It was *sort by social position*. The innovation was not "use need" so
+much as "**stop using something else**", and it had to be imposed by an
+institution against the interests of the people it demoted.
+
+The modern mass-casualty version, START and its relatives, keeps the structure
+and adds the part nobody likes to discuss. Four tags: immediate, delayed, minor
+— and a fourth for the patients who will not survive with the resources
+available, who are therefore not treated first even though they are the most
+ill.
+
+<Punch note="Which is the clearest statement in the whole course that a priority rule encodes an objective, and that different objectives produce opposite orderings from identical facts.">
+  Sickest-first and most-lives-saved are different rules, and in a disaster
+  they disagree.
+</Punch>
+
+In a normally resourced department they mostly agree, which is why the
+distinction stays invisible and why everybody can support triage without ever
+being asked which of the two they support. Week 12 is the lecture where that
+question finally has to be answered out loud.
+
+</Beat>
+
+<Beat n={4} label="The same rule, outside a hospital">
+
+Once you can see the pattern — fixed classes, a target per class, strict
+priority between, arrival order within — you find it running in places with no
+clinical connection at all.
+
+**Ambulance dispatch.** A call handler, working from a script, assigns a
+category before anybody has seen the patient, and the category determines the
+response-time standard the service is measured against. It is triage performed
+over a phone line by somebody who cannot see the patient, on information from a
+caller who is frightened. Everything in Priya's half of this lecture applies to
+it twice over.
+
+**Incident severity.** Every operations team on earth runs P1 to P4 with a
+response target attached to each, which is the Australasian Triage Scale with
+servers instead of patients. The failure modes are identical, including the
+famous one: everything gets filed as a P1 by whoever raised it.
+
+**Manufacturing and repair.** A production line down is a category 1. A
+degraded machine is a category 3. The targets are in the maintenance contract.
+
+**Content moderation and safety queues.** Reports are classified on arrival and
+routed by severity, by a classifier that is often literally a model, at a scale
+where nobody can audit an individual decision.
+
+<Key>The medical version is the one with the best-developed ethics and the
+worst-tolerated failures</Key>, which is why it is worth studying even if you
+will never work in a hospital. Everybody else is running the same machine with
+less scrutiny.
+
+</Beat>
+
+<Beat n={5} label="Priya's half of the lecture">
 
 Everything above treats the category as given.
 
@@ -119,6 +208,18 @@ rules are largely informal.
   label="Week 6 — the same rule, the same person paying, a different building."
 />
 
+There is a fourth, and it belongs to the institution rather than the nurse.
+**The classifier is an input to the performance report.** When a department is
+measured on the share of category 2 patients seen within ten minutes, the
+category becomes something the department has an interest in. Nobody has to be
+dishonest for this to bend: a borderline case carded down is a borderline case
+that cannot breach, and there is always a defensible clinical story for either
+choice.
+
+</Beat>
+
+<Beat n={6} label="What a bad classifier actually costs">
+
 <Predict question="Your classifier is 15% wrong. How much does the queue degrade?">
 
 Nothing like 15% — and in the wrong places entirely.
@@ -144,9 +245,24 @@ error rate in this week's lab, and then apply it.
 
 </Predict>
 
+Two consequences follow, and they generalise past hospitals.
+
+**Errors in one direction are not errors in the other.** Carding a sprained
+wrist as a category 2 costs somebody thirty minutes. Carding a heart attack as a
+category 3 can cost a life. A classifier reported as "92% accurate" has told you
+almost nothing, because that single number has averaged over two failures that
+are not remotely comparable. Ask for the confusion matrix, always, and ask which
+cell is the one that kills.
+
+**A sorting rule is only ever as good as the thing it sorts on** — which means
+that every time you improve the *rule*, you should ask whether the same effort
+spent on the *measurement* would buy more. A department choosing between a
+cleverer queue discipline and a second triage nurse is usually looking at a
+false choice in which the second option wins.
+
 </Beat>
 
-<Beat n={4} label="The disagreement, stated plainly">
+<Beat n={7} label="The disagreement, stated plainly">
 
 Adaeze's framing is that the ordering rule is where the distributive work
 happens.

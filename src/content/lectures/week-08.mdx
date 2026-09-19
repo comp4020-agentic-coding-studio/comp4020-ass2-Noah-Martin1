@@ -11,6 +11,7 @@ system: Theme park priority pass
 buildsOn: 4
 teachers:
   - adaeze-nkemelu
+slides: /decks/week-08/
 related:
   - sessions/week-08
   - assessments/03-simulation-report
@@ -72,6 +73,17 @@ falls and the revenue funds transit.
 
 </Predict>
 
+Notice what the two currencies have in common and where they part. Both are
+auctions. Both allocate a scarce thing to whoever bids most. The difference is
+entirely in **what happens to the bid**: a queue burns it, a price transfers it.
+Economists call the burned part **deadweight loss**, and a queue is one of the
+purest generators of it in ordinary life — an allocation mechanism whose entire
+operating cost is destroyed human time.
+
+That is the strongest argument for pricing, and you should be able to state it
+in one sentence before you attack it: <Key>a queue and a price sort the same
+people in the same order, and only one of them sets the money on fire.</Key>
+
 </Beat>
 
 <Beat n={2} label="Three objections, hardest last">
@@ -80,18 +92,29 @@ falls and the revenue funds transit.
 ability*. Forty dollars from someone with forty thousand is not the same signal
 as forty dollars from someone with four hundred, so the auction is not measuring
 how much people want the ride. It measures what they have. Time, for all its
-faults, is distributed far more equally than money.
+faults, is distributed far more equally than money — everybody gets
+twenty-four hours, and nobody can buy a twenty-fifth.
+
+That last clause is the strongest version of the argument and it is worth
+stress-testing, because it is not quite true. People *can* buy time: childcare,
+a taxi instead of a bus, somebody else to stand in the line. The correct
+statement is weaker and still decisive — **time is distributed far more equally
+than money, and converting time into money is far easier in one direction than
+the other.**
 
 **It creates a reason not to fix the queue.** This is the one that should worry
 you most. A park's revenue from priority passes depends on the standard queue
 being unpleasant. Once a system earns money from congestion it has acquired an
 interest in preserving it — and this applies to airport security, motorway
-lanes and customer support alike.
+lanes and customer support alike. Surge pricing on a fast pass is that interest
+written down as a pricing rule.
 
 **It reclassifies the good.** Some queues are for things we have decided should
 not be allocated by price at all: organ transplants, emergency care, a place at
 a public school. Introducing payment does not just reallocate them, it changes
-what kind of thing they are. That is week 12.
+what kind of thing they are. A blood donation system that pays donors is not the
+same institution as one that does not, even if the litres match. That is
+week 12.
 
 </Beat>
 
@@ -138,9 +161,58 @@ park instead of a hospital.
   watch="Start at nought per cent, where the two lines are one line. Now drag the share upwards. The fourth number in the readout — the mean wait across everybody — does not move at any setting, because it cannot. Watch instead what happens to the pink party at the front of standby: the count beside them is the number of pass-holders who have walked past and boarded since they joined, and it climbs faster at every step of the slider. Past about half, look at the paid lane too. It is a queue now, and nobody in it is getting much for their money."
 />
 
+The conservation law is worth one more sentence, because it is the single most
+transferable fact in Act II. **Any work-conserving reordering of a queue leaves
+the mean wait exactly where it was.** Week 6's shortest-job-first appears to
+break this and does not — it lowers the mean *per customer* only because it
+front-loads the short jobs, and the total person-minutes of waiting is what
+falls. Priority by payment does not even do that: rich and poor jobs are the
+same length. It is a pure transfer, and the fact that it is *pure* is precisely
+why no efficiency argument can defend it once the lane shares the servers.
+
 </Beat>
 
-<Beat n={4} label="The decay nobody advertises">
+<Beat n={4} label="Where this has actually been done, and what happened">
+
+Theme parks are the easy case because nobody has to ride. Roads are the hard
+case, and the record is better than most people assume.
+
+**Singapore, 1975.** The Area Licensing Scheme: a paper licence to enter the
+central district in the morning peak, checked by people standing at the
+roadside. Electronic Road Pricing replaced it in 1998, with gantries and
+variable rates by time of day and level of congestion. Fifty years of continuous
+operation, which makes it the longest-running natural experiment available.
+
+**London, February 2003.** A flat daily charge to drive into the centre.
+Politically survivable because the traffic effect was immediate and visible, and
+because the revenue was hypothecated to buses.
+
+**Stockholm, 2006.** The most instructive of the three, because of the order
+events happened in. A **trial** ran from January to July. A **referendum**
+followed in September. The charge was made permanent the year after — and the
+reason it passed is that support for it was substantially higher *after* people
+had lived with it than before. Asked in the abstract, a charge to drive is a
+tax. Asked after a summer of measurably shorter journeys, it is a different
+question.
+
+**New York, January 2025.** The first such scheme in the United States, after
+roughly two decades of proposals.
+
+Two lessons come out of that list, and neither is "pricing works".
+
+<Punch note="Singapore, London and Stockholm all recycled the money visibly into the alternative to driving. The schemes that fail are the ones where the revenue disappears into a general fund.">
+  What makes a price acceptable is not the price. It is where the money goes.
+</Punch>
+
+And the second: **experience moves opinion in one direction.** The abstract
+version of a fast lane is universally disliked; the lived version is frequently
+tolerated. That is an uncomfortable fact for anyone designing one, because it
+means the honest way to find out is to run it, and running it is the part you
+cannot take back.
+
+</Beat>
+
+<Beat n={5} label="The decay nobody advertises">
 
 Push the slider past 50%.
 
@@ -150,9 +222,68 @@ and it costs the same.
 At high uptake you have a pure transfer from customers to operator with almost
 no change in service — everybody has paid, and nobody is faster.
 
+This has a name in the wild — **priority inflation** — and once you look for it
+you will find it everywhere that a fast lane has been a commercial success.
+Airport expedited screening works beautifully until enough people enrol.
+Priority boarding is a queue of its own on most flights now. A support tier
+labelled "premium" stops meaning anything the moment it is the majority tier.
+
+<Key>The value of a fast lane is not a property of the lane. It is a property of
+how few people are in it</Key> — which means an operator selling access to it
+has an incentive that is in direct conflict with the product they are selling,
+and the conflict only resolves in one direction.
+
 Find that point for a system you use. It is the number the operator most wants
 to know and least wants published, and finding it is a legitimate basis for
 your simulation report.
+
+</Beat>
+
+<Beat n={6} label="A checklist for the next one you meet">
+
+You will be in the room for one of these arguments within five years of leaving
+here. Four questions, in order, and they are the entire lecture.
+
+**1. Is the fast lane using spare capacity or shared capacity?** If spare, most
+objections evaporate. If shared, every skip is somebody's delay and you should
+say so out loud.
+
+**2. Who is in the slow lane?** Week 4's question. If the standard queue is
+disproportionately people who could not have paid, the scheme is a transfer from
+them, and the fact that they "chose" the free option is not a defence.
+
+**3. Where does the revenue go?** Into capacity that shortens the queue for
+everybody, or into margin that depends on the queue staying long? This is the
+single best predictor of whether a scheme survives contact with the public.
+
+**4. What is the uptake at which it stops working, and who is watching it?**
+
+<Predict question="A hospital proposes paid priority for elective surgery, using the same operating theatres. Run the checklist.">
+
+It fails at question one and never recovers.
+
+Shared capacity, so every private slot is an NHS slot that did not happen, and
+the mean wait across everybody is fixed by the conservation law — the total is
+untouched and the distribution moves toward whoever paid.
+
+Question two makes it worse: the people in the slow lane are, by construction,
+the ones who could not pay. Question three is where it becomes interesting
+rather than simply objectionable — a scheme whose revenue demonstrably funds
+additional theatre capacity is a different proposal, and worth arguing about on
+its merits.
+
+And question four is the one that gets skipped: at what uptake does the paid
+list become its own waiting list? Nobody proposing these publishes that number,
+because nobody has computed it.
+
+<Key>Notice that you did not need an opinion about healthcare to get this far.
+You needed four questions and a conservation law.</Key>
+
+</Predict>
+
+</Beat>
+
+<Beat n={7} label="Where this goes">
 
 Next week: the alternative nobody in this argument ever mentions, which is not
 having the queue at all.

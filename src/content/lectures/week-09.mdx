@@ -11,6 +11,7 @@ system: Restaurant reservation book
 buildsOn: 8
 teachers:
   - priya-raghunathan
+slides: /decks/week-09/
 related:
   - sessions/week-09
   - assessments/03-simulation-report
@@ -85,9 +86,114 @@ people who cannot join it.
 allocation by willingness to commit money in advance. Every argument from last
 week applies unchanged.
 
+Notice that all three keep the same *ordering rule* — arrival order — and change
+only **where you stand while it is applied**. That is why this week sits at the
+end of Act II rather than being a sixth rule. It is not a new answer to *who
+goes first*. It is a new answer to *where the queue is*, and it turns out that
+question does at least as much distributive work as the ordering did.
+
 </Beat>
 
-<Beat n={3} label="The trap this sets for measurement">
+<Beat n={3} label="The mathematics of an appointment book">
+
+An appointment system looks like it has abolished queueing theory. It has done
+the opposite: it has moved the whole problem into a diary, where the same
+equations apply and nobody expects them.
+
+Here is the tension, and it is unavoidable. A clinic has two costs it can
+trade: **patients waiting** in the room, and the **doctor sitting idle** between
+patients. Book appointments far apart and the doctor idles. Book them close and
+the patients queue. There is no schedule that eliminates both, because
+consultation lengths vary — and the size of the unavoidable trade is set by
+exactly the coefficient of variation from week 2.
+
+This has been studied since the 1950s, and the classic result — the
+**Bailey–Welch rule** — is delightfully concrete: book *two* patients at the
+start of the session, then one per mean consultation length thereafter. The
+double booking at the top exists solely so that the doctor is never idle at the
+beginning, which is the one moment when idleness is guaranteed rather than
+probabilistic.
+
+Three consequences follow, and all three are in your own experience.
+
+**Delay accumulates monotonically through a session.** Any consultation that
+overruns pushes every subsequent appointment back, and nothing pushes them
+forward again except a cancellation. So the 9am appointment runs on time and the
+4:30 does not, always, in every clinic in the world. <Key>Your appointment time
+is not a promise about when you will be seen; it is a promise about your
+position in a sequence.</Key>
+
+**No-shows are the reason for overbooking.** Clinic no-show rates commonly run
+in the low tens of per cent, and an empty slot is capacity destroyed for ever.
+So clinics overbook, exactly as airlines do — and when the no-shows fail to
+materialise, the overbooking arrives as a queue in the waiting room. The people
+who pay for it are the ones who turned up.
+
+**The slack you removed was doing a job.** A perfectly packed diary is a system
+at ρ = 1, and week 2's table says what that means. Real schedulers protect
+themselves with catch-up slots, which look like waste on a utilisation report
+and are the only reason the afternoon ever recovers.
+
+<Predict question="A clinic is running 40 minutes late every afternoon. What is the cheapest fix?">
+
+Two empty slots in the middle of the session.
+
+Not faster consultations — the mean is not the problem, the variance is. Not
+more doctors, which is the expensive answer to a scheduling question. A
+deliberate gap partway through lets the accumulated delay drain, and it resets
+the second half of the afternoon to zero.
+
+It costs one appointment's worth of capacity and it is nearly always refused,
+because a gap in the diary is visible to management and a forty-minute delay is
+visible only to patients.
+
+Which is week 4, in a diary: <Key>the cost that is inside the organisation gets
+optimised, and the cost that is outside it gets produced.</Key>
+
+</Predict>
+
+</Beat>
+
+<Beat n={4} label="The virtual queue, and who cannot join one">
+
+The purest form of moving a wait is to keep the line and delete the standing.
+
+Restaurant pagers. Take-a-ticket systems. Theme-park virtual queues, where you
+join a ride's line from a bench half a mile away. Online waiting rooms — the
+software that sits in front of a ticket sale or a vaccine booking page and
+issues you a position rather than an error — which are now a standard piece of
+web infrastructure precisely because the alternative is a system that falls
+over.
+
+These are close to a free win. The ordering is preserved, the fairness claim is
+identical to week 5's, and the hours are returned to the people who own them.
+This is the single best intervention in the course by ratio of benefit to cost,
+and if your design brief has a physical line in it that could be a virtual one,
+say so.
+
+Now the part that is always left out.
+
+A virtual queue quietly changes the **entry requirement**. To join it you need a
+phone, charge, data, a number that receives messages, somewhere acceptable to
+wait, and enough confidence with the interface to trust that you have actually
+joined. Each of those is nearly universal and none of them is universal, and the
+people who fail one of them are not a random sample — they are, with depressing
+reliability, the same people who were disproportionately in week 4's waiting
+room.
+
+<Punch note="The people who cannot join it are not visible in it, which is a different and worse thing than being at the back of it.">
+  A physical queue excludes nobody who can stand in it. A virtual queue has an
+  eligibility criterion that nobody wrote down.
+</Punch>
+
+The design response is not to abandon virtual queues. It is to keep **a
+staffed physical path to the same service**, and to measure what fraction of
+people use it — because that fraction is the size of the group your clever
+system was about to strand.
+
+</Beat>
+
+<Beat n={5} label="The trap this sets for measurement">
 
 <Predict question="A clinic moves from walk-in to booked appointments. Its published average wait falls from 90 minutes to 8. Did anything improve?">
 
@@ -119,7 +225,52 @@ is your lab this week, on a real published statistic of your choosing.
 
 </Beat>
 
-<Beat n={4} label="The honest case for doing it anyway">
+<Beat n={6} label="When the waiting list becomes the policy">
+
+Once the wait has moved into a list, the list becomes a thing that can be
+*managed* — and that is where the most instructive failures in this entire
+course live.
+
+Health systems set access targets: a maximum time from referral to treatment,
+published, with consequences attached. The intention is unimpeachable. The
+effect on the *distribution* of waits is well documented and is not what anyone
+intended.
+
+<Predict question="A system sets an 18-week maximum and publishes the share of patients treated inside it. What shape does the distribution of waits take?">
+
+A pile-up just inside the threshold, and a sharp cliff just outside it.
+
+The target creates a rule, the rule is optimised against, and the optimisation
+is entirely rational at every level. A manager with a patient at week 17 and a
+patient at week 20 has a strong reason to treat the one at 17, because the one
+at 20 has already breached and cannot be un-breached. <Key>The patient who has
+waited longest becomes the patient it is least valuable to treat.</Key>
+
+Which is a priority queue, sorted by *time remaining before a reporting
+boundary*, that nobody designed and nobody would defend if asked.
+
+Notice that there is no villain and no dishonesty. The target did exactly what a
+target does: it turned a continuous quantity into a threshold, and everything
+downstream reorganised around the threshold rather than the quantity.
+
+</Predict>
+
+The general lesson is worth writing in the margin of your design brief. **A
+published metric becomes an ordering rule**, whether or not you wanted one. If
+you can only report one number about a queue, you have effectively told the
+people running it which patients, tickets or customers to prioritise — and if
+the number is a threshold, you have told them to prioritise the ones nearest the
+threshold.
+
+The defence, and it is only a partial one: report the *whole distribution*, or
+at minimum report the tail as well as the rate. A system publishing "the share
+seen within 18 weeks" **and** "the longest anyone waited" is much harder to game
+in the direction above, because the second number gets worse precisely when the
+first is being protected.
+
+</Beat>
+
+<Beat n={7} label="The honest case for doing it anyway">
 
 Do not read this as debunking. Moving a wait is often the best available move,
 and the reason is precise:
@@ -139,11 +290,20 @@ believing your own waiting-time statistic.
 
 </Beat>
 
-<Beat n={5} label="What Act II gave you">
+<Beat n={8} label="What Act II gave you">
 
-Five ordering rules: arrival, length, need, price, and appointment. Each one
-buys something. Each one charges somebody. You can now say which, for any of
-them.
+Five ordering rules, and a sixth move that is not an ordering rule at all.
+
+| Rule | Buys | Charges |
+| --- | --- | --- |
+| Arrival order | Auditability, no information needed | Ignores length and need; tests free time |
+| Job length | The best possible mean | Starves the longest job |
+| Need | Lives, and near-universal consent | Everything rests on a 90-second classifier |
+| Price | Revenue instead of burned time | Sorts by ability to pay; rewards congestion |
+| Appointment | Variability, and the hours back | Brittle; demands commitment in advance |
+
+Each one buys something. Each one charges somebody. You can now say which, for
+any of them, and that is the whole of Act II.
 
 Act III is about what happens when the system you applied them to turns out to
 be connected to other systems — and full of people who have worked out what you

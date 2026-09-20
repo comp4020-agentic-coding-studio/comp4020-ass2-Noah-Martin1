@@ -82,6 +82,13 @@ export const collections = {
         due: z.coerce.date(),
         weight: z.coerce.number().positive().max(100),
         marking: z.discriminatedUnion("mode", [weightedMarking, holisticMarking]).optional(),
+        // True for a component that is graded continuously rather than handed
+        // in once -- currently only the weekly quizzes. `due` still anchors it
+        // to a week (so the "falls due in a week already taught" check and the
+        // grid's sort keep working), but it reads as "from", not "due", and it
+        // is left out of the arc timeline's per-week deadline chips, which
+        // exist to show single-week hand-ins.
+        ongoing: z.coerce.boolean().default(false),
       })
       .loose(),
   }),

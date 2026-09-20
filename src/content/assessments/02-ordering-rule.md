@@ -5,7 +5,7 @@ description:
   say plainly who is worse off afterwards.
 week: 6
 due: 2027-04-02T17:00:00+11:00
-weight: 20
+weight: 15
 marking:
   mode: weighted
   criteria:

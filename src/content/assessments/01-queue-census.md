@@ -5,7 +5,7 @@ description:
   with Little's Law, and report the gap between the two.
 week: 3
 due: 2027-03-12T17:00:00+11:00
-weight: 15
+weight: 10
 marking:
   mode: weighted
   criteria:

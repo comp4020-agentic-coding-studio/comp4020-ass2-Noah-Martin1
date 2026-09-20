@@ -5,7 +5,7 @@ description:
   the alternative you rejected.
 week: 12
 due: 2027-05-28T17:00:00+10:00
-weight: 50
+weight: 40
 marking:
   mode: holistic
   description:
@@ -32,8 +32,8 @@ related:
 
 > Redesign a queue. Then argue against yourself, properly, and win.
 
-This is half the course's marks and it is the piece the whole semester has been
-loading for. Weeks 1–4 taught you to see the queue and price the wait. Weeks 5–9
+This is 40% of the course's marks — the single largest piece — and it is the
+piece the whole semester has been loading for. Weeks 1–4 taught you to see the queue and price the wait. Weeks 5–9
 gave you the ordering rules. Weeks 10–12 showed you what happens when the system
 answers back. Now pick something real and do the whole job.
 

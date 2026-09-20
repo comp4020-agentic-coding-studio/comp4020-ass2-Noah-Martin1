@@ -3,6 +3,7 @@ import ContentLayout from "astro-theme-university/layouts/ContentLayout.astro";
 import { getPublishedCollection } from "astro-course-university/content";
 import { withBase } from "astro-theme-university/url";
 import { siteConfig } from "../site-config";
+import Key from "../components/Key.astro";
 import "../styles/course.css";
 
 // This page and spec/course-arc.test.ts read the same four frontmatter keys --
@@ -38,9 +39,15 @@ const weeks: Week[] = lectures
 // other half of the arc: a chain of ideas nobody is assessed on is a reading
 // list, and the weights are deliberately loaded onto the two that ask the
 // student to choose something and defend it.
+//
+// The quizzes are an assessments entry too (so the course total still checks
+// out to 100%, in spec/course-arc.test.ts), but they are `ongoing` rather than
+// due in one week, so they are filtered out here rather than drawn as a fifth
+// deadline chip -- that mechanic gets its own explanation below instead.
 type Task = { week: number; title: string; weight: number; href: string };
 const assessments = await getPublishedCollection("assessments");
 const tasks: Task[] = assessments
+  .filter((entry) => !(entry.data as unknown as Record<string, unknown>).ongoing)
   .map((entry) => {
     const data = entry.data as unknown as Record<string, unknown>;
     return {
@@ -52,6 +59,20 @@ const tasks: Task[] = assessments
   })
   .sort((a, b) => a.week - b.week);
 const taskAt = (week: number) => tasks.find((t) => t.week === week);
+
+// Every lecture is paired with a lab of the same week (spec/course-arc.test.ts
+// checks this pairing holds), so a lab link can sit beside each week's lecture
+// below rather than living only in the sessions collection nobody visits from
+// here.
+type Lab = { week: number; id: string };
+const sessions = await getPublishedCollection("sessions");
+const labs: Lab[] = sessions
+  .map((entry) => ({
+    week: Number((entry.data as unknown as Record<string, unknown>).week),
+    id: entry.id,
+  }))
+  .sort((a, b) => a.week - b.week);
+const labAt = (week: number) => labs.find((l) => l.week === week);
 
 const ACTS = [
   { id: "I", name: "Why waiting happens", gloss: "The physics. Learn to see a queue, explain why it forms, measure it from outside, and price what it costs." },
@@ -179,6 +200,61 @@ const taskSummary = tasks
     </figcaption>
   </figure>
 
+  <section class="arc-grade" aria-labelledby="grade-heading">
+    <h2 id="grade-heading">How the grade adds up</h2>
+    <p>
+      The four gold chips on the timeline above are 80% of the mark: <Key>10%</Key> for
+      measuring a real queue in week 3, <Key>15%</Key> for changing who goes first in
+      week 6, <Key>15%</Key> for simulating that change in week 9, and <Key>40%</Key> for
+      the design brief the whole semester has been loading for. The remaining
+      <Key>20%</Key> is not a fifth brief — it is a short quiz at the start of every
+      lecture.
+    </p>
+
+    <div class="arc-quiz">
+      <div class="arc-quiz-track">
+        <p class="arc-quiz-track-label">In the room</p>
+        <p>
+          Two minutes on the clock, and you may talk it over with whoever is
+          next to you. Turning up without the reading is entirely recoverable
+          here — that is what the two minutes and the room are for.
+        </p>
+      </div>
+      <div class="arc-quiz-track">
+        <p class="arc-quiz-track-label">Watching online</p>
+        <p>
+          About thirty seconds — long enough to answer if you already know
+          it, not long enough to go and look it up. Doing well here means the
+          week's page was read before the lecture started, not during it.
+        </p>
+      </div>
+    </div>
+
+    <p>
+      Same question, same week, two different clocks — and which one a
+      student gets is decided by where they happened to be sitting. <Key>Best
+      7 of 12 scores count</Key>, so the other five are free to lose, to a bad
+      morning or a genuinely hard question, with nothing owed by way of
+      explanation.
+    </p>
+
+    <p class="q-punch">
+      It is a small, low-stakes version of the course's opening claim: a rule
+      decides who goes first, and it is rarely neutral about who it favours.
+    </p>
+
+    <p>
+      Every lecture is paired with a lab in the same week — the link sits
+      beside each week's title below. Labs are not marked and carry no
+      percentage of their own; they exist so that pooling two queues, running
+      shortest-job-first, or boarding a plane by rows is something you have
+      built and broken yourself, not just watched happen on a slide.
+      <Key>Participating in 6 of the 12</Key> is a condition of passing the
+      course rather than a mark, which is why labs draw no chip on the
+      timeline above.
+    </p>
+  </section>
+
   {actRuns.map((act) => (
     <section class="arc-act" aria-labelledby={`act-${act.id}`}>
       <h2 id={`act-${act.id}`}>
@@ -195,6 +271,9 @@ const taskSummary = tasks
               <a href={withBase(`/lectures/week-${String(w.week).padStart(2, "0")}/`)}>{w.title}</a>
               {w.slides && (
                 <a class="arc-week-slides" href={withBase(w.slides)}>Slides</a>
+              )}
+              {labAt(w.week) && (
+                <a class="arc-week-slides" href={withBase(`/sessions/${labAt(w.week)!.id}/`)}>Lab</a>
               )}
             </div>
             <p class="arc-week-idea">{w.idea}</p>
@@ -223,6 +302,33 @@ const taskSummary = tasks
 </ContentLayout>
 
 <style>
+  .arc-grade { margin-block: 2.5rem; }
+
+  .arc-quiz {
+    display: grid;
+    gap: 1rem;
+    margin: 1.25rem 0;
+  }
+  @media (min-width: 34rem) {
+    .arc-quiz { grid-template-columns: 1fr 1fr; }
+  }
+  .arc-quiz-track {
+    padding: 0.9rem 1rem;
+    border: var(--q-stroke) solid var(--q-rule);
+    border-radius: var(--at-border-radius, 4px);
+    background: var(--q-ground);
+  }
+  .arc-quiz-track > :first-child { margin-top: 0; }
+  .arc-quiz-track > :last-child { margin-bottom: 0; }
+  .arc-quiz-track-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--q-gold);
+    margin-bottom: 0.35rem;
+  }
+
   .arc-figure { margin-block: 2.5rem; }
   .arc-svg { display: block; margin-inline: auto; max-width: 100%; height: auto; }
 

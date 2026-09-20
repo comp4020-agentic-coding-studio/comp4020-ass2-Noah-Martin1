@@ -34,8 +34,9 @@ describe("the built site is this course and nothing else", () => {
     expect(idsOf("sessions")).toEqual(expected.map((w) => `sessions/${w}`));
   });
 
-  it("publishes exactly the four assessments", () => {
+  it("publishes exactly the four briefs and the ongoing quizzes", () => {
     expect(idsOf("assessments")).toEqual([
+      "assessments/00-quizzes",
       "assessments/01-queue-census",
       "assessments/02-ordering-rule",
       "assessments/03-simulation-report",

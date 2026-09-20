@@ -2,217 +2,55 @@
 
 ## What I built
 
-**SLOP2710 — The Economics of Waiting**, a twelve-week SlopU course arguing that
-every queue is running an ordering rule somebody chose, that the rule decides
-whose time is worth less, and that there is therefore no neutral queue.
+**SLOP2710 — The Economics of Waiting**, a twelve-week SlopU course exploring how every queue operates according to an ordering rule, and how that rule determines who waits, who gets priority, and whose time carries less value.
 
-Twelve lectures in three acts, twelve labs of fieldwork, four assessments — and
-twelve live simulations, one a week, each set in a real place you could walk
-into. A café you rearrange, an airport line you measure two ways, a passport
-office with its own cost ticking underneath it, a bank, a supermarket, an
-emergency department, a theme park, a restaurant, an aircraft at a gate, a call
-centre, and a dialysis unit where the rule decides who lives.
+The course is structured into twelve lectures across three acts, twelve fieldwork labs, five assessments, and twelve live simulations. Its aim is to make the hidden systems behind everyday waiting visible, exploring how different queuing rules distribute time, access, and cost, and encouraging students to question whether any queue can truly be neutral.
 
-## The structural decision, and making it checkable
+## How I got here
 
-I think a course is one idea explored for twelve weeks, and that the usual way
-that fails is twelve topics sharing a subject. My first outline had exactly that
-failure: airports, elevators, restaurants, hospitals, traffic — a venue a week. I
-threw it out for a mechanism-led arc where each week introduces one new rule for
-deciding who goes first and venues become evidence rather than chapters.
-Aircraft boarding is teased in week 2 and returns as the week 10 set-piece
-carrying weeks 6 and 8 with it.
+I knew the topic I wanted to pursue was the rules and systems of queuing, but I did not yet have the complete criteria set out. Knowing there have been many papers and reports discussing everyday queueing problems, and that it could be argued that queuing is one of the world's most important hidden systems, I first began writing out the harness to establish the limits of the project.
 
-That is easy to claim and hard to keep true across thirty files, so I made it
-checkable before writing any of it. Every lecture declares an `act`, an `idea`, a
-headline `system` and the earlier week it `buildsOn`, and
-[`6f05794`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/6f05794)
-asserts the chain points strictly backwards, terminates at week 1, and never
-headlines a system twice. The `/arc/` page renders from those same four fields,
-so the diagram and the checks cannot disagree — the page is the checks' input.
-Those tests were written and failing before a word of content existed.
+The evolution of the harness (CLAUDE.md)
 
-## The visual decision: scenes, not diagrams
+### 1. Brainstorming
 
-The first version of this site had four simulations and eight static SVG
-diagrams drawn in an austere two-ink grammar of dots and boxes. It was coherent
-and it was wrong for the course. A reader should be able to look at a figure and
-know what it is *about* before reading a word of context, and a queue of grey
-dots tells you nothing except that the author had a queue in mind.
+I started with a quick research and personal brainstorm of themes that were relevant to queuing, regardless of whether they were directly related to each other. I put these together into the harness so Claude could help choreograph the topic selection, pending my approval.
 
-So I rewrote the harness rules first
-([`0188125`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/0188125))
-and then the visuals: every week gets a simulation, every simulation is a place,
-and a phrase worth remembering is marked in pink
-([`47a0d8a`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/47a0d8a),
-which deliberately overrides two comments in my own stylesheet that forbade a
-third colour — the commit says so rather than quietly contradicting the file).
+I also established the project's visual priorities. Visual learning is key, so I wanted to iterate towards useful visualisations rather than simply producing neat animations. I also established a workflow policy: understand and plan around topics before generating content, with the aim of creating a coherent structure rather than generating each week independently.
 
-Twelve dioramas is where this kind of thing normally collapses into twelve
-unrelated drawings, so almost nothing about a scene is per-scene
-([`f438a7f`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/f438a7f)):
-one oblique camera, one painter's-order stage, one prop kit — people, counters,
-chairs, plants, cars, screens — and one materials palette resolved from the
-theme's tokens. A scene file is a room description and a model, and the series
-look is structural rather than maintained.
+The goal of this stage was for Claude to dive deeper into the topics I had provided, plan animations that could represent the content, and determine which topics could sit coherently together to create a 12-week course structure.
 
-Cross-references became live crops. Where a lecture needs an earlier visual it
-replays a named region of that scene inline and links back, rather than writing
-"as we saw in figure 3"
-([`dc7eaec`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/dc7eaec)).
-Week 12 uses four of them, one against each rule it is re-running, and closes on
-week 1's counter.
+**Commits from this phase:**
+- [8ac03ca](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/8ac03caae03b37f409bdfc4f2636f02b3e534eed) Initial claude.md brainstorming setup
 
-All eight SVGs are gone — the first with week 1, the last seven together once
-every week had a scene
-([`eb9c0f4`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/eb9c0f4))
-— and each was absorbed by the scene that replaced it rather than left beside
-it: week 1's three café layouts became a
-selector, so the comparison is something you do rather than look at
-([`91be64c`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/91be64c));
-week 3's area argument became a sweeping overlay on a real security queue
-([`cdb0ae8`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/cdb0ae8));
-week 4's bill became a counter that ticks. The one survivor is the objective
-matrix, which stays a real `<table>`: its job is a five-by-four comparison a
-screen reader should be able to read, and canvas would take that away.
 
-## What measuring caught
+### 2. Molding / designing
 
-Every single week, measuring the scene against theory caught something the
-lecture had asserted. The best ones:
+At this stage, the harness directed Claude to create a skeleton of possible topics and animations around the course themes. Claude was intentionally reserved in its creative role, focusing more on planning and verifying than creating. This was what I wanted at this point.
 
-**Week 5 said the wrong thing.** My draft asserted that pooling servers "does
-almost nothing to your average wait" and only cuts variance. The simulator said
-the mean roughly halves, because a pooled line never leaves a server idle while
-someone waits. I had written a confident, wrong thing; the lecture and the lab
-were both corrected
-([`ff1d0fd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/ff1d0fd)).
+From here, I could identify where Claude had fallen short and rephrase areas where its confidence or direction was lacking. I began introducing more explicit "must" directions and course-projection language, such as making the course "unfold like a documentary". I also provided real-world examples for Claude to refer to and draw inspiration from, which I have found helpful in previous projects. 
+> "visualisation similar to Veritasium and 3Blue1Brown videos"
 
-**A one-line arrival bug cost fifteen per cent of the traffic.** Week 7's
-department was scheduling `nextArrival = tick + interval`, which throws away the
-fraction the clock overshot by. The lecture claimed a load of 0.93 over an
-almost empty waiting room; the real load was 0.78
-([`0937bbd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/0937bbd)).
+**Commits from this phase:**
+- [d39d70f](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/d39d70f475ed13a7f60c3f6416de5b2f0bf96d24) designing redirection - rephrasing claude.md
 
-**Three overlays measured nothing, and the model said so.** Week 8's first
-overlay drew a counterfactual floor on the standby queue's length — which barely
-moves, because priority is work-conserving, which is the week's own thesis
-([`5f9286e`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/5f9286e)).
-Week 10 charged each row for its own passengers' stowing time, which is identical
-under every boarding strategy; rewritten to charge a stalled walker to the row
-responsible, the worst row goes from 349 ticks under back-to-front to 30 under
-Steffen
-([`3fac975`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/3fac975)).
-And week 11 reported *fewer* calls offered when more agents were on shift, which
-is impossible: the arrival rate does not know the staffing. I had reconstructed
-the counters from outside by diffing the hold queue; instrumenting the tick is
-duller and correct
-([`c0e79ba`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/c0e79ba)).
+### 3. Refinement
 
-**Averages and maxima are both the wrong instrument, in opposite directions.**
-Week 7's readout began as the worst category-1 wait and moved eighty minutes
-between neighbouring accuracy settings — one sample from a tail. Week 12's began
-as the longest wait and moved sixteen years. Both became rates: a share over the
-target, a ninetieth percentile. Week 12 then caught the subtler version of the
-same class of error, and it turned into the best paragraph on the page: its wait
-was measured over the transplanted only, so it was blind to exactly the people
-each rule excludes. Measured over everybody who left the list, the gap between
-the two figures turns out to be the amount of sorting the rule did
-([`2dc2e04`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/2dc2e04)).
+In this stage, I focused on the things Claude had done right and narrowed down what each week's topic should be, along with the specific simulation attached to it.
 
-## What only a screenshot caught
+I removed the other possible themes from the brainstorming phase because I wanted Claude to refine the topics and content it had already developed rather than continuing to expand the scope.
 
-My harness rule that visuals must be checked rather than assumed paid for itself
-every week, and two classes of bug were invisible to every test I could write.
+There were several refinement iterations where I explored what Claude had achieved, removed remaining brainstorming content, and replaced it with detailed instructions for the course flow. I found this stage particularly important for narrowing down what actually mattered for the course site.
 
-**The theme's colours are `light-dark()` pairs**, which canvas cannot resolve, so
-it silently kept its previous fill and every rule and label rendered gold
-([`9225eeb`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/9225eeb)).
-The dark-mode inverse of that is a trap I hit repeatedly: `--q-ink` is near-white
-in dark mode, so anything physically dark has to be built from the ground colour
-instead. Week 12's green vinyl recliners came out as the brightest objects in the
-room, ten chairs glowing louder than the ten people sitting in them.
+I also found that qualitative direction in the harness was far more useful and impactful than purely quantitative direction.
 
-**And in an oblique projection, depth folds into screen height.** A prop two
-metres behind somebody occupies the same band of pixels as their chest, so every
-sign, roof, tally and caption I placed "above" or "behind" something landed
-across it — a lane sign over an operator's chest in week 6, a caption printed
-through its own subject twice in week 11, a chip over the crowd it was describing
-in week 12. It is one fact with one rule, and no amount of unit testing was ever
-going to surface it. Chrome also clamps `--window-size` to about 500px on macOS,
-so my early 390px screenshots were a 500px layout cropped; I wrote a CDP tool
-with real device emulation before trusting anything I saw
-([`6bec983`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/6bec983)).
+For example, I thought each week's content was too short. Instead of simply telling Claude that it was "too short", I timed myself reading through it. The current content took approximately 7 minutes, including time to use the simulator, while I was aiming for 15–20 minutes. I then used this measurement to give Claude more useful feedback:
 
-The build carries an axe gate, so the pink's contrast and every canvas
-`aria-label` are enforced rather than intended.
+> "... solid topics however lack a bit of depth - current reading time approx 7mins including time to play the simulator - this should be 15 - 20min. Include more depth in the topic or expand to other examples. ... This is a content specific prompt and update, dont spend much time updating visuals in this response."
 
-Two pieces of housekeeping are worth admitting. Files deleted in this working
-tree keep coming back — ten starter samples with their original September mtimes,
-and, within minutes of the commit that removed them, all nine of the static
-diagrams. A restored `week-02.md` shadows `week-02.mdx` and serves starter prose
-at a real URL, so this is now a `prebuild` step rather than something I remember
-([`a1259f1`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/a1259f1)).
-And the same mechanism was quietly restoring the scratch measurement harnesses I
-use while calibrating a scene, which vitest then collected: my check count had
-been drifting between 24 and 29 depending on which scratch files happened to
-exist, which is worse than either number. The real suite is 24. The pattern is
-now excluded in config rather than deleted by hand.
+I provided this as a prompt rather than putting it directly into the harness because saying that the content "currently reads 7 minutes" is too state-dependent for the harness. The harness established the overall direction, while individual prompts responded to what I actually observed in the current state of the site.
 
-## Depth, and the decks
+**Commits from this phase:**
+- [0188125](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/0188125c6af80daa84d79f05d5581cbfea4d590f) Refinement - viusal direction and removing brainstorming foundations
 
-The first version of the twelve lectures read in about seven minutes each. That
-is a reading, not a lecture, and the fix was depth rather than more topics —
-each week roughly doubled, to two to three thousand words, by going further into
-the system it already had.
-
-The clearest case is week 2, which spent a whole lecture arguing that
-variability rather than load makes queues and never wrote down the equation that
-says so. It now carries Kingman's, as W ≈ V × U × T, and the payoff is that the
-formula reproduces the numbers the lecture had already quoted from one line of
-arithmetic: V = 1, U = 11.5, τ = 55 seconds, eleven minutes. Set V to zero and
-the whole product collapses, which is why the clockwork lane in that scene
-cannot be made to queue at any setting. That is a better argument for learning
-an equation than any amount of saying it is important.
-
-Several of the additions are the course finding its own earlier lessons in new
-places: week 5's square-root staffing, which explains why pooling four
-single-server lines is transformative and pooling four teams of ten is not;
-week 6's multi-level feedback queue, which runs shortest-job-first without being
-told the job lengths because it infers them from behaviour; week 9's Bailey rule
-and why delay accumulates monotonically through a clinic session; week 12's
-account of what the real kidney system does, where every component turns out to
-be a correction to a failure the course has already covered.
-
-Eleven of the twelve weeks had no slide deck, and CLAUDE.md asks for one per
-week with a simulation on it. They exist now, and getting a live scene onto a
-slide surfaced a real defect rather than a cosmetic one: a deck is an injected
-route that loads only the brand CSS and the deck stylesheet, so every `--at-*`
-token the course palette derives from was simply absent there, and the first
-deck with a scene rendered a pale cream drive-through on a black slide. Each
-token now carries the theme's own derivation as a fallback, reached only where
-the site stylesheet is not.
-
-Both of those promises were invisible to every check I had
-([`7c0d3bd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/7c0d3bd)).
-A missing deck is not a broken link unless something links to it, and an
-unlinked deck is not a missing page. So there is now a test asserting twelve
-decks, each linked from its lecture and each carrying a simulation — and a floor
-under lecture length, which is a poor proxy for depth and the only mechanical
-one available. It catches the failure that actually happened.
-
-## What I deliberately did not encode
-
-Prose quality. I considered a check on reading level or repeated phrasing and
-decided a green test would license exactly the generic writing it was meant to
-prevent. Whether week 7 sounds like a person is a judgement, and I left it as
-one.
-
-Visual quality, for the same reason and more strongly. The checks can prove a
-scene has a caption, a label, enough contrast and a converged first frame. They
-cannot tell me the dialysis unit read as an open-plan office one week after a
-call centre, which it did until every station got a drip stand. That was a
-screenshot and an opinion, twelve times over.
-
-Full history:
-[`ab8a430...7c0d3bd`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/compare/ab8a430...7c0d3bd).
+- [4989060](https://github.com/comp4020-agentic-coding-studio/comp4020-ass2-Noah-Martin1/commit/498906024e9241b8e4f13f8a23f78e9241c93dfd) removing brainstorming direction and refining webpage directions (the arc, lecture decks and assessment)
